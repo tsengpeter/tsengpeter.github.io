@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head prefix="og: https://ogp.me/ns#">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  
+  <title>前端的Race Condition - Peter&#39;s Blog</title>
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+  
+  
+  <meta property="og:title" content="前端的Race Condition - Peter&#39;s Blog" />
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:url" content="https://tsengpeter.github.io/2025/06/10/%E5%89%8D%E7%AB%AF%E7%9A%84Race-Condition/index.html" />
+  
+  <meta property="og:image" content="/favicon.png" />
+  
+  <meta property="og:article:published_time" content="2025-06-10T02:00:00.000Z" />
+  
+  <meta property="og:article:author" content="Peter" />
+  
+  
+
+  
+<link rel="stylesheet" href="/css/var.css">
+
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+<link rel="stylesheet" href="/css/typography.css">
+
+  
+<link rel="stylesheet" href="/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/css/components.css">
+
+  
+<link rel="stylesheet" href="/css/nav.css">
+
+  
+<link rel="stylesheet" href="/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/css/footer.css">
+
+  
+<link rel="stylesheet" href="/css/post-list.css">
+
+  
+  
+<link rel="stylesheet" href="/css/rainbow-banner.css">
+
+  
+  
+  
+<link rel="stylesheet" href="/css/toc.css">
+
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/post.css">
+
+  
+  
+  
+  
+  
+
+  
+<meta name="generator" content="Hexo 7.2.0"></head>
+    <body
+        data-color-scheme="auto"
+        data-uppercase-categories="true"
+        
+        data-rainbow-banner="true"
+        data-rainbow-banner-shown="auto"
+        data-rainbow-banner-month="6"
+        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+        
+        data-config-root="/"
+        
+        data-toc="true"
+        data-toc-max-depth="2"
+        
+        
+    >
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">Blog</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">Home</a>
+            
+            
+            <a class="nav-item" href="/archives">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/friends">Friends</a>
+            
+            
+            
+            <a class="nav-item" href="/projects">Projects</a>
+            
+            
+            
+            <a class="nav-item" href="/about">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/MrWillCom" target="_blank" aria-label="GitHub">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-codepen nav-item-icon" href="https://codepen.io/mrwillcom" target="_blank" aria-label="CodePen">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-patreon nav-item-icon" href="https://www.patreon.com/MrWillCom" target="_blank" aria-label="Patreon">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-mastodon nav-item-icon" href="https://noc.social/@MrWillCom" target="_blank" aria-label="Mastodon">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-discord nav-item-icon" href="https://discord.gg/UKuFDjcfY8" target="_blank" aria-label="Discord">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        
+<article class="post">
+    <div class="meta">
+        
+
+        
+        <div class="date" id="date">
+            <span>June</span>
+            <span>10,</span>
+            <span>2025</span>
+        </div>
+        
+
+        <h1 class="title">前端的Race Condition</h1>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <ul>
+<li><a href="#%E4%BB%80%E9%BA%BC%E6%98%AF-Race-Condition">什麼是 Race Condition</a></li>
+<li><a href="#%E5%B8%B8%E8%A6%8B%E6%83%85%E5%A2%83">常見情境</a></li>
+<li><a href="#%E7%82%BA%E4%BB%80%E9%BA%BC%E6%9C%83%E7%99%BC%E7%94%9F">為什麼會發生</a></li>
+<li><a href="#%E8%A7%A3%E6%B1%BA%E6%96%B9%E5%BC%8F">解決方式</a></li>
+<li><a href="#BONUS-%E5%AF%A6%E5%8B%99%E7%AF%84%E4%BE%8B%E8%88%87%E9%98%B2%E5%91%86%E6%8A%80%E5%B7%A7">BONUS: 實務範例與防呆技巧</a></li>
+</ul>
+<h2 id="什麼是-Race-Condition"><a href="#什麼是-Race-Condition" class="headerlink" title="什麼是 Race Condition"></a>什麼是 Race Condition</h2><p>Race Condition（競態條件）是指多個非同步操作同時執行時，因執行順序不確定，導致結果不如預期的情況。這在前端開發中，尤其是處理 API 請求、狀態更新或 UI 互動時非常常見。</p>
+<h2 id="常見情境"><a href="#常見情境" class="headerlink" title="常見情境"></a>常見情境</h2><ul>
+<li>多個 API 請求同時發送，回應順序不一致，導致畫面資料錯亂。</li>
+<li>使用 setTimeout、Promise、async&#x2F;await 等非同步操作時，資料覆蓋或狀態不同步。</li>
+<li>使用者快速切換頁面或輸入查詢，前一個請求的結果覆蓋了後一個請求。</li>
+</ul>
+<h2 id="為什麼會發生"><a href="#為什麼會發生" class="headerlink" title="為什麼會發生"></a>為什麼會發生</h2><ul>
+<li>JavaScript 的非同步特性，讓多個操作同時進行，無法保證執行順序。</li>
+<li>前端 UI 互動頻繁，容易產生多重請求或狀態競爭。</li>
+<li>缺乏對請求唯一性的管理，導致舊資料覆蓋新資料。</li>
+</ul>
+<h2 id="解決方式"><a href="#解決方式" class="headerlink" title="解決方式"></a>解決方式</h2><ul>
+<li>只處理最後一次請求的結果（如設計唯一請求編號）。</li>
+<li>使用 AbortController 取消舊的請求。</li>
+<li>避免多重 setState 或資料競爭，善用狀態管理工具。</li>
+<li>在 UI 上鎖定操作，避免重複觸發。</li>
+</ul>
+<h2 id="BONUS-實務範例與防呆技巧"><a href="#BONUS-實務範例與防呆技巧" class="headerlink" title="BONUS: 實務範例與防呆技巧"></a>BONUS: 實務範例與防呆技巧</h2><h3 id="範例：只處理最新請求"><a href="#範例：只處理最新請求" class="headerlink" title="範例：只處理最新請求"></a>範例：只處理最新請求</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> latestRequest = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">function</span> <span class="title function_">fetchData</span>(<span class="params">query</span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> requestId = ++latestRequest;</span><br><span class="line">  <span class="title function_">fetch</span>(<span class="string">`/api/search?q=<span class="subst">$&#123;query&#125;</span>`</span>)</span><br><span class="line">    .<span class="title function_">then</span>(<span class="function">(<span class="params">res</span>) =&gt;</span> res.<span class="title function_">json</span>())</span><br><span class="line">    .<span class="title function_">then</span>(<span class="function">(<span class="params">data</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (requestId === latestRequest) &#123;</span><br><span class="line">        <span class="title function_">render</span>(data);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="範例：使用-AbortController"><a href="#範例：使用-AbortController" class="headerlink" title="範例：使用 AbortController"></a>範例：使用 AbortController</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> controller;</span><br><span class="line"><span class="keyword">function</span> <span class="title function_">fetchData</span>(<span class="params">query</span>) &#123;</span><br><span class="line">  <span class="keyword">if</span> (controller) controller.<span class="title function_">abort</span>();</span><br><span class="line">  controller = <span class="keyword">new</span> <span class="title class_">AbortController</span>();</span><br><span class="line">  <span class="title function_">fetch</span>(<span class="string">`/api/search?q=<span class="subst">$&#123;query&#125;</span>`</span>, &#123; <span class="attr">signal</span>: controller.<span class="property">signal</span> &#125;)</span><br><span class="line">    .<span class="title function_">then</span>(<span class="function">(<span class="params">res</span>) =&gt;</span> res.<span class="title function_">json</span>())</span><br><span class="line">    .<span class="title function_">then</span>(render)</span><br><span class="line">    .<span class="title function_">catch</span>(<span class="function">(<span class="params">err</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (err.<span class="property">name</span> !== <span class="string">&quot;AbortError&quot;</span>) <span class="keyword">throw</span> err;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<p>前端開發中，Race Condition 很常見，需特別注意非同步流程的設計，確保資料一致性與正確性。</p>
+
+    </div>
+
+    
+    <div class="about">
+        <h1>About this Post</h1>
+        <div class="details">
+            <p>This post is written by Peter, licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a>.</p>
+        </div>
+        
+        <p class="tags">
+            
+            <i class="icon"></i>
+            <a href="/tags/FRONTEND/" class="tag">#FRONTEND</a><a href="/tags/學習筆記/" class="tag">#學習筆記</a><a href="/tags/WEB/" class="tag">#WEB</a><a href="/tags/Race-Condition/" class="tag">#Race Condition</a>
+        </p>
+        
+    </div>
+    
+
+    <div class="container post-prev-next">
+        <a class="next"></a>
+        
+        <a href="/2025/01/08/nodejs%E7%9A%84elsint%E8%88%87prettier%E8%88%87husky/" class="prev">
+            <div>
+                <div class="text">
+                    <p class="label">Previous</p>
+                    <h3 class="title">nodejs的elsint與prettier與husky</>
+                </div>
+            </div>
+        </a>
+        
+    </div>
+
+    
+        
+        
+    
+</article>
+
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h2 class="title">Blog</h2>
+                
+                <a href="/" class="item">Blog</a>
+                
+                <a href="/archives" class="item">Archives</a>
+                
+                <a href="/tags" class="item">Tags</a>
+                
+                <a href="/categories" class="item">Categories</a>
+                
+                <a href="/search" class="item">Search</a>
+                
+                <a href="/friends" class="item">Friends</a>
+                
+                <a href="/projects" class="item">Projects</a>
+                
+                <a href="/resume" class="item">Resume</a>
+                
+                <a href="/about" class="item">About</a>
+                
+                <a href="/atom.xml" class="item">RSS</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Projects</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/MrWillCom/rsa-cli" class="item">RSA CLI</a>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/MrWillCom/hexo-theme-cupertino" class="item">Hexo Theme Cupertino</a>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/MrWillCom/a-calendar" class="item">A Calendar</a>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/MrWillCom/auto-mirroring-bucket" class="item">Auto Mirroring Bucket</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Me</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/MrWillCom" class="item">GitHub</a>
+                
+                <a target="_blank" rel="noopener" href="https://codepen.io/mrwillcom" class="item">CodePen</a>
+                
+                <a target="_blank" rel="noopener" href="https://www.patreon.com/MrWillCom" class="item">Patreon</a>
+                
+                <a target="_blank" rel="noopener" href="https://noc.social/@MrWillCom" class="item">Mastodon</a>
+                
+                <a target="_blank" rel="noopener" href="https://discord.gg/UKuFDjcfY8" class="item">Discord</a>
+                
+                <a href="mailto:mr.will.com@outlook.com" class="item">Email</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2025 Peter<br>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> </span>
+        
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+
+        
+<script src="/js/main.js"></script>
+
+        
+        
+        
+
+        
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            window.addEventListener('load', () => {
+                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
+                ScrollReveal().reveal('.post-list-item .cover-img img')
+                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
+            })
+        </script>
+        
+    </body>
+</html>
