@@ -181,7 +181,12 @@
 <li><a href="#Step3-%E5%88%9D%E5%A7%8B%E5%8C%96-Sentry">Step3: 初始化 Sentry</a></li>
 </ul>
 </li>
-<li><a href="#%E8%A8%AD%E5%AE%9A-Source-Map-%E4%B8%8A%E5%82%B3">設定 Source Map 上傳</a></li>
+<li><a href="#%E8%A8%AD%E5%AE%9A-Source-Map-%E4%B8%8A%E5%82%B3">設定 Source Map 上傳</a><ul>
+<li><a href="#Step1-%E5%AE%89%E8%A3%9D-Sentry-CLI">Step1: 安裝 Sentry CLI</a></li>
+<li><a href="#Step2-%E8%A8%AD%E5%AE%9A-Sentry-CLI">Step2: 設定 Sentry CLI</a></li>
+<li><a href="#Step3-%E6%95%B4%E5%90%88-Source-Map-%E4%B8%8A%E5%82%B3%E8%87%B3%E5%BB%BA%E7%BD%AE%E6%B5%81%E7%A8%8B">Step3: 整合 Source Map 上傳至建置流程</a></li>
+</ul>
+</li>
 <li><a href="#%E6%B8%AC%E8%A9%A6%E6%95%B4%E5%90%88%E7%B5%90%E6%9E%9C">測試整合結果</a></li>
 <li><a href="#%E7%B8%BD%E7%B5%90">總結</a></li>
 </ul>
@@ -201,7 +206,7 @@
 <li>建立一個新專案，並根據您要監控的應用程式選擇對應的框架（例如：React, Angular, NestJS）。</li>
 </ol>
 <blockquote>
-<p>根據圖片的步驟創建專案<br>[<img src="/../img/sentry1.png" alt="sentry1">]<br>創建好專案後點擊專案會看到這個畫面，選擇你目前專案使用的技術<br>[<img src="/../img/sentry2.png" alt="sentry2">]<br>1 可以連結slack、email、teams來發出訊息，2 是輸入你這個專案的名稱<br>[<img src="/../img/sentry3.png" alt="sentry3">]</p>
+<p>根據圖片的步驟創建專案<br><img src="/../img/sentry1.png" alt="sentry1"><br>創建好專案後點擊專案會看到這個畫面，選擇你目前專案使用的技術<br><img src="/../img/sentry2.png" alt="sentry2"><br>1 可以連結slack、email、teams來發出訊息，2 是輸入你這個專案的名稱<br><img src="/../img/sentry3.png" alt="sentry3"></p>
 </blockquote>
 <h3 id="Step2-在-NX-專案中安裝-Sentry"><a href="#Step2-在-NX-專案中安裝-Sentry" class="headerlink" title="Step2: 在 NX 專案中安裝 Sentry"></a>Step2: 在 NX 專案中安裝 Sentry</h3><p>針對您 Monorepo 中要監控的特定應用程式，安裝對應的 Sentry SDK。</p>
 <p>以一個名為 <code>my-react-app</code> 的 React 應用為例：</p>
@@ -216,7 +221,7 @@
 </blockquote>
 <h4 id="sentryVitePlugin設定來源"><a href="#sentryVitePlugin設定來源" class="headerlink" title="sentryVitePlugin設定來源"></a>sentryVitePlugin設定來源</h4><p>sentryVitePlugin的 org 是Sentry創建帳號時輸入的 Organization Slug，project則是你創建的Sentry project名稱，authToken則是要透過下方操作來取得</p>
 <blockquote>
-<p>點選左邊 Settings 後找到 Develope Settings 的 Organization Tokens，點選之後會看到畫面上的 Create New Token 按鈕<br>[<img src="/../img/sentry8.png" alt="sentry8">]<br>輸入隨意的名稱後按下 Create Token 按鈕<br>[<img src="/../img/sentry9.png" alt="sentry9">]<br>建立成功會看到一串的Token，這個就是authToken要填的，將其複製下來貼到authToken<br>[<img src="/../img/sentry10.png" alt="sentry10">]</p>
+<p>點選左邊 Settings 後找到 Develope Settings 的 Organization Tokens，點選之後會看到畫面上的 Create New Token 按鈕<br><img src="/../img/sentry8.png" alt="sentry8"><br>輸入隨意的名稱後按下 Create Token 按鈕<br><img src="/../img/sentry9.png" alt="sentry9"><br>建立成功會看到一串的Token，這個就是authToken要填的，將其複製下來貼到authToken<br><img src="/../img/sentry10.png" alt="sentry10"></p>
 </blockquote>
 <p><strong>備註</strong>: NX各個專案的 sentryVitePlugin 設定值全部用同一組即可</p>
 <h3 id="Step3-初始化-Sentry"><a href="#Step3-初始化-Sentry" class="headerlink" title="Step3: 初始化 Sentry"></a>Step3: 初始化 Sentry</h3><p>在應用程式的進入點 (Entry Point) 初始化 Sentry，使 Sentry 在應用程式啟動時就開始監控。</p>
@@ -249,7 +254,7 @@
 <p><strong>強烈建議</strong>：不要將 <code>DSN</code> 直接寫在程式碼中，並將 <code>.env</code> 相關檔案加入到 <code>.gitignore</code> 中，以避免敏感資訊外洩。</p>
 <h4 id="如何找到-Sentry-的DSN"><a href="#如何找到-Sentry-的DSN" class="headerlink" title="如何找到 Sentry 的DSN"></a>如何找到 Sentry 的DSN</h4><p>根據下方圖片的步驟操作就可以找到 Project 的 DSN</p>
 <blockquote>
-<p>點選你創立的對應 Project<br>[<img src="/../img/sentry4.png" alt="sentry4">]<br>點擊右上方齒輪圖示的設定按鈕<br>[<img src="/../img/sentry5.png" alt="sentry5">]<br>再點左邊的Settings，找到 SDK Setup 點擊 Client keys<br>[<img src="/../img/sentry6.png" alt="sentry6">]<br>就會看到 Project 的 DSN碼<br>[<img src="/../img/sentry7.png" alt="sentry7">]</p>
+<p>點選你創立的對應 Project<br><img src="/../img/sentry4.png" alt="sentry4"><br>點擊右上方齒輪圖示的設定按鈕<br><img src="/../img/sentry5.png" alt="sentry5"><br>再點左邊的Settings，找到 SDK Setup 點擊 Client keys<br><img src="/../img/sentry6.png" alt="sentry6"><br>就會看到 Project 的 DSN碼<br><img src="/../img/sentry7.png" alt="sentry7"></p>
 </blockquote>
 <h2 id="設定-Source-Map-上傳"><a href="#設定-Source-Map-上傳" class="headerlink" title="設定 Source Map 上傳"></a>設定 Source Map 上傳</h2><p>為了在 Sentry 中看到可讀的原始碼錯誤堆疊（而不是被壓縮、醜化後的程式碼），上傳 Source Map 是至關重要的一步。對於 Vite 專案，我們可以使用 <code>@sentry/vite-plugin</code> 來自動化這個流程。</p>
 <p><strong>1. 安裝套件</strong></p>
@@ -293,7 +298,16 @@
     
 
     <div class="container post-prev-next">
-        <a class="next"></a>
+        
+        <a href="/2025/09/18/NX%E5%B0%88%E6%A1%88%E7%9A%84%E9%96%8B%E7%99%BC%E7%92%B0%E5%A2%83%E8%AE%8A%E6%95%B8%E8%A8%AD%E5%AE%9A%E6%96%B9%E5%BC%8F/" class="next">
+            <div>
+                <div class="text">
+                    <p class="label">Next</p>
+                    <h3 class="title">NX專案的開發環境變數設定方式</h3>
+                </div>
+            </div>
+        </a>
+        
         
         <a href="/2025/01/08/nodejs%E7%9A%84elsint%E8%88%87prettier%E8%88%87husky/" class="prev">
             <div>
