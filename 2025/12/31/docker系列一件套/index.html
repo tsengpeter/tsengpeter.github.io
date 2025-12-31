@@ -226,7 +226,8 @@
 <li><strong>直觀的 Log 查看器</strong>：支援搜尋、過濾 Logs，比終端機更易讀。</li>
 <li>**Extensions (擴充功能)**：可以一鍵安裝 Portainer、Redis Insight 等管理工具。</li>
 </ul>
-<h2 id="核心概念速覽"><a href="#核心概念速覽" class="headerlink" title="核心概念速覽"></a>核心概念速覽</h2><ul>
+<h2 id="核心概念速覽"><a href="#核心概念速覽" class="headerlink" title="核心概念速覽"></a>核心概念速覽</h2><p><img src="/../img/docker-instructure.png" alt="Docker 架構圖"></p>
+<ul>
 <li>**Dockerfile (食譜)**：定義如何製作一個 Image。</li>
 <li>**Image (蛋糕模具)**：唯讀的環境模板。</li>
 <li>**Container (蛋糕)**：實際運行的環境實例。</li>
@@ -275,13 +276,13 @@
 </ol>
 <hr>
 <h2 id="Docker-Desktop-視覺化管理技巧"><a href="#Docker-Desktop-視覺化管理技巧" class="headerlink" title="Docker Desktop 視覺化管理技巧"></a>Docker Desktop 視覺化管理技巧</h2><p>有了 Docker Desktop，很多操作變得直觀許多：</p>
-<h3 id="查看-Logs-與容器狀態"><a href="#查看-Logs-與容器狀態" class="headerlink" title="查看 Logs 與容器狀態"></a>查看 Logs 與容器狀態</h3><ol>
-<li>開啟 Docker Desktop，點擊左側 <strong>Containers</strong>。</li>
-<li>點擊你的專案名稱（如 <code>backend</code>）。</li>
-<li>你可以看到 <code>api</code> 和 <code>db</code> 並列顯示。點擊任意一個，就能看到即時的 <strong>Logs</strong> 視窗。<ul>
-<li><strong>優勢</strong>：你可以直接在介面上搜尋 Log 關鍵字（例如 “Error” 或 “Exception”），這比在終端機用 <code>grep</code> 方便得多。</li>
-</ul>
-</li>
+<h3 id="管理-Images-映像檔"><a href="#管理-Images-映像檔" class="headerlink" title="管理 Images (映像檔)"></a>管理 Images (映像檔)</h3><p><img src="/../img/docker-desktop-1.png" alt="執行 docker build 後的成果"></p>
+<p>當你執行完 <code>docker build -t my-app .</code> 後，你可以在 <strong>Images</strong> 頁面看到剛建置好的 Image。介面上直接提供了「Run (啟動)」、「Pull (拉取)」、「Delete (刪除)」等按鈕，讓你不用背複雜的指令也能輕鬆管理本機映像檔。</p>
+<h3 id="查看-Logs-與容器狀態"><a href="#查看-Logs-與容器狀態" class="headerlink" title="查看 Logs 與容器狀態"></a>查看 Logs 與容器狀態</h3><p><img src="/../img/docker-desktop-2.png" alt="執行 docker-compose up 後的成果"></p>
+<ol>
+<li>當你執行 <code>docker-compose up -d</code> 後，所有相關的服務會自動被歸類在同一個群組下（如上圖的 <code>biddingservice</code>）。</li>
+<li>點擊你的專案名稱，你可以看到 <code>api</code> 和 <code>db</code> 等容器並列顯示。</li>
+<li>點擊任意一個容器，就能看到即時的 <strong>Logs</strong> 視窗，這對於除錯非常有幫助。</li>
 </ol>
 <h3 id="管理-Volumes-資料持久化"><a href="#管理-Volumes-資料持久化" class="headerlink" title="管理 Volumes (資料持久化)"></a>管理 Volumes (資料持久化)</h3><ol>
 <li>點擊左側 <strong>Volumes</strong>。</li>
