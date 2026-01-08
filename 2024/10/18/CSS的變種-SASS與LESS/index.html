@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head prefix="og: https://ogp.me/ns#">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  
+  <title>CSS的變種: SASS與LESS - Peter&#39;s Blog</title>
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+  
+  
+  <meta property="og:title" content="CSS的變種: SASS與LESS - Peter&#39;s Blog" />
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:url" content="https://tsengpeter.github.io/2024/10/18/CSS%E7%9A%84%E8%AE%8A%E7%A8%AE-SASS%E8%88%87LESS/index.html" />
+  
+  <meta property="og:image" content="/favicon.png" />
+  
+  <meta property="og:article:published_time" content="2024-10-18T10:18:06.000Z" />
+  
+  <meta property="og:article:author" content="Peter" />
+  
+  
+
+  
+<link rel="stylesheet" href="/css/var.css">
+
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+<link rel="stylesheet" href="/css/typography.css">
+
+  
+<link rel="stylesheet" href="/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/css/components.css">
+
+  
+<link rel="stylesheet" href="/css/nav.css">
+
+  
+<link rel="stylesheet" href="/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/css/footer.css">
+
+  
+<link rel="stylesheet" href="/css/post-list.css">
+
+  
+  
+<link rel="stylesheet" href="/css/rainbow-banner.css">
+
+  
+  
+  
+<link rel="stylesheet" href="/css/toc.css">
+
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/post.css">
+
+  
+  
+  
+  
+  
+
+  
+<meta name="generator" content="Hexo 7.2.0"></head>
+    <body
+        data-color-scheme="auto"
+        data-uppercase-categories="true"
+        
+        data-rainbow-banner="true"
+        data-rainbow-banner-shown="auto"
+        data-rainbow-banner-month="6"
+        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+        
+        data-config-root="/"
+        
+        data-toc="true"
+        data-toc-max-depth="2"
+        
+        
+    >
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">Blog</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">Home</a>
+            
+            
+            <a class="nav-item" href="/archives">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/friends">Friends</a>
+            
+            
+            
+            <a class="nav-item" href="/projects">Projects</a>
+            
+            
+            
+            <a class="nav-item" href="/about">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/MrWillCom" target="_blank" aria-label="GitHub">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-codepen nav-item-icon" href="https://codepen.io/mrwillcom" target="_blank" aria-label="CodePen">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-patreon nav-item-icon" href="https://www.patreon.com/MrWillCom" target="_blank" aria-label="Patreon">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-mastodon nav-item-icon" href="https://noc.social/@MrWillCom" target="_blank" aria-label="Mastodon">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-discord nav-item-icon" href="https://discord.gg/UKuFDjcfY8" target="_blank" aria-label="Discord">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        
+<article class="post">
+    <div class="meta">
+        
+        <div class="categories text-uppercase">
+        
+            <a href="/categories/技術分享/">技術分享</a>
+        
+        </div>
+        
+
+        
+        <div class="date" id="date">
+            <span>October</span>
+            <span>18,</span>
+            <span>2024</span>
+        </div>
+        
+
+        <h1 class="title">CSS的變種: SASS與LESS</h1>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <ul>
+<li><a href="#%E4%BB%80%E9%BA%BC%E6%98%AF-Sass-%E5%92%8C-Less">什麼是 Sass 和 Less</a><br>1 <a href="#Sass-%E7%9A%84%E7%89%B9%E9%BB%9E">Sass 的特點</a><br>1-1 <a href="#Sass-%E5%AF%AB%E6%B3%95%E7%AF%84%E4%BE%8B">Sass 寫法範例</a><br>2 <a href="#Less-%E7%9A%84%E7%89%B9%E9%BB%9E">Less 的特點</a><br>2-1 <a href="#Less-%E5%AF%AB%E6%B3%95%E7%AF%84%E4%BE%8B">Less 寫法範例</a></li>
+<li><a href="#Sass-%E8%88%87-Less-%E7%9A%84%E4%B8%BB%E8%A6%81%E5%B7%AE%E7%95%B0">Sass 與 Less 的主要差異</a></li>
+<li><a href="#%E5%89%8D%E7%BD%AE%E4%BD%9C%E6%A5%AD">前置作業</a><br>1 <a href="#%E5%89%8D%E7%BD%AE%E5%AE%89%E8%A3%9D">前置安裝</a></li>
+<li><a href="#%E5%A6%82%E4%BD%95%E9%96%8B%E5%A7%8B%E4%BD%BF%E7%94%A8-Sass">如何開始使用 Sass</a><br>1 <a href="#Step1-%E5%AE%89%E8%A3%9D-Sass">Step1:安裝 Sass</a><br>2 <a href="#Step2-%E7%B7%A8%E5%AF%AB-Sass-%E6%96%87%E4%BB%B6">Step2:編寫 Sass 文件</a><br>3 <a href="#Step3-%E7%B7%A8%E8%AD%AF-Sass">Step3:編譯 Sass</a><br>4 <a href="#Step4:%E5%9C%A8-HTML-%E4%B8%AD%E8%BC%89%E5%85%A5-CSS">Step4:在 HTML 中載入 CSS</a></li>
+<li><a href="#%E5%A6%82%E4%BD%95%E9%96%8B%E5%A7%8B%E4%BD%BF%E7%94%A8-Less">如何開始使用 Less</a><br>1 <a href="#Step1-%E5%AE%89%E8%A3%9D-Less">Step1:安裝 Less</a><br>2 <a href="#Step2-%E7%B7%A8%E5%AF%AB-Less-%E6%96%87%E4%BB%B6">Step2:編寫 Less 文件</a><br>3 <a href="#Step3-%E7%B7%A8%E8%AD%AF-Less">Step3:編譯 Less</a><br>4 <a href="#Step4-%E5%9C%A8-HTML-%E4%B8%AD%E8%BC%89%E5%85%A5-CSS-1">Step4:在 HTML 中載入 CSS</a></li>
+<li><a href="#%E5%9C%A8%E5%89%8D%E7%AB%AF%E6%A1%86%E6%9E%B6%E4%B8%AD%E4%BD%BF%E7%94%A8-Sass-%E5%92%8C-Less">在前端框架中使用 Sass 和 Less</a><br>1 <a href="#%E5%9C%A8-React-%E4%B8%AD%E4%BD%BF%E7%94%A8-Sass">在 React 中使用 Sass</a><br>2 <a href="#%E5%9C%A8-Vue-%E4%B8%AD%E4%BD%BF%E7%94%A8-Sass">在 Vue 中使用 Sass</a><br>3 <a href="#%E5%9C%A8-Angular-%E4%B8%AD%E4%BD%BF%E7%94%A8-Sass">在 Angular 中使用 Sass</a><br>4 <a href="#%E5%9C%A8-React-%E4%B8%AD%E4%BD%BF%E7%94%A8-Less">在 React 中使用 Less</a><br>5 <a href="#%E5%9C%A8-Vue-%E4%B8%AD%E4%BD%BF%E7%94%A8-Less">在 Vue 中使用 Less</a><br>6 <a href="#%E5%9C%A8-Angular-%E4%B8%AD%E4%BD%BF%E7%94%A8-Less">在 Angular 中使用 Less</a></li>
+<li><a href="#%E7%B5%90%E8%AB%96">結論</a></li>
+</ul>
+<h1 id="Sass-與-Less-的入門教學"><a href="#Sass-與-Less-的入門教學" class="headerlink" title="Sass 與 Less 的入門教學"></a>Sass 與 Less 的入門教學</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在現代前端開發中，CSS 預處理器如 Sass 和 Less 越來越受到重視。這些工具可以幫助我們寫出更結構化、更可維護的樣式代碼。本文將介紹 Sass 和 Less 的基本概念、使用方法，以及它們之間的主要差異，還有如何在前端框架中使用它們。</p>
+<hr>
+<h2 id="什麼是-Sass-和-Less？"><a href="#什麼是-Sass-和-Less？" class="headerlink" title="什麼是 Sass 和 Less？"></a>什麼是 Sass 和 Less？</h2><p><strong>Sass</strong>（Syntactically Awesome Style Sheets）和 <strong>Less</strong>（Leaner Style Sheets）都是 CSS 的擴展，提供了許多強大的功能，如變數、嵌套、混合（mixins）等，使得 CSS 的撰寫變得更方便。</p>
+<h3 id="1-Sass-的特點"><a href="#1-Sass-的特點" class="headerlink" title="1. Sass 的特點"></a>1. Sass 的特點</h3><ul>
+<li><strong>變數</strong>：可以定義顏色、字體等變數。</li>
+<li><strong>嵌套</strong>：支援選擇器的嵌套，讓樣式更具結構性。</li>
+<li><strong>混合</strong>：可重用樣式片段，減少重複代碼。</li>
+<li><strong>運算</strong>：可以進行數學運算，如計算寬度、高度等。</li>
+</ul>
+<h4 id="Sass-寫法示例"><a href="#Sass-寫法示例" class="headerlink" title="Sass 寫法示例"></a>Sass 寫法示例</h4><figure class="highlight scss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$primary-color</span>: <span class="number">#3498db</span>;</span><br><span class="line"></span><br><span class="line"><span class="selector-tag">body</span> &#123;</span><br><span class="line">  <span class="attribute">font-family</span>: Arial, sans-serif;</span><br><span class="line">  <span class="attribute">color</span>: <span class="variable">$primary-color</span>;</span><br><span class="line"></span><br><span class="line">  <span class="selector-tag">h1</span> &#123;</span><br><span class="line">    <span class="attribute">font-size</span>: <span class="number">2em</span>;</span><br><span class="line">    <span class="attribute">margin</span>: <span class="number">0</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="selector-class">.button</span> &#123;</span><br><span class="line">    <span class="attribute">background-color</span>: <span class="variable">$primary-color</span>;</span><br><span class="line">    <span class="attribute">padding</span>: <span class="number">10px</span>;</span><br><span class="line"></span><br><span class="line">    &amp;<span class="selector-pseudo">:hover</span> &#123;</span><br><span class="line">      <span class="attribute">background-color</span>: <span class="built_in">darken</span>(<span class="variable">$primary-color</span>, <span class="number">10%</span>);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-Less-的特點"><a href="#2-Less-的特點" class="headerlink" title="2. Less 的特點"></a>2. Less 的特點</h3><ul>
+<li><strong>變數</strong>：與 Sass 類似，可以定義變數。</li>
+<li><strong>嵌套</strong>：支援選擇器嵌套，結構清晰。</li>
+<li><strong>混合</strong>：可重用樣式，支援參數。</li>
+<li><strong>函數</strong>：提供許多內建函數進行顏色處理等。</li>
+</ul>
+<h4 id="Less-寫法示例"><a href="#Less-寫法示例" class="headerlink" title="Less 寫法示例"></a>Less 寫法示例</h4><figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">@primary-color:</span> <span class="number">#3498db</span>;</span><br><span class="line"></span><br><span class="line"><span class="selector-tag">body</span> &#123;</span><br><span class="line">  <span class="attribute">font-family</span>: Arial, sans-serif;</span><br><span class="line">  <span class="attribute">color</span>: <span class="variable">@primary-color</span>;</span><br><span class="line"></span><br><span class="line">  <span class="selector-tag">h1</span> &#123;</span><br><span class="line">    <span class="attribute">font-size</span>: <span class="number">2em</span>;</span><br><span class="line">    <span class="attribute">margin</span>: <span class="number">0</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="selector-class">.button</span> &#123;</span><br><span class="line">    <span class="attribute">background-color</span>: <span class="variable">@primary-color</span>;</span><br><span class="line">    <span class="attribute">padding</span>: <span class="number">10px</span>;</span><br><span class="line"></span><br><span class="line">    <span class="selector-tag">&amp;</span><span class="selector-pseudo">:hover</span> &#123;</span><br><span class="line">      <span class="attribute">background-color</span>: <span class="built_in">darken</span>(<span class="variable">@primary-color</span>, <span class="number">10%</span>);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="前置作業"><a href="#前置作業" class="headerlink" title="前置作業"></a>前置作業</h2><h3 id="前置安裝"><a href="#前置安裝" class="headerlink" title="前置安裝"></a>前置安裝</h3><p>在開始使用之前，電腦必須先安裝以下工具:</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://nodejs.org/en">安裝 node.js</a> : 使用 npm 指令來安裝所需的套件<blockquote>
+<p>Hexo 官網建議使用 Node.js 10.0 及以上版本，若不確定下載哪個版本，可以直接下載最新的 node 版本。</p>
+</blockquote>
+</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://nodejs.org/en"><img src="/../img/nodejs.png" alt="nodejs"></a></p>
+<h2 id="Sass-與-Less-的主要差異"><a href="#Sass-與-Less-的主要差異" class="headerlink" title="Sass 與 Less 的主要差異"></a>Sass 與 Less 的主要差異</h2><ul>
+<li><strong>語法</strong>：<br>Sass 使用縮排語法（Sass），或者可選擇使用類似 CSS 的 SCSS 語法。<br>Less 采用類似 CSS 的語法，並在 CSS 的基礎上進行擴展。</li>
+<li><strong>編譯器</strong>：<br>Sass 需要 Ruby 或 Node.js 環境來編譯，且提供了更高效的編譯方式。<br>Less 通常使用 JavaScript 編譯，因此能更快地進行即時編譯。</li>
+<li><strong>功能性</strong>：<br>Sass 提供更強大的功能，如 @import 語句能夠導入其他 Sass 文件，並且支持更複雜的運算和條件語句。<br>Less 支持簡單的函數和混合，但不如 Sass 那麼強大。</li>
+<li><strong>支持的環境</strong>：<br>Sass 更加流行於大型專案和團隊開發中，因為其功能更強大且靈活。<br>Less 常被用於小型項目或快速原型設計。</li>
+</ul>
+<h2 id="如何開始使用-Sass"><a href="#如何開始使用-Sass" class="headerlink" title="如何開始使用 Sass"></a>如何開始使用 Sass</h2><h3 id="Step1-安裝-Sass"><a href="#Step1-安裝-Sass" class="headerlink" title="Step1:安裝 Sass"></a>Step1:安裝 Sass</h3><p>使用以下命令安裝 Sass：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g sass</span><br></pre></td></tr></table></figure>
+
+<h3 id="Step2-編寫-Sass-文件"><a href="#Step2-編寫-Sass-文件" class="headerlink" title="Step2:編寫 Sass 文件"></a>Step2:編寫 Sass 文件</h3><p>創建一個名為 styles.scss 的檔案，範例內容如下：</p>
+<figure class="highlight scss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$primary-color</span>: <span class="number">#3498db</span>;</span><br><span class="line"></span><br><span class="line"><span class="selector-tag">body</span> &#123;</span><br><span class="line">  <span class="attribute">font-family</span>: Arial, sans-serif;</span><br><span class="line">  <span class="attribute">color</span>: <span class="variable">$primary-color</span>;</span><br><span class="line"></span><br><span class="line">  <span class="selector-tag">h1</span> &#123;</span><br><span class="line">    <span class="attribute">font-size</span>: <span class="number">2em</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Step3-編譯-Sass"><a href="#Step3-編譯-Sass" class="headerlink" title="Step3:編譯 Sass"></a>Step3:編譯 Sass</h3><p>使用以下命令將 Sass 編譯成 CSS：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sass styles.scss styles.css</span><br></pre></td></tr></table></figure>
+
+<h3 id="Step4-在-HTML-中載入-CSS"><a href="#Step4-在-HTML-中載入-CSS" class="headerlink" title="Step4:在 HTML 中載入 CSS"></a>Step4:在 HTML 中載入 CSS</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">&quot;zh&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;stylesheet&quot;</span> <span class="attr">href</span>=<span class="string">&quot;styles.css&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Sass 教學<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h1</span>&gt;</span>Hello, Sass!<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="如何開始使用-Less"><a href="#如何開始使用-Less" class="headerlink" title="如何開始使用 Less"></a>如何開始使用 Less</h2><h3 id="Step1-安裝-Less"><a href="#Step1-安裝-Less" class="headerlink" title="Step1:安裝 Less"></a>Step1:安裝 Less</h3><p>使用以下命令安裝 Less：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g less</span><br></pre></td></tr></table></figure>
+
+<h3 id="Step2-編寫-Less-文件"><a href="#Step2-編寫-Less-文件" class="headerlink" title="Step2:編寫 Less 文件"></a>Step2:編寫 Less 文件</h3><p>創建一個名為 styles.less 的檔案，內容如下：</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">@primary-color:</span> <span class="number">#3498db</span>;</span><br><span class="line"></span><br><span class="line"><span class="selector-tag">body</span> &#123;</span><br><span class="line">  <span class="attribute">font-family</span>: Arial, sans-serif;</span><br><span class="line">  <span class="attribute">color</span>: <span class="variable">@primary-color</span>;</span><br><span class="line"></span><br><span class="line">  <span class="selector-tag">h1</span> &#123;</span><br><span class="line">    <span class="attribute">font-size</span>: <span class="number">2em</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Step3-編譯-Less"><a href="#Step3-編譯-Less" class="headerlink" title="Step3:編譯 Less"></a>Step3:編譯 Less</h3><p>使用以下命令將 Less 編譯成 CSS:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lessc styles.less styles.css</span><br></pre></td></tr></table></figure>
+
+<h3 id="Step4-在-HTML-中載入-CSS-1"><a href="#Step4-在-HTML-中載入-CSS-1" class="headerlink" title="Step4:在 HTML 中載入 CSS"></a>Step4:在 HTML 中載入 CSS</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">&quot;zh&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;stylesheet&quot;</span> <span class="attr">href</span>=<span class="string">&quot;styles.css&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Less 教學<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h1</span>&gt;</span>Hello, Less!<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="在前端框架中使用-Sass-和-Less"><a href="#在前端框架中使用-Sass-和-Less" class="headerlink" title="在前端框架中使用 Sass 和 Less"></a>在前端框架中使用 Sass 和 Less</h2><h3 id="在-React-中使用-Sass"><a href="#在-React-中使用-Sass" class="headerlink" title="在 React 中使用 Sass:"></a>在 React 中使用 Sass:</h3><h4 id="1-安裝-Sass："><a href="#1-安裝-Sass：" class="headerlink" title="1. 安裝 Sass："></a>1. 安裝 Sass：</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g sass</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-創建一個-scss-檔案，如-App-scss，然後在組件中導入它："><a href="#2-創建一個-scss-檔案，如-App-scss，然後在組件中導入它：" class="headerlink" title="2.創建一個 .scss 檔案，如 App.scss，然後在組件中導入它："></a>2.創建一個 .scss 檔案，如 App.scss，然後在組件中導入它：</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">&quot;./App.scss&quot;</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="在-Vue-中使用-Sass"><a href="#在-Vue-中使用-Sass" class="headerlink" title="在 Vue 中使用 Sass:"></a>在 Vue 中使用 Sass:</h3><h4 id="1-安裝-Sass"><a href="#1-安裝-Sass" class="headerlink" title="1. 安裝 Sass:"></a>1. 安裝 Sass:</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g sass</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-在你的-vue-文件中，添加，範例如下："><a href="#2-在你的-vue-文件中，添加，範例如下：" class="headerlink" title="2.在你的 .vue 文件中，添加&lt;style lang=&quot;scss&quot;&gt;，範例如下："></a>2.在你的 .vue 文件中，添加<code>&lt;style lang=&quot;scss&quot;&gt;</code>，範例如下：</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  <span class="language-xml"><span class="tag">&lt;<span class="name">h1</span>&gt;</span>Hello, Vue!<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span></span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">style</span> <span class="attr">lang</span>=<span class="string">&quot;scss&quot;</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">$primary-color: #3498db;</span></span><br><span class="line"><span class="language-xml">h1 &#123;</span></span><br><span class="line"><span class="language-xml">    color: $primary-color;</span></span><br><span class="line"><span class="language-xml">&#125;</span></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+
+<h4 id="3-使用-src-引入-scss，範例如下"><a href="#3-使用-src-引入-scss，範例如下" class="headerlink" title="3.使用 src 引入 scss，範例如下:"></a>3.使用 src 引入 scss，範例如下:</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;style lang=<span class="string">&quot;scss&quot;</span> src=<span class="string">&quot;@/assets/scss/main.scss&quot;</span> scoped&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="在-Angular-中使用-Sass"><a href="#在-Angular-中使用-Sass" class="headerlink" title="在 Angular 中使用 Sass:"></a>在 Angular 中使用 Sass:</h3><h4 id="1-在創建-Angular-項目時，選擇-Sass-作為樣式格式，或使用以下命令安裝："><a href="#1-在創建-Angular-項目時，選擇-Sass-作為樣式格式，或使用以下命令安裝：" class="headerlink" title="1.在創建 Angular 項目時，選擇 Sass 作為樣式格式，或使用以下命令安裝："></a>1.在創建 Angular 項目時，選擇 Sass 作為樣式格式，或使用以下命令安裝：</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g sass</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-創建-scss-檔案並在組件中導入："><a href="#2-創建-scss-檔案並在組件中導入：" class="headerlink" title="2.創建 .scss 檔案並在組件中導入："></a>2.創建 .scss 檔案並在組件中導入：</h4><figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$primary-<span class="attribute">color</span>: <span class="number">#3498db</span>;</span><br><span class="line"></span><br><span class="line"><span class="selector-tag">h1</span> &#123;</span><br><span class="line">  <span class="attribute">color</span>: $primary-color;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-在組件的樣式中引用："><a href="#3-在組件的樣式中引用：" class="headerlink" title="3.在組件的樣式中引用："></a>3.在組件的樣式中引用：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">import &#x27;./styles.scss&#x27;;</span><br></pre></td></tr></table></figure>
+
+<h3 id="在-React-中使用-Less"><a href="#在-React-中使用-Less" class="headerlink" title="在 React 中使用 Less:"></a>在 React 中使用 Less:</h3><h4 id="1-安裝-Less："><a href="#1-安裝-Less：" class="headerlink" title="1. 安裝 Less："></a>1. 安裝 Less：</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g less</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-創建一個-less-檔案，如-App-less，然後在組件中導入它："><a href="#2-創建一個-less-檔案，如-App-less，然後在組件中導入它：" class="headerlink" title="2.創建一個 .less 檔案，如 App.less，然後在組件中導入它："></a>2.創建一個 .less 檔案，如 App.less，然後在組件中導入它：</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">&quot;./App.less&quot;</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="在-Vue-中使用-Less"><a href="#在-Vue-中使用-Less" class="headerlink" title="在 Vue 中使用 Less:"></a>在 Vue 中使用 Less:</h3><h4 id="1-安裝-less"><a href="#1-安裝-less" class="headerlink" title="1. 安裝 less:"></a>1. 安裝 less:</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g less</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-在你的-vue-文件中，添加，範例如下：-1"><a href="#2-在你的-vue-文件中，添加，範例如下：-1" class="headerlink" title="2.在你的 .vue 文件中，添加&lt;style lang=&quot;less&quot;&gt;，範例如下："></a>2.在你的 .vue 文件中，添加<code>&lt;style lang=&quot;less&quot;&gt;</code>，範例如下：</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  <span class="language-xml"><span class="tag">&lt;<span class="name">h1</span>&gt;</span>Hello, Vue!<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span></span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">style</span> <span class="attr">lang</span>=<span class="string">&quot;less&quot;</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">$primary-color: #3498db;</span></span><br><span class="line"><span class="language-xml">h1 &#123;</span></span><br><span class="line"><span class="language-xml">    color: $primary-color;</span></span><br><span class="line"><span class="language-xml">&#125;</span></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+
+<h4 id="3-使用-src-引入-scss，範例如下-1"><a href="#3-使用-src-引入-scss，範例如下-1" class="headerlink" title="3.使用 src 引入 scss，範例如下:"></a>3.使用 src 引入 scss，範例如下:</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;style lang=<span class="string">&quot;less&quot;</span> src=<span class="string">&quot;@/assets/scss/main.less&quot;</span> scoped&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="在-Angular-中使用-Less"><a href="#在-Angular-中使用-Less" class="headerlink" title="在 Angular 中使用 Less:"></a>在 Angular 中使用 Less:</h3><h4 id="1-在創建-Angular-項目時，選擇-less-作為樣式格式，或使用以下命令安裝："><a href="#1-在創建-Angular-項目時，選擇-less-作為樣式格式，或使用以下命令安裝：" class="headerlink" title="1.在創建 Angular 項目時，選擇 less 作為樣式格式，或使用以下命令安裝："></a>1.在創建 Angular 項目時，選擇 less 作為樣式格式，或使用以下命令安裝：</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g less</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-創建-less-檔案並在組件中導入："><a href="#2-創建-less-檔案並在組件中導入：" class="headerlink" title="2.創建 .less 檔案並在組件中導入："></a>2.創建 .less 檔案並在組件中導入：</h4><figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$primary-<span class="attribute">color</span>: <span class="number">#3498db</span>;</span><br><span class="line"></span><br><span class="line"><span class="selector-tag">h1</span> &#123;</span><br><span class="line">  <span class="attribute">color</span>: $primary-color;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-在組件的樣式中引用：-1"><a href="#3-在組件的樣式中引用：-1" class="headerlink" title="3.在組件的樣式中引用："></a>3.在組件的樣式中引用：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">import &#x27;./styles.less&#x27;;</span><br></pre></td></tr></table></figure>
+
+<h2 id="結論"><a href="#結論" class="headerlink" title="結論"></a>結論</h2><p>Sass 與 Less 兩種 CSS 的預處理器都是強大且能有效提高開發效率，它們都能幫助你寫出更具可維護性和可讀性的樣式代碼，兩者的語法也很相近，可以選擇自己喜歡的來引入專案使用，希望這篇教學能幫助你入門 Sass 和 Less 的世界！</p>
+
+    </div>
+
+    
+    <div class="about">
+        <h1>About this Post</h1>
+        <div class="details">
+            <p>This post is written by Peter, licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a>.</p>
+        </div>
+        
+        <p class="tags">
+            
+            <i class="icon"></i>
+            <a href="/tags/CSS/" class="tag">#CSS</a><a href="/tags/SASS/" class="tag">#SASS</a><a href="/tags/LESS/" class="tag">#LESS</a><a href="/tags/FRONTEND/" class="tag">#FRONTEND</a><a href="/tags/TUTORIAL/" class="tag">#TUTORIAL</a>
+        </p>
+        
+    </div>
+    
+
+    <div class="container post-prev-next">
+        
+        <a href="/2024/11/08/React%E5%B0%88%E6%A1%88%E5%BC%95%E5%85%A5PWA%E6%A9%9F%E5%88%B6/" class="next">
+            <div>
+                <div class="text">
+                    <p class="label">Next</p>
+                    <h3 class="title">React專案引入PWA機制</h3>
+                </div>
+            </div>
+        </a>
+        
+        
+        <a href="/2024/06/12/%E4%BD%BF%E7%94%A8-Hexo-GitHub-Pages-%E6%9E%B6%E8%A8%AD%E5%80%8B%E4%BA%BA%E9%83%A8%E8%90%BD%E6%A0%BC/" class="prev">
+            <div>
+                <div class="text">
+                    <p class="label">Previous</p>
+                    <h3 class="title">使用 Hexo + GitHub Pages 架設個人部落格</>
+                </div>
+            </div>
+        </a>
+        
+    </div>
+
+    
+        
+        
+    
+</article>
+
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h2 class="title">Blog</h2>
+                
+                <a href="/" class="item">Blog</a>
+                
+                <a href="/archives" class="item">Archives</a>
+                
+                <a href="/tags" class="item">Tags</a>
+                
+                <a href="/categories" class="item">Categories</a>
+                
+                <a href="/search" class="item">Search</a>
+                
+                <a href="/friends" class="item">Friends</a>
+                
+                <a href="/projects" class="item">Projects</a>
+                
+                <a href="/resume" class="item">Resume</a>
+                
+                <a href="/about" class="item">About</a>
+                
+                <a href="/atom.xml" class="item">RSS</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Projects</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/MrWillCom/rsa-cli" class="item">RSA CLI</a>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/MrWillCom/hexo-theme-cupertino" class="item">Hexo Theme Cupertino</a>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/MrWillCom/a-calendar" class="item">A Calendar</a>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/MrWillCom/auto-mirroring-bucket" class="item">Auto Mirroring Bucket</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Me</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/MrWillCom" class="item">GitHub</a>
+                
+                <a target="_blank" rel="noopener" href="https://codepen.io/mrwillcom" class="item">CodePen</a>
+                
+                <a target="_blank" rel="noopener" href="https://www.patreon.com/MrWillCom" class="item">Patreon</a>
+                
+                <a target="_blank" rel="noopener" href="https://noc.social/@MrWillCom" class="item">Mastodon</a>
+                
+                <a target="_blank" rel="noopener" href="https://discord.gg/UKuFDjcfY8" class="item">Discord</a>
+                
+                <a href="mailto:mr.will.com@outlook.com" class="item">Email</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2026 Peter<br>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> </span>
+        
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+
+        
+<script src="/js/main.js"></script>
+
+        
+        
+        
+
+        
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            window.addEventListener('load', () => {
+                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
+                ScrollReveal().reveal('.post-list-item .cover-img img')
+                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
+            })
+        </script>
+        
+    </body>
+</html>

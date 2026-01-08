@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head prefix="og: https://ogp.me/ns#">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  
+  <title>Monorepo架構的NX專案引入Sentry監控 - Peter&#39;s Blog</title>
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+  
+  
+  <meta property="og:title" content="Monorepo架構的NX專案引入Sentry監控 - Peter&#39;s Blog" />
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:url" content="https://tsengpeter.github.io/2025/09/10/Monorepo%E6%9E%B6%E6%A7%8B%E7%9A%84NX%E5%B0%88%E6%A1%88%E5%BC%95%E5%85%A5Sentry%E7%9B%A3%E6%8E%A7/index.html" />
+  
+  <meta property="og:image" content="/favicon.png" />
+  
+  <meta property="og:article:published_time" content="2025-09-10T21:00:00.000Z" />
+  
+  <meta property="og:article:author" content="Peter" />
+  
+  
+
+  
+<link rel="stylesheet" href="/css/var.css">
+
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+<link rel="stylesheet" href="/css/typography.css">
+
+  
+<link rel="stylesheet" href="/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/css/components.css">
+
+  
+<link rel="stylesheet" href="/css/nav.css">
+
+  
+<link rel="stylesheet" href="/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/css/footer.css">
+
+  
+<link rel="stylesheet" href="/css/post-list.css">
+
+  
+  
+<link rel="stylesheet" href="/css/rainbow-banner.css">
+
+  
+  
+  
+<link rel="stylesheet" href="/css/toc.css">
+
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/post.css">
+
+  
+  
+  
+  
+  
+
+  
+<meta name="generator" content="Hexo 7.2.0"></head>
+    <body
+        data-color-scheme="auto"
+        data-uppercase-categories="true"
+        
+        data-rainbow-banner="true"
+        data-rainbow-banner-shown="auto"
+        data-rainbow-banner-month="6"
+        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+        
+        data-config-root="/"
+        
+        data-toc="true"
+        data-toc-max-depth="2"
+        
+        
+    >
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">Blog</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">Home</a>
+            
+            
+            <a class="nav-item" href="/archives">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/friends">Friends</a>
+            
+            
+            
+            <a class="nav-item" href="/projects">Projects</a>
+            
+            
+            
+            <a class="nav-item" href="/about">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/MrWillCom" target="_blank" aria-label="GitHub">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-codepen nav-item-icon" href="https://codepen.io/mrwillcom" target="_blank" aria-label="CodePen">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-patreon nav-item-icon" href="https://www.patreon.com/MrWillCom" target="_blank" aria-label="Patreon">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-mastodon nav-item-icon" href="https://noc.social/@MrWillCom" target="_blank" aria-label="Mastodon">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-discord nav-item-icon" href="https://discord.gg/UKuFDjcfY8" target="_blank" aria-label="Discord">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        
+<article class="post">
+    <div class="meta">
+        
+        <div class="categories text-uppercase">
+        
+            <a href="/categories/技術分享/">技術分享</a>
+        
+        </div>
+        
+
+        
+        <div class="date" id="date">
+            <span>September</span>
+            <span>10,</span>
+            <span>2025</span>
+        </div>
+        
+
+        <h1 class="title">Monorepo架構的NX專案引入Sentry監控</h1>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <ul>
+<li><a href="#Sentry-%E6%98%AF%E4%BB%80%E9%BA%BC">Sentry 是什麼</a></li>
+<li><a href="#%E7%82%BA%E4%BD%95%E5%9C%A8-NX-Monorepo-%E4%B8%AD%E4%BD%BF%E7%94%A8-Sentry">為何在 NX Monorepo 中使用 Sentry</a></li>
+<li><a href="#%E5%B0%88%E6%A1%88%E8%A8%AD%E5%AE%9A%E8%88%87%E7%92%B0%E5%A2%83%E5%BB%BA%E7%BD%AE">專案設定與環境建置</a><ul>
+<li><a href="#Step1-%E5%BB%BA%E7%AB%8B-Sentry-%E5%B0%88%E6%A1%88">Step1: 建立 Sentry 專案</a></li>
+<li><a href="#Step2-%E5%9C%A8-NX-%E5%B0%88%E6%A1%88%E4%B8%AD%E5%AE%89%E8%A3%9D-Sentry">Step2: 在 NX 專案中安裝 Sentry</a></li>
+<li><a href="#Step3-%E5%88%9D%E5%A7%8B%E5%8C%96-Sentry">Step3: 初始化 Sentry</a></li>
+</ul>
+</li>
+<li><a href="#%E8%A8%AD%E5%AE%9A-Source-Map-%E4%B8%8A%E5%82%B3">設定 Source Map 上傳</a><ul>
+<li><a href="#Step1-%E5%AE%89%E8%A3%9D-Sentry-CLI">Step1: 安裝 Sentry CLI</a></li>
+<li><a href="#Step2-%E8%A8%AD%E5%AE%9A-Sentry-CLI">Step2: 設定 Sentry CLI</a></li>
+<li><a href="#Step3-%E6%95%B4%E5%90%88-Source-Map-%E4%B8%8A%E5%82%B3%E8%87%B3%E5%BB%BA%E7%BD%AE%E6%B5%81%E7%A8%8B">Step3: 整合 Source Map 上傳至建置流程</a></li>
+</ul>
+</li>
+<li><a href="#%E6%B8%AC%E8%A9%A6%E6%95%B4%E5%90%88%E7%B5%90%E6%9E%9C">測試整合結果</a></li>
+<li><a href="#%E7%B8%BD%E7%B5%90">總結</a></li>
+</ul>
+<span id="more"></span>
+
+<h2 id="Sentry-是什麼"><a href="#Sentry-是什麼" class="headerlink" title="Sentry 是什麼"></a>Sentry 是什麼</h2><p>Sentry 是一個開源的錯誤追蹤與效能監控平台，它可以幫助開發者即時發現、診斷並解決應用程式中的問題。從前端的 JavaScript 錯誤到後端的伺服器異常，Sentry 都能提供詳細的錯誤報告、堆疊追蹤 (Stack Trace) 以及發生問題時的上下文環境，讓修復 Bug 的過程更加高效。</p>
+<h2 id="為何在-NX-Monorepo-中使用-Sentry"><a href="#為何在-NX-Monorepo-中使用-Sentry" class="headerlink" title="為何在 NX Monorepo 中使用 Sentry"></a>為何在 NX Monorepo 中使用 Sentry</h2><p>NX 是一個強大的 Monorepo (單體式版本庫) 管理工具，它讓在同一個專案中管理多個前端和後端應用程式變得輕而易舉。然而，隨著專案數量增長，監控每個應用的健康狀況也變得愈加複雜。</p>
+<p>在 Monorepo 架構中引入 Sentry 帶來了以下核心優勢：</p>
+<ol>
+<li><strong>集中式監控</strong>：為所有應用程式（無論是 React, Angular, 或 NestJS）提供一個統一的儀表板來監控錯誤和效能。</li>
+<li><strong>跨專案追蹤</strong>：能夠追蹤從前端請求到後端服務的完整流程，快速定位問題根源。</li>
+<li><strong>標準化錯誤管理</strong>：在整個組織內建立一套標準化的錯誤處理與警報機制。</li>
+</ol>
+<h2 id="專案設定與環境建置"><a href="#專案設定與環境建置" class="headerlink" title="專案設定與環境建置"></a>專案設定與環境建置</h2><p>以下將引導您完成 Sentry 在 NX 專案中的設定，本篇將以前端技術為主。</p>
+<h3 id="Step1-建立-Sentry-專案"><a href="#Step1-建立-Sentry-專案" class="headerlink" title="Step1: 建立 Sentry 專案"></a>Step1: 建立 Sentry 專案</h3><ol>
+<li>前往 <a target="_blank" rel="noopener" href="https://sentry.io/">sentry.io</a> 註冊一個帳號並登入，我是用google登入，會要填寫組織名稱跟顯示名稱等。</li>
+<li>建立一個新專案，並根據您要監控的應用程式選擇對應的框架（例如：React, Angular, NestJS）。</li>
+</ol>
+<blockquote>
+<p>根據圖片的步驟創建專案<br><img src="/../img/sentry1.png" alt="sentry1"><br>創建好專案後點擊專案會看到這個畫面，選擇你目前專案使用的技術<br><img src="/../img/sentry2.png" alt="sentry2"><br>1 可以連結slack、email、teams來發出訊息，2 是輸入你這個專案的名稱<br><img src="/../img/sentry3.png" alt="sentry3"></p>
+</blockquote>
+<h3 id="Step2-在-NX-專案中安裝-Sentry"><a href="#Step2-在-NX-專案中安裝-Sentry" class="headerlink" title="Step2: 在 NX 專案中安裝 Sentry"></a>Step2: 在 NX 專案中安裝 Sentry</h3><p>針對您 Monorepo 中要監控的特定應用程式，安裝對應的 Sentry SDK。</p>
+<p>以一個名為 <code>my-react-app</code> 的 React 應用為例：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install @sentry/react</span><br></pre></td></tr></table></figure>
+<p>或是你用的是pnpm</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pnpm install -w @sentry/react</span><br></pre></td></tr></table></figure>
+
+<p>這個 <code>@sentry/vite-plugin</code> 套件是我們推薦用來上傳 Source Map 的工具，我們將在後續章節說明如何設定它。</p>
+<p>這裡主要是已React的專案為例子，其他技術可參考 <a target="_blank" rel="noopener" href="https://docs.sentry.io/">Sentry</a> 官方文件，點選你的技術架構就會引導如何導入</p>
+<blockquote>
+<p>指令中的 -w 是指安裝在 package.json 的 dependencies，而非在devdependencies</p>
+</blockquote>
+<h4 id="sentryVitePlugin設定來源"><a href="#sentryVitePlugin設定來源" class="headerlink" title="sentryVitePlugin設定來源"></a>sentryVitePlugin設定來源</h4><p>sentryVitePlugin的 org 是Sentry創建帳號時輸入的 Organization Slug，project則是你創建的Sentry project名稱，authToken則是要透過下方操作來取得</p>
+<blockquote>
+<p>點選左邊 Settings 後找到 Develope Settings 的 Organization Tokens，點選之後會看到畫面上的 Create New Token 按鈕<br><img src="/../img/sentry8.png" alt="sentry8"><br>輸入隨意的名稱後按下 Create Token 按鈕<br><img src="/../img/sentry9.png" alt="sentry9"><br>建立成功會看到一串的Token，這個就是authToken要填的，將其複製下來貼到authToken<br><img src="/../img/sentry10.png" alt="sentry10"></p>
+</blockquote>
+<p><strong>備註</strong>: NX各個專案的 sentryVitePlugin 設定值全部用同一組即可</p>
+<h3 id="Step3-初始化-Sentry"><a href="#Step3-初始化-Sentry" class="headerlink" title="Step3: 初始化 Sentry"></a>Step3: 初始化 Sentry</h3><p>在應用程式的進入點 (Entry Point) 初始化 Sentry，使 Sentry 在應用程式啟動時就開始監控。</p>
+<p>下方以NX架構下的 React 專案為例，因為NX架構下的專案不會只有一個，因此我的作法是將Sentry初始化的程式建立一個新的NX架構的library，每個NX底下的專案會對立各個Sentry建立的project，因此每個專案會有相對應的 dsn 需要傳入初始化的function，因此我將 dsn 已參數傳入function方式，而 dsn 可以在NX的各專案下建立各自的設定檔來儲存 dsn，例如建立.env檔存放等等。</p>
+<p>首先先建立NX的library</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npx nx -g @nx/react:library libs/&lt;name&gt;</span><br></pre></td></tr></table></figure>
+<p>或是你用的是pnpm</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pnpm <span class="built_in">exec</span> nx -g @nx/react:library libs/&lt;name&gt;</span><br></pre></td></tr></table></figure>
+
+<p>之後再你建立的的 libs&#x2F;<name> 的資料夾中將下方的程式碼寫到 src&#x2F;lib&#x2F;<name>.ts 中</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> * <span class="keyword">as</span> <span class="title class_">Sentry</span> <span class="keyword">from</span> <span class="string">&quot;@sentry/react&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> <span class="title function_">initSentry</span> = (<span class="params">DSN: <span class="built_in">string</span>, ver: <span class="built_in">string</span>, env: <span class="built_in">string</span></span>) =&gt; &#123;</span><br><span class="line">  <span class="title class_">Sentry</span>.<span class="title function_">init</span>(&#123;</span><br><span class="line">    <span class="comment">// 在此處貼上您從 Sentry 專案設定中取得的 DSN</span></span><br><span class="line">    <span class="attr">dsn</span>: <span class="variable constant_">DSN</span>,</span><br><span class="line">    <span class="attr">integrations</span>: [</span><br><span class="line">      <span class="comment">// 啟用瀏覽器性能監控</span></span><br><span class="line">      <span class="title class_">Sentry</span>.<span class="title function_">browserTracingIntegration</span>(),</span><br><span class="line">      <span class="comment">// 啟用 Session Replay</span></span><br><span class="line">      <span class="title class_">Sentry</span>.<span class="title function_">replayIntegration</span>(&#123;</span><br><span class="line">        <span class="comment">// 為了保護用戶隱私，可以選擇性地遮罩所有文字和圖片</span></span><br><span class="line">        <span class="attr">maskAllText</span>: <span class="literal">true</span>,</span><br><span class="line">        <span class="attr">blockAllMedia</span>: <span class="literal">true</span>,</span><br><span class="line">      &#125;),</span><br><span class="line">      <span class="title class_">Sentry</span>.<span class="title function_">captureConsoleIntegration</span>(&#123; <span class="attr">levels</span>: [<span class="string">&quot;error&quot;</span>, <span class="string">&quot;warn&quot;</span>] &#125;),</span><br><span class="line">    ],</span><br><span class="line">    <span class="comment">// 設定性能監控的採樣率 (可依需求調整)</span></span><br><span class="line">    <span class="attr">tracesSampleRate</span>: <span class="number">1.0</span>,</span><br><span class="line">    <span class="comment">// 設定 Session Replay 的採樣率</span></span><br><span class="line">    <span class="attr">replaysSessionSampleRate</span>: <span class="number">0.1</span>, <span class="comment">// 10% 的 session 會被錄製</span></span><br><span class="line">    <span class="attr">replaysOnErrorSampleRate</span>: <span class="number">1.0</span>, <span class="comment">// 發生錯誤的 session 100% 會被錄製</span></span><br><span class="line">    <span class="comment">// 開啟或關閉除錯模式</span></span><br><span class="line">    <span class="attr">debug</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="comment">// 設定應用程式的版本</span></span><br><span class="line">    <span class="attr">release</span>: ver,</span><br><span class="line">    <span class="comment">// 設定應用程式的環境</span></span><br><span class="line">    <span class="attr">environment</span>: env,</span><br><span class="line">    <span class="comment">// 設定是否發送個人可識別資訊 (PII)</span></span><br><span class="line">    <span class="attr">sendDefaultPii</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="comment">// 設定最大麵包屑數量</span></span><br><span class="line">    <span class="attr">maxBreadcrumbs</span>: <span class="number">50</span>,</span><br><span class="line">    <span class="comment">// 設定是否附加堆疊追蹤</span></span><br><span class="line">    <span class="attr">attachStacktrace</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="comment">// 設定性能分析的採樣率</span></span><br><span class="line">    <span class="attr">profilesSampleRate</span>: <span class="number">1.0</span>,</span><br><span class="line">    <span class="comment">// 設定初始範圍</span></span><br><span class="line">    <span class="attr">initialScope</span>: &#123;</span><br><span class="line">      <span class="attr">tags</span>: &#123; <span class="string">&quot;my-tag&quot;</span>: <span class="string">&quot;my value&quot;</span> &#125;,</span><br><span class="line">      <span class="attr">user</span>: &#123; <span class="attr">id</span>: <span class="number">42</span>, <span class="attr">email</span>: <span class="string">&quot;john.doe@example.com&quot;</span> &#125;,</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="comment">// 在發送事件前執行回呼</span></span><br><span class="line">    <span class="title function_">beforeSend</span>(<span class="params">event</span>) &#123;</span><br><span class="line">      <span class="comment">// 修改或捨棄事件</span></span><br><span class="line">      <span class="keyword">return</span> event;</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="comment">// 忽略特定的錯誤</span></span><br><span class="line">    <span class="attr">ignoreErrors</span>: [<span class="string">&quot;ResizeObserver loop limit exceeded&quot;</span>],</span><br><span class="line">    <span class="comment">// 設定追蹤傳播的目標</span></span><br><span class="line">    <span class="attr">tracePropagationTargets</span>: [<span class="string">&quot;localhost&quot;</span>, <span class="regexp">/^https:\/\/yourserver\.io\/api\//</span>],</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>還要再 src&#x2F;index.ts 中將下方程式碼寫入</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> * <span class="keyword">from</span> <span class="string">&quot;./lib/&lt;name&gt;.ts&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>接著，在您要監控的應用程式進入點 (例如 <code>apps/my-react-app/src/main.tsx</code>) 呼叫剛剛建立的 <code>initSentry</code> 函式。為了提供更完整的範例，下方是一個典型的 <code>main.tsx</code> 檔案內容：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; initSentry &#125; <span class="keyword">from</span> <span class="string">&#x27;@&lt;your-workspace-name&gt;/&lt;name&gt;&#x27;</span>; <span class="comment">// 根據你的 tsconfig.base.json 中的路徑別名調整</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">React</span> <span class="keyword">from</span> <span class="string">&#x27;react&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; createRoot &#125; <span class="keyword">from</span> <span class="string">&#x27;react-dom/client&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> <span class="title class_">App</span> <span class="keyword">from</span> <span class="string">&#x27;./app/app&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 初始化 Sentry</span></span><br><span class="line"><span class="comment">// 建議將 DSN、版本和環境等敏感或常變動的資訊儲存在環境變數中</span></span><br><span class="line"><span class="title function_">initSentry</span>(</span><br><span class="line">  process.<span class="property">env</span>.<span class="property">NX_SENTRY_DSN</span>, <span class="comment">// 從環境變數讀取 DSN</span></span><br><span class="line">  <span class="string">&#x27;1.0.0&#x27;</span>, <span class="comment">// 建議從 package.json 或環境變數讀取</span></span><br><span class="line">  process.<span class="property">env</span>.<span class="property">NODE_ENV</span> <span class="comment">// &#x27;development&#x27; 或 &#x27;production&#x27;</span></span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> root = <span class="title function_">createRoot</span>(<span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&#x27;root&#x27;</span>)!);</span><br><span class="line">root.<span class="title function_">render</span>(</span><br><span class="line">  <span class="language-xml"><span class="tag">&lt;<span class="name">React.StrictMode</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;<span class="name">App</span> /&gt;</span></span></span><br><span class="line"><span class="language-xml">  <span class="tag">&lt;/<span class="name">React.StrictMode</span>&gt;</span></span></span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>路徑提示</strong>：<code>@&lt;your-workspace-name&gt;/&lt;name&gt;</code> 是 NX library 的典型引入路徑，您可以在專案根目錄的 <code>tsconfig.base.json</code> 中找到對應的 <code>paths</code> 別名設定。如果使用相對路徑，請確保路徑 <code>../../libs/&lt;name&gt;/src/index.ts</code> 正確。</p>
+</blockquote>
+<h4 id="如何設定環境變數"><a href="#如何設定環境變數" class="headerlink" title="如何設定環境變數"></a>如何設定環境變數</h4><p>為了讓 <code>process.env.NX_SENTRY_DSN</code> 能夠被讀取到，您需要在專案中設定環境變數。NX 提供了方便的方式來管理不同環境的變數。</p>
+<ol>
+<li><p>在您要監控的應用程式根目錄下建立 <code>.env</code> 檔案，例如：<code>apps/my-react-app/.env</code>。</p>
+</li>
+<li><p>在檔案中填入 Sentry DSN：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># apps/my-react-app/.env</span><br><span class="line">NX_SENTRY_DSN=&quot;在此貼上您從Sentry專案取得的DSN&quot;</span><br></pre></td></tr></table></figure></li>
+</ol>
+<p>如此一來，當您執行 <code>nx serve my-react-app</code> 時，<code>process.env.NX_SENTRY_DSN</code> 就會被正確載入。您也可以為不同的環境（如 <code>production</code>）建立不同的設定檔，例如 <code>.env.production</code>，並在其中定義不同的 DSN 或其他設定。</p>
+<p><strong>強烈建議</strong>：不要將 <code>DSN</code> 直接寫在程式碼中，並將 <code>.env</code> 相關檔案加入到 <code>.gitignore</code> 中，以避免敏感資訊外洩。</p>
+<h4 id="如何找到-Sentry-的DSN"><a href="#如何找到-Sentry-的DSN" class="headerlink" title="如何找到 Sentry 的DSN"></a>如何找到 Sentry 的DSN</h4><p>根據下方圖片的步驟操作就可以找到 Project 的 DSN</p>
+<blockquote>
+<p>點選你創立的對應 Project<br><img src="/../img/sentry4.png" alt="sentry4"><br>點擊右上方齒輪圖示的設定按鈕<br><img src="/../img/sentry5.png" alt="sentry5"><br>再點左邊的Settings，找到 SDK Setup 點擊 Client keys<br><img src="/../img/sentry6.png" alt="sentry6"><br>就會看到 Project 的 DSN碼<br><img src="/../img/sentry7.png" alt="sentry7"></p>
+</blockquote>
+<h2 id="設定-Source-Map-上傳"><a href="#設定-Source-Map-上傳" class="headerlink" title="設定 Source Map 上傳"></a>設定 Source Map 上傳</h2><p>為了在 Sentry 中看到可讀的原始碼錯誤堆疊（而不是被壓縮、醜化後的程式碼），上傳 Source Map 是至關重要的一步。對於 Vite 專案，我們可以使用 <code>@sentry/vite-plugin</code> 來自動化這個流程。</p>
+<p><strong>1. 安裝套件</strong></p>
+<p>如果尚未安裝，請在專案根目錄執行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 如果使用 npm</span></span><br><span class="line">npm install @sentry/vite-plugin --save-dev</span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果使用 pnpm</span></span><br><span class="line">pnpm install -w @sentry/vite-plugin</span><br></pre></td></tr></table></figure>
+
+<p><strong>2. 設定 vite.config.ts</strong></p>
+<p>在您應用程式的 <code>vite.config.ts</code> 檔案中，加入 <code>sentryVitePlugin</code>。它會與 Vite 的建置流程深度整合，自動完成 Source Map 的上傳。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; sentryVitePlugin &#125; <span class="keyword">from</span> <span class="string">&quot;@sentry/vite-plugin&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; defineConfig &#125; <span class="keyword">from</span> <span class="string">&#x27;vite&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> react <span class="keyword">from</span> <span class="string">&#x27;@vitejs/plugin-react&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; nxViteTsPaths &#125; <span class="keyword">from</span> <span class="string">&#x27;@nx/vite/plugins/nx-tsconfig-paths.plugin&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineConfig</span>(&#123;</span><br><span class="line">  <span class="comment">// ... (其他 vite 設定)</span></span><br><span class="line">  <span class="attr">plugins</span>: [</span><br><span class="line">    <span class="title function_">react</span>(),</span><br><span class="line">    <span class="title function_">nxViteTsPaths</span>(),</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Sentry plugin 必須放在所有插件的最後</span></span><br><span class="line">    <span class="title function_">sentryVitePlugin</span>(&#123;</span><br><span class="line">      <span class="attr">authToken</span>: process.<span class="property">env</span>.<span class="property">SENTRY_AUTH_TOKEN</span>,</span><br><span class="line">      <span class="attr">org</span>: <span class="string">&#x27;your-sentry-org-slug&#x27;</span>,</span><br><span class="line">      <span class="attr">project</span>: <span class="string">&#x27;your-sentry-project-slug&#x27;</span></span><br><span class="line">    &#125;)</span><br><span class="line">  ],</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 必須開啟 sourcemap 選項</span></span><br><span class="line">  <span class="attr">build</span>: &#123;</span><br><span class="line">    <span class="attr">sourcemap</span>: <span class="literal">true</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p><strong>3. 設定環境變數</strong></p>
+<p>在專案<strong>根目錄</strong>建立 <code>.env</code> 檔案（如果不存在的話），並加入您的 Sentry 認證權杖。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># &lt;project-root&gt;/.env</span><br><span class="line">SENTRY_AUTH_TOKEN=&quot;YOUR_SENTRY_AUTH_TOKEN&quot;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><strong>注意</strong>：<code>SENTRY_AUTH_TOKEN</code> 不需要加 <code>NX_</code> 前綴，因為它只在建置過程中使用，不會暴露到前端。請務必將 <code>.env</code> 加入 <code>.gitignore</code>。</p>
+</blockquote>
+<p>完成以上設定後，每次執行 <code>nx build &lt;your-app-name&gt;</code> 時，Source Maps 就會自動上傳，無需其他手動步驟。</p>
+<h2 id="測試整合結果"><a href="#測試整合結果" class="headerlink" title="測試整合結果"></a>測試整合結果</h2><p>為了驗證 Sentry 是否成功整合，我們可以在應用中手動觸發一個錯誤。</p>
+<p>在您的 React 元件中加入一個按鈕：</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;button onClick=&#123;<span class="function">() =&gt;</span> &#123; <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">Error</span>(<span class="string">&quot;Sentry Test from NX Monorepo!&quot;</span>); &#125;&#125;&gt;</span><br><span class="line">  <span class="title class_">Throw</span> <span class="title class_">Test</span> <span class="title class_">Error</span></span><br><span class="line">&lt;/button&gt;</span><br></pre></td></tr></table></figure>
+
+<p>執行您的應用程式，點擊此按鈕，稍待片刻後，您應該能在 Sentry 儀表板上看到這個錯誤。如果 Source Map 設定正確，您將能直接點擊錯誤堆疊，並跳轉到出錯的原始碼位置。</p>
+<h2 id="總結"><a href="#總結" class="headerlink" title="總結"></a>總結</h2><p>透過本文的引導，您已經成功地在 NX Monorepo 中為您的應用程式整合了 Sentry 監控。這不僅讓錯誤管理變得集中化與標準化，也為維護大型、複雜的專案提供了強大的支援。您可以為專案中的其他應用程式重複上述步驟，將它們一一納入 Sentry 的監控範圍，實現全面的品質控管。</p>
+
+    </div>
+
+    
+    <div class="about">
+        <h1>About this Post</h1>
+        <div class="details">
+            <p>This post is written by Peter, licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a>.</p>
+        </div>
+        
+        <p class="tags">
+            
+            <i class="icon"></i>
+            <a href="/tags/NX/" class="tag">#NX</a><a href="/tags/Monorepo/" class="tag">#Monorepo</a><a href="/tags/Sentry/" class="tag">#Sentry</a><a href="/tags/監控/" class="tag">#監控</a><a href="/tags/錯誤追蹤/" class="tag">#錯誤追蹤</a>
+        </p>
+        
+    </div>
+    
+
+    <div class="container post-prev-next">
+        
+        <a href="/2025/09/18/NX%E5%B0%88%E6%A1%88%E7%9A%84%E9%96%8B%E7%99%BC%E7%92%B0%E5%A2%83%E8%AE%8A%E6%95%B8%E8%A8%AD%E5%AE%9A%E6%96%B9%E5%BC%8F/" class="next">
+            <div>
+                <div class="text">
+                    <p class="label">Next</p>
+                    <h3 class="title">NX專案的開發環境變數設定方式</h3>
+                </div>
+            </div>
+        </a>
+        
+        
+        <a href="/2025/01/08/nodejs%E7%9A%84elsint%E8%88%87prettier%E8%88%87husky/" class="prev">
+            <div>
+                <div class="text">
+                    <p class="label">Previous</p>
+                    <h3 class="title">nodejs的elsint與prettier與husky</>
+                </div>
+            </div>
+        </a>
+        
+    </div>
+
+    
+        
+        
+    
+</article>
+
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h2 class="title">Blog</h2>
+                
+                <a href="/" class="item">Blog</a>
+                
+                <a href="/archives" class="item">Archives</a>
+                
+                <a href="/tags" class="item">Tags</a>
+                
+                <a href="/categories" class="item">Categories</a>
+                
+                <a href="/search" class="item">Search</a>
+                
+                <a href="/friends" class="item">Friends</a>
+                
+                <a href="/projects" class="item">Projects</a>
+                
+                <a href="/resume" class="item">Resume</a>
+                
+                <a href="/about" class="item">About</a>
+                
+                <a href="/atom.xml" class="item">RSS</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Projects</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/MrWillCom/rsa-cli" class="item">RSA CLI</a>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/MrWillCom/hexo-theme-cupertino" class="item">Hexo Theme Cupertino</a>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/MrWillCom/a-calendar" class="item">A Calendar</a>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/MrWillCom/auto-mirroring-bucket" class="item">Auto Mirroring Bucket</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Me</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/MrWillCom" class="item">GitHub</a>
+                
+                <a target="_blank" rel="noopener" href="https://codepen.io/mrwillcom" class="item">CodePen</a>
+                
+                <a target="_blank" rel="noopener" href="https://www.patreon.com/MrWillCom" class="item">Patreon</a>
+                
+                <a target="_blank" rel="noopener" href="https://noc.social/@MrWillCom" class="item">Mastodon</a>
+                
+                <a target="_blank" rel="noopener" href="https://discord.gg/UKuFDjcfY8" class="item">Discord</a>
+                
+                <a href="mailto:mr.will.com@outlook.com" class="item">Email</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2026 Peter<br>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> </span>
+        
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+
+        
+<script src="/js/main.js"></script>
+
+        
+        
+        
+
+        
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            window.addEventListener('load', () => {
+                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
+                ScrollReveal().reveal('.post-list-item .cover-img img')
+                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
+            })
+        </script>
+        
+    </body>
+</html>

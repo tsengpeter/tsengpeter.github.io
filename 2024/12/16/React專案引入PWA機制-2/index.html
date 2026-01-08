@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head prefix="og: https://ogp.me/ns#">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  
+  <title>React專案引入PWA機制(2) - Peter&#39;s Blog</title>
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+  
+  
+  <meta property="og:title" content="React專案引入PWA機制(2) - Peter&#39;s Blog" />
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:url" content="https://tsengpeter.github.io/2024/12/16/React%E5%B0%88%E6%A1%88%E5%BC%95%E5%85%A5PWA%E6%A9%9F%E5%88%B6-2/index.html" />
+  
+  <meta property="og:image" content="/favicon.png" />
+  
+  <meta property="og:article:published_time" content="2024-12-16T10:05:13.000Z" />
+  
+  <meta property="og:article:author" content="Peter" />
+  
+  
+
+  
+<link rel="stylesheet" href="/css/var.css">
+
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+<link rel="stylesheet" href="/css/typography.css">
+
+  
+<link rel="stylesheet" href="/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/css/components.css">
+
+  
+<link rel="stylesheet" href="/css/nav.css">
+
+  
+<link rel="stylesheet" href="/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/css/footer.css">
+
+  
+<link rel="stylesheet" href="/css/post-list.css">
+
+  
+  
+<link rel="stylesheet" href="/css/rainbow-banner.css">
+
+  
+  
+  
+<link rel="stylesheet" href="/css/toc.css">
+
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/post.css">
+
+  
+  
+  
+  
+  
+
+  
+<meta name="generator" content="Hexo 7.2.0"></head>
+    <body
+        data-color-scheme="auto"
+        data-uppercase-categories="true"
+        
+        data-rainbow-banner="true"
+        data-rainbow-banner-shown="auto"
+        data-rainbow-banner-month="6"
+        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+        
+        data-config-root="/"
+        
+        data-toc="true"
+        data-toc-max-depth="2"
+        
+        
+    >
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">Blog</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">Home</a>
+            
+            
+            <a class="nav-item" href="/archives">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/friends">Friends</a>
+            
+            
+            
+            <a class="nav-item" href="/projects">Projects</a>
+            
+            
+            
+            <a class="nav-item" href="/about">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/MrWillCom" target="_blank" aria-label="GitHub">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-codepen nav-item-icon" href="https://codepen.io/mrwillcom" target="_blank" aria-label="CodePen">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-patreon nav-item-icon" href="https://www.patreon.com/MrWillCom" target="_blank" aria-label="Patreon">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-mastodon nav-item-icon" href="https://noc.social/@MrWillCom" target="_blank" aria-label="Mastodon">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-discord nav-item-icon" href="https://discord.gg/UKuFDjcfY8" target="_blank" aria-label="Discord">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        
+<article class="post">
+    <div class="meta">
+        
+        <div class="categories text-uppercase">
+        
+            <a href="/categories/技術分享/">技術分享</a>
+        
+        </div>
+        
+
+        
+        <div class="date" id="date">
+            <span>December</span>
+            <span>16,</span>
+            <span>2024</span>
+        </div>
+        
+
+        <h1 class="title">React專案引入PWA機制(2)</h1>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <ul>
+<li><a href="#PWA-%E5%A5%97%E4%BB%B6%E7%9A%84%E9%80%B2%E9%9A%8E%E5%8F%83%E6%95%B8%E4%BD%BF%E7%94%A8">PWA 套件的進階參數使用</a></li>
+<li><a href="#workbox-%E9%85%8D%E7%BD%AE%E5%85%A7%E5%AE%B9">workbox 配置內容</a></li>
+<li><a href="#%E5%AE%8C%E6%95%B4%E7%9A%84%E7%AF%84%E4%BE%8B">完整的範例</a></li>
+<li><a href="#%E7%89%B9%E6%AE%8A%E6%83%85%E6%B3%81%E6%A1%88%E4%BE%8B">特殊情況案例</a></li>
+<li><a href="#%E7%89%B9%E6%AE%8A%E6%83%85%E6%B3%81%E8%A7%A3%E6%B1%BA%E6%96%B9%E6%B3%95">特殊情況解決方法</a></li>
+</ul>
+<h1 id="三大前端框架引入-PWA-機制-進階篇"><a href="#三大前端框架引入-PWA-機制-進階篇" class="headerlink" title="三大前端框架引入 PWA 機制 - 進階篇"></a>三大前端框架引入 PWA 機制 - 進階篇</h1><h2 id="PWA-套件的進階參數使用"><a href="#PWA-套件的進階參數使用" class="headerlink" title="PWA 套件的進階參數使用"></a>PWA 套件的進階參數使用</h2><p>在 vite.config.js&#x2F;ts 設定中的 defineConfig 中，plugins 這個參數中在上一個入門篇有講說要加上 VitePWA 來使用 PWA 的套件，在這裡就要說明 VitePWA 能夠用到的設定參數有哪些:<br>1.registerType<br>定義服務工作者的註冊方式。<br>參數內容:</p>
+<ul>
+<li>“autoUpdate”: 自動更新服務，此為預設值。</li>
+<li>“prompt”: 服務更新後會發送一個 onUpdate 回調，用戶可以自行決定更新。</li>
+<li>“inline”: 將服務內嵌到 HTML 文件中。</li>
+</ul>
+<blockquote>
+<p>PS: 除了 “autoUpdate” 以外其他都不用，</p>
+</blockquote>
+<p>2.includeAssets<br>指定需要包含在 PWA 緩存中的額外靜態資源。<br>參數內容:<br>string[] 或是 string</p>
+<blockquote>
+<p>PS: 我沒使用這參數。</p>
+</blockquote>
+<p>3.manifest<br>定義 Web App 的 manifest.json 文件的内容。<br>參數內容:<br>往入門篇自己看範例，不使用則設定 false。</p>
+<p>4.workbox<br>定義 Worker service 的設定。<br>參數內容:<br>因能介紹的內容太多，將移到下面<a href="#workbox-%E9%85%8D%E7%BD%AE%E5%85%A7%E5%AE%B9">workbox 配置內容</a>篇章介紹 -</p>
+<p>5.strategies<br>定義生成服務的策略。<br>參數內容:</p>
+<ul>
+<li>“generateSW”: 自動生成服務，此為預設值。</li>
+<li>“injectManifest”: 需要提供自定義生成服務的文件。</li>
+</ul>
+<blockquote>
+<p>差異在於自動生成是 VitePWA()裡定義 workbox，還是另外寫一隻 js 定義 workbox 來引用。</p>
+</blockquote>
+<p>6.devOptions<br>定義開發環境下的配置<br>參數內容:</p>
+<ul>
+<li>enabled(boolean): 是否在開發環境啟用 PWA，預設是 false。</li>
+<li>type: “classic”為預設值，還有”module”，”module”須是在 Chromium 底的瀏覽器最新版本(Chromium&#x2F;Chrome&#x2F;Edge)。</li>
+<li>disableRuntimeConfig(boolean): 設定是否要使用 workbox 的 RuntimeConfig，預設是 false，只能在 strategies 是 generateSW 才能夠生效。</li>
+<li>navigateFallback(string): 這配置是當離線狀態時，預設路由會導回設定的頁面，例如:index.html，只能在 strategies 是 injectManifest 才能夠生效。</li>
+<li>navigateFallbackAllowlist(RegExp[]): 只有在套件版本是 v0.12.4 之後支援，當 navigateFallback 使用時定義那些檔案可以跳過請求，如果有用這個配置，就不用是用 default 的值，只能在 strategies 是 generateSW 才能夠生效。</li>
+<li>webManifestUrl(string): 指定加載 manifest.json 的路徑，只能在 strategies 是 generateSW 才能夠生效。</li>
+<li>suppressWarnings(boolean): 建構 workbox 時的錯誤警告，只能在 strategies 是 generateSW 才能夠生效。</li>
+</ul>
+<blockquote>
+<p>通常只會用到幾個參數，個人通常只會設定 enabled、type、navigateFallback 再加上 suppressWarnings 這四個有使用，其他不太會使用到，可以參考<a target="_blank" rel="noopener" href="https://vite-pwa-org.netlify.app/guide/development">PWA 文件</a></p>
+</blockquote>
+<p>7.base<br>設定 pwa 配置文件路徑。</p>
+<blockquote>
+<p>不使用此配置</p>
+</blockquote>
+<p>8.selfDestroying<br>是否自動銷毀服務。<br>參數內容:</p>
+<ul>
+<li>boolean: true&#x2F;false</li>
+</ul>
+<blockquote>
+<p>不啟用 PWA 時可能會設定，但我個人不會使用此配置。</p>
+</blockquote>
+<h2 id="workbox-配置內容"><a href="#workbox-配置內容" class="headerlink" title="workbox 配置內容"></a>workbox 配置內容</h2><p>1.runtimeCaching<br>設定運行時緩存的規則。<br>參數內容:</p>
+<ul>
+<li><p>urlPattern(RegExp[]): 匹配 url 的正規表達式或是字串。</p>
+</li>
+<li><p>handler: 緩存數據，支持下面的設定值</p>
+<ul>
+<li>CacheFrislt -&gt; 優先返回緩存的內容，沒有緩存的話才從網路請求資料。</li>
+<li>NetworkFirst -&gt; 優先網路請求資料，失敗的時候才從緩存拿資料，另外突然網路不通。</li>
+<li>StaleWhileRevalidate -&gt; 返回緩存的資料同時在跟網路請求資料更新緩存。</li>
+<li>NetworkOnly -&gt; 只請求網路資料。</li>
+<li>CacheOnly -&gt; 只使用緩存資料。</li>
+</ul>
+</li>
+<li><p>options(object): 對緩存進行額外的設定，有以下這些設定值</p>
+<ul>
+<li>cacheName -&gt; 緩存名稱。</li>
+<li>expiration -&gt; 控制緩存過期設定。<ul>
+<li>maxEntries -&gt; 最大緩存條數。</li>
+<li>maxAgeSeconds -&gt; 緩存最大的儲存時間。</li>
+</ul>
+</li>
+<li>networkTimeoutSeconds -&gt; 網路請求超時時間。</li>
+<li>cacheableResponse -&gt; 篩選緩存的響應狀態碼。 ex: statuses: [200]</li>
+</ul>
+</li>
+</ul>
+<p>2.skipWaiting<br>是否跳過等待的階段，直接讓新的服務器接管。<br>參數內容:</p>
+<ul>
+<li>boolean: true&#x2F;false</li>
+</ul>
+<p>3.clientsClaim<br>是否立即接管服務器。<br>參數內容:</p>
+<ul>
+<li>boolean: true&#x2F;false</li>
+</ul>
+<blockquote>
+<p>通常與 skipWaiting 參數一起配置，這樣就能跳過等待直接用新的服務器。</p>
+</blockquote>
+<p>4.globPatterns<br>指定要被預緩存的文件。<br>參數內容:</p>
+<ul>
+<li>string[]: [‘**&#x2F;*.{js,css,html,png,svg}’]</li>
+</ul>
+<p>5.globDirectory<br>指定要被預緩存的文件路徑。<br>參數內容:</p>
+<ul>
+<li>string: ‘C:&#x2F;&#x2F;‘</li>
+</ul>
+<blockquote>
+<p>globPatterns 跟 globDirectory 應該擇一使用就好。</p>
+</blockquote>
+<p>6.globIgnores<br>指定要被排除預緩存的文件。<br>參數內容:</p>
+<ul>
+<li>string[]: [‘**&#x2F;ignored-file.js’, ‘index.html’]</li>
+</ul>
+<p>7.cleanupOutdatedCaches<br>是否清除舊的緩存。<br>參數內容:</p>
+<ul>
+<li>boolean: true&#x2F;false</li>
+</ul>
+<p>8.maximumFileSizeToCacheInBytes<br>設定預緩存的最大文件大小。<br>參數內容:</p>
+<ul>
+<li>number: 5 _ 1024 _ 1024 -&gt; 5MB</li>
+</ul>
+<p>9.templatedURLs<br>指定額外要緩存的 url。<br>參數內容:</p>
+<ul>
+<li>string&#x2F;string[]: { ‘&#x2F;custom-url’: [‘dependencies-file1.js’, ‘dependencies-file2.js’], }</li>
+</ul>
+<blockquote>
+<p>個人沒有用這參數，要使用在查找文件。</p>
+</blockquote>
+<p>10.navigateFallback<br>設置當服務未找到符合緩存時回退的畫面。<br>參數內容:</p>
+<ul>
+<li>string: index.html</li>
+</ul>
+<p>11.navigateFallbackDenylist<br>navigateFallback 的額外規則，需有配置 navigateFallback，排除會被 Service Worker 攔截的路由。<br>參數內容:</p>
+<ul>
+<li>RegExp[]: [&#x2F;^/api/&#x2F;]</li>
+</ul>
+<p>12.navigateFallbackAllowlist<br>navigateFallback 的額外規則，需有配置 navigateFallback，允許規則下路由使用 navigateFallback。<br>參數內容:</p>
+<ul>
+<li>RegExp[]: [&#x2F;^/pages/&#x2F;]</li>
+</ul>
+<blockquote>
+<p>在 workbox 的設定下，navigateFallback 我不會去設定，只會在 options 下可能會使用。</p>
+</blockquote>
+<h2 id="完整的範例"><a href="#完整的範例" class="headerlink" title="完整的範例"></a>完整的範例</h2><p>下面是一個寫在 vite.config.js&#x2F;ts 的配置範例，可搭配入門篇的 VitePWA 內容分離 defineconfig:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineConfig</span>(&#123;</span><br><span class="line">  <span class="attr">plugins</span>: [</span><br><span class="line">    <span class="title class_">VitePWA</span>(&#123;</span><br><span class="line">      <span class="attr">registerType</span>: <span class="string">&quot;autoUpdate&quot;</span>,</span><br><span class="line">      <span class="attr">includeAssets</span>: [<span class="string">&quot;favicon.ico&quot;</span>, <span class="string">&quot;robots.txt&quot;</span>, <span class="string">&quot;apple-touch-icon.png&quot;</span>],</span><br><span class="line">      <span class="attr">devOptions</span>: &#123;</span><br><span class="line">        <span class="attr">enabled</span>: <span class="literal">false</span>, <span class="comment">// 開發環境不啟用</span></span><br><span class="line">        <span class="attr">type</span>: <span class="string">&quot;module&quot;</span>,</span><br><span class="line">        <span class="attr">navigateFallback</span>: <span class="string">&quot;index.html&quot;</span>,</span><br><span class="line">        <span class="attr">suppressWarnings</span>: <span class="literal">false</span>,</span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="attr">manifest</span>: &#123;</span><br><span class="line">        <span class="attr">name</span>: <span class="string">&quot;My Awesome App&quot;</span>,</span><br><span class="line">        <span class="attr">short_name</span>: <span class="string">&quot;AwesomeApp&quot;</span>,</span><br><span class="line">        <span class="attr">description</span>: <span class="string">&quot;An awesome app powered by Vite and PWA&quot;</span>,</span><br><span class="line">        <span class="attr">theme_color</span>: <span class="string">&quot;#ffffff&quot;</span>,</span><br><span class="line">        <span class="attr">icons</span>: [</span><br><span class="line">          &#123;</span><br><span class="line">            <span class="attr">src</span>: <span class="string">&quot;pwa-192x192.png&quot;</span>,</span><br><span class="line">            <span class="attr">sizes</span>: <span class="string">&quot;192x192&quot;</span>,</span><br><span class="line">            <span class="attr">type</span>: <span class="string">&quot;image/png&quot;</span>,</span><br><span class="line">          &#125;,</span><br><span class="line">          &#123;</span><br><span class="line">            <span class="attr">src</span>: <span class="string">&quot;pwa-512x512.png&quot;</span>,</span><br><span class="line">            <span class="attr">sizes</span>: <span class="string">&quot;512x512&quot;</span>,</span><br><span class="line">            <span class="attr">type</span>: <span class="string">&quot;image/png&quot;</span>,</span><br><span class="line">          &#125;,</span><br><span class="line">        ],</span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="attr">workbox</span>: &#123;</span><br><span class="line">        <span class="comment">// 预缓存相关文件</span></span><br><span class="line">        <span class="attr">globPatterns</span>: [<span class="string">&quot;**/*.&#123;js,css,html,png,svg,ico&#125;&quot;</span>],</span><br><span class="line">        <span class="attr">globDirectory</span>: <span class="string">&quot;dist&quot;</span>,</span><br><span class="line">        <span class="attr">globIgnores</span>: [<span class="string">&quot;**/ignored-file.js&quot;</span>, <span class="string">&quot;index.html&quot;</span>],</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 清理旧缓存</span></span><br><span class="line">        <span class="attr">cleanupOutdatedCaches</span>: <span class="literal">true</span>,</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 设置是否直接控制客户端和跳过等待</span></span><br><span class="line">        <span class="attr">skipWaiting</span>: <span class="literal">true</span>,</span><br><span class="line">        <span class="attr">clientsClaim</span>: <span class="literal">true</span>,</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 最大缓存文件大小设置 (5MB)</span></span><br><span class="line">        <span class="attr">maximumFileSizeToCacheInBytes</span>: <span class="number">5</span> * <span class="number">1024</span> * <span class="number">1024</span>,</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 自定义 URL 模板</span></span><br><span class="line">        <span class="attr">templatedURLs</span>: &#123;</span><br><span class="line">          <span class="string">&quot;/custom-route&quot;</span>: [<span class="string">&quot;static/dependency1.js&quot;</span>, <span class="string">&quot;static/dependency2.css&quot;</span>],</span><br><span class="line">          <span class="string">&quot;/offline.html&quot;</span>: [<span class="string">&quot;static/offline-helper.js&quot;</span>],</span><br><span class="line">        &#125;,</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 导航回退设置 (SPA 应用)</span></span><br><span class="line">        <span class="attr">navigateFallback</span>: <span class="string">&quot;/index.html&quot;</span>,</span><br><span class="line">        <span class="attr">navigateFallbackDenylist</span>: [<span class="regexp">/^\/api\//</span>, <span class="regexp">/\/admin\//</span>], <span class="comment">// 排除 API 和后台管理路径</span></span><br><span class="line">        <span class="attr">navigateFallbackAllowlist</span>: [<span class="regexp">/^\/pages\//</span>], <span class="comment">// 仅允许 pages 目录下使用 navigateFallback</span></span><br><span class="line"></span><br><span class="line">        <span class="attr">runtimeCaching</span>: [</span><br><span class="line">          &#123;</span><br><span class="line">            <span class="attr">urlPattern</span>: <span class="regexp">/^https:\/\/myapi\.com\/.*$/</span>,</span><br><span class="line">            <span class="attr">handler</span>: <span class="string">&quot;NetworkFirst&quot;</span>,</span><br><span class="line">            <span class="attr">options</span>: &#123;</span><br><span class="line">              <span class="attr">cacheName</span>: <span class="string">&quot;api-cache&quot;</span>,</span><br><span class="line">              <span class="attr">expiration</span>: &#123;</span><br><span class="line">                <span class="attr">maxEntries</span>: <span class="number">50</span>,</span><br><span class="line">                <span class="attr">maxAgeSeconds</span>: <span class="number">60</span> * <span class="number">60</span> * <span class="number">24</span> * <span class="number">7</span>, <span class="comment">// 7 days</span></span><br><span class="line">              &#125;,</span><br><span class="line">            &#125;,</span><br><span class="line">          &#125;,</span><br><span class="line">        ],</span><br><span class="line">        <span class="comment">// 额外预缓存的条目</span></span><br><span class="line">        <span class="attr">additionalManifestEntries</span>: [</span><br><span class="line">          &#123; <span class="attr">url</span>: <span class="string">&quot;/offline.html&quot;</span>, <span class="attr">revision</span>: <span class="string">&quot;v1&quot;</span> &#125;,</span><br><span class="line">          &#123; <span class="attr">url</span>: <span class="string">&quot;/images/offline.png&quot;</span>, <span class="attr">revision</span>: <span class="string">&quot;v1&quot;</span> &#125;,</span><br><span class="line">        ],</span><br><span class="line">      &#125;,</span><br><span class="line">    &#125;),</span><br><span class="line">  ],</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>下面是一個不寫在 vite.config.js&#x2F;ts 的配置範例，主要是會另外寫 Workbox 的配置文件後再注入到 defineconfig:</p>
+<figure class="highlight javascript"><figcaption><span>sw.js</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; registerRoute &#125; <span class="keyword">from</span> <span class="string">&quot;workbox-routing&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; clientsClaim &#125; <span class="keyword">from</span> <span class="string">&quot;workbox-core&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123;</span><br><span class="line">  <span class="title class_">NetworkFirst</span>,</span><br><span class="line">  <span class="title class_">StaleWhileRevalidate</span>,</span><br><span class="line">  <span class="title class_">CacheFirst</span>,</span><br><span class="line">&#125; <span class="keyword">from</span> <span class="string">&quot;workbox-strategies&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; <span class="title class_">CacheableResponsePlugin</span> &#125; <span class="keyword">from</span> <span class="string">&quot;workbox-cacheable-response&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; <span class="title class_">ExpirationPlugin</span> &#125; <span class="keyword">from</span> <span class="string">&quot;workbox-expiration&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; cleanupOutdatedCaches, precacheAndRoute &#125; <span class="keyword">from</span> <span class="string">&quot;workbox-precaching&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 啟用新 Service Worker 快速接管舊的</span></span><br><span class="line">self.<span class="title function_">skipWaiting</span>();</span><br><span class="line"><span class="title function_">clientsClaim</span>();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 清理過時的快取</span></span><br><span class="line"><span class="title function_">cleanupOutdatedCaches</span>();</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> filteredManifest = self.<span class="property">__WB_MANIFEST</span>.<span class="title function_">filter</span>(<span class="function">(<span class="params">entry</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> !entry.<span class="property">url</span>.<span class="title function_">startsWith</span>(<span class="string">&quot;index.html&quot;</span>);</span><br><span class="line">&#125;);</span><br><span class="line"><span class="comment">// 使用過濾後的清單</span></span><br><span class="line"><span class="title function_">precacheAndRoute</span>(filteredManifest);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 缓存 API 请求</span></span><br><span class="line"><span class="title function_">registerRoute</span>(</span><br><span class="line">  <span class="regexp">/\/api\/,</span></span><br><span class="line"><span class="regexp">  new NetworkFirst(&#123;</span></span><br><span class="line"><span class="regexp">    cacheName: &quot;api-cache&quot;,</span></span><br><span class="line"><span class="regexp">    networkTimeoutSeconds: 10,</span></span><br><span class="line"><span class="regexp">    plugins: [</span></span><br><span class="line"><span class="regexp">      new ExpirationPlugin(&#123;</span></span><br><span class="line"><span class="regexp">        maxEntries: 50,</span></span><br><span class="line"><span class="regexp">        maxAgeSeconds: 60 * 60 * 24 * 7, // 7 天</span></span><br><span class="line"><span class="regexp">      &#125;),</span></span><br><span class="line"><span class="regexp">      new CacheableResponsePlugin(&#123;</span></span><br><span class="line"><span class="regexp">        statuses: [200], /</span>/ 僅緩存狀態碼 <span class="number">200</span> 的響應</span><br><span class="line">      &#125;),</span><br><span class="line">    ],</span><br><span class="line">  &#125;)</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 缓存图片资源</span></span><br><span class="line"><span class="title function_">registerRoute</span>(</span><br><span class="line">  <span class="regexp">/\.(?:png|jpg|jpeg|svg|gif|webp)$/</span>,</span><br><span class="line">  <span class="keyword">new</span> <span class="title class_">CacheFirst</span>(&#123;</span><br><span class="line">    <span class="attr">cacheName</span>: <span class="string">&#x27;image-cache&#x27;</span>,</span><br><span class="line">    <span class="attr">plugins</span>: [</span><br><span class="line">      <span class="keyword">new</span> <span class="title class_">ExpirationPlugin</span>(&#123;</span><br><span class="line">        <span class="attr">maxEntries</span>: <span class="number">30</span>,</span><br><span class="line">        <span class="attr">maxAgeSeconds</span>: <span class="number">60</span> * <span class="number">60</span> * <span class="number">24</span> * <span class="number">30</span>, <span class="comment">// 30 天</span></span><br><span class="line">      &#125;),</span><br><span class="line">    ],</span><br><span class="line">  &#125;)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><figcaption><span>vite.config.js/ts</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineConfig</span>(&#123;</span><br><span class="line">  <span class="attr">plugins</span>: [</span><br><span class="line">    <span class="title class_">VitePWA</span>(&#123;</span><br><span class="line">      <span class="attr">registerType</span>: <span class="string">&quot;autoUpdate&quot;</span>,</span><br><span class="line"></span><br><span class="line">      <span class="comment">// 使用 injectManifest 模式</span></span><br><span class="line">      <span class="attr">strategies</span>: <span class="string">&quot;injectManifest&quot;</span>,</span><br><span class="line"></span><br><span class="line">      <span class="comment">// 自定义 Service Worker 路径</span></span><br><span class="line">      <span class="attr">filename</span>: <span class="string">&quot;sw.js&quot;</span>,</span><br><span class="line"></span><br><span class="line">      <span class="comment">// 設定模式為inject才使用這屬性</span></span><br><span class="line">      <span class="attr">injectManifest</span>: &#123;</span><br><span class="line">        <span class="attr">globPatterns</span>: [<span class="string">&quot;**/*.&#123;js,css,html,png,ico&#125;&quot;</span>], <span class="comment">// 预缓存文件匹配模式</span></span><br><span class="line">        <span class="attr">globDirectory</span>: <span class="string">&quot;dist&quot;</span>,</span><br><span class="line">        <span class="attr">globIgnores</span>: [<span class="string">&quot;**/temp/**&quot;</span>, <span class="string">&quot;index.html&quot;</span>], <span class="comment">// 忽略不需要缓存的文件</span></span><br><span class="line">        <span class="attr">maximumFileSizeToCacheInBytes</span>: <span class="number">5</span> * <span class="number">1024</span> * <span class="number">1024</span>, <span class="comment">// 最大缓存文件大小 (5MB)</span></span><br><span class="line">      &#125;,</span><br><span class="line"></span><br><span class="line">      <span class="comment">// Web App Manifest</span></span><br><span class="line">      <span class="attr">manifest</span>: &#123;</span><br><span class="line">        <span class="attr">name</span>: <span class="string">&quot;My InjectManifest PWA&quot;</span>,</span><br><span class="line">        <span class="attr">short_name</span>: <span class="string">&quot;MyPWA&quot;</span>,</span><br><span class="line">        <span class="attr">description</span>:</span><br><span class="line">          <span class="string">&quot;A PWA using injectManifest mode with custom Service Worker.&quot;</span>,</span><br><span class="line">        <span class="attr">theme_color</span>: <span class="string">&quot;#42b883&quot;</span>,</span><br><span class="line">        <span class="attr">background_color</span>: <span class="string">&quot;#ffffff&quot;</span>,</span><br><span class="line">        <span class="attr">start_url</span>: <span class="string">&quot;/&quot;</span>,</span><br><span class="line">        <span class="attr">display</span>: <span class="string">&quot;standalone&quot;</span>,</span><br><span class="line">        <span class="attr">scope</span>: <span class="string">&quot;/&quot;</span>,</span><br><span class="line">        <span class="attr">icons</span>: [</span><br><span class="line">          &#123;</span><br><span class="line">            <span class="attr">src</span>: <span class="string">&quot;/icons/pwa-192x192.png&quot;</span>,</span><br><span class="line">            <span class="attr">sizes</span>: <span class="string">&quot;192x192&quot;</span>,</span><br><span class="line">            <span class="attr">type</span>: <span class="string">&quot;image/png&quot;</span>,</span><br><span class="line">          &#125;,</span><br><span class="line">          &#123;</span><br><span class="line">            <span class="attr">src</span>: <span class="string">&quot;/icons/pwa-512x512.png&quot;</span>,</span><br><span class="line">            <span class="attr">sizes</span>: <span class="string">&quot;512x512&quot;</span>,</span><br><span class="line">            <span class="attr">type</span>: <span class="string">&quot;image/png&quot;</span>,</span><br><span class="line">          &#125;,</span><br><span class="line">        ],</span><br><span class="line">      &#125;,</span><br><span class="line"></span><br><span class="line">      <span class="attr">devOptions</span>: &#123;</span><br><span class="line">        <span class="attr">enabled</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="attr">type</span>: <span class="string">&quot;module&quot;</span>,</span><br><span class="line">        <span class="attr">navigateFallback</span>: <span class="string">&quot;index.html&quot;</span>,</span><br><span class="line">        <span class="attr">suppressWarnings</span>: <span class="literal">false</span>,</span><br><span class="line">      &#125;,</span><br><span class="line"></span><br><span class="line">      <span class="comment">// 离线回退页面</span></span><br><span class="line">      <span class="attr">includeAssets</span>: [<span class="string">&quot;favicon.ico&quot;</span>, <span class="string">&quot;robots.txt&quot;</span>, <span class="string">&quot;offline.html&quot;</span>],</span><br><span class="line">    &#125;),</span><br><span class="line">  ],</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>這兩種範例的內容並不是一定都這些配置，但是配置的框架大致是這樣，例如我的專案就沒有用 includeAssets 這個配置，端看專案的需求來配置這些設定。</p>
+<h2 id="特殊情況案例"><a href="#特殊情況案例" class="headerlink" title="特殊情況案例"></a>特殊情況案例</h2><p>PWA 機制雖然已經行之有年了，但是並非完美無缺的功能，PWA 機制的使用是根據系統的需求來想添加甚麼樣的機制，那當時我看到了一位台灣業界算是大神級的人物，叫做 will 保哥，當時看到他發現了使用 Worker Service 時引發的特殊情況，會讓整個網站儘管是已開發完整的項目，但是卻無法正常運作。</p>
+<p>問題是這樣的，一個網站引入了 Worker Service 一年以上，那今年這個網站因為有新的活動，所以有做了今年活動的相關頁面，但是卻有用戶反應網站的畫面還是舊的，主要是因為 Worker Service 會去 precache index.html 這個頁面，也就是主頁會被 cache 住，那 Service Worker 知道的人會去開發者工具那邊清除 cache 資料，但是一般用戶並不會處理這個問題，所以就算一直重整網站，但是瀏覽器還是 cache 住可能去年或是更久之前的資料，也就是你的 index.html 會是舊的內容，所以導致網站一直都不是最新版的網頁，這個問題確實是十分的嚴重。</p>
+<p>那當時看到了這個情況後我在目前的開發項目也測試了一下，發現部屬在 Server 上網站確實會直接被 precache 住資料，怎麼重整都不會是更新過的頁面，因此與同事跟部門主管討論這狀況的解法，也就是在 Worker Service 配置時，將 index.html 這個文件不做 precache，也就是過濾 index.html，這樣子重整的話就能夠抓到新的頁面。</p>
+<p>但是這個方式會讓網站在使用者離線狀態下，沒有辦法繼續瀏覽網站，也就是不過濾 index.html 的話能夠在離線時繼續瀏覽網站，但是會有用戶看不到新的網站問題，那過濾 index.html 的話能夠看到最新版的網站，但就沒辦法離線時瀏覽網站，所以我認為當你是網站是純靜態網頁，且不太會做大更動的話可以 precache index.html，但現代的網站大部分都是動態網頁就建議要過濾掉 index.html，讓網站能夠看到最新的版本。</p>
+<h2 id="特殊情況解決方法"><a href="#特殊情況解決方法" class="headerlink" title="特殊情況解決方法"></a>特殊情況解決方法</h2><p>在配置 vite.config.js&#x2F;ts 的 VitePWA 時，當 strategies 是”injectManifest”的話，可以在 sw.js 內容先過濾掉 index.html 後再去註冊 precacheAndRoute，方法如下:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 過濾index.html</span></span><br><span class="line"><span class="keyword">const</span> filteredManifest = self.<span class="property">__WB_MANIFEST</span>.<span class="title function_">filter</span>(<span class="function">(<span class="params">entry</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> !entry.<span class="property">url</span>.<span class="title function_">startsWith</span>(<span class="string">&quot;index.html&quot;</span>);</span><br><span class="line">&#125;);</span><br><span class="line"><span class="comment">// 使用過濾後的清單</span></span><br><span class="line"><span class="title function_">precacheAndRoute</span>(filteredManifest);</span><br></pre></td></tr></table></figure>
+
+<p>或是在 vite.config.js&#x2F;ts 的配置內容中添加下面這段:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 設定模式為inject才使用這屬性</span></span><br><span class="line"><span class="attr">injectManifest</span>: &#123;</span><br><span class="line">  <span class="attr">globIgnores</span>: [<span class="string">&quot;index.html&quot;</span>], <span class="comment">// 忽略指定檔案</span></span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+
+<p>那當 VitePWA 的 strategies 是”generateSW”的話，也就是預設情況下，可以在 workbox 段落中添加以下配置:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">globIgnores</span>: [<span class="string">&quot;index.html&quot;</span>], <span class="comment">// 忽略指定檔案</span></span><br></pre></td></tr></table></figure>
+
+<p>這樣子配置就可以過濾掉 index.html，網站也就能夠不會 precache 過往的資料，讓網站能夠看到新版的。</p>
+
+    </div>
+
+    
+    <div class="about">
+        <h1>About this Post</h1>
+        <div class="details">
+            <p>This post is written by Peter, licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a>.</p>
+        </div>
+        
+        <p class="tags">
+            
+            <i class="icon"></i>
+            <a href="/tags/FRONTEND/" class="tag">#FRONTEND</a><a href="/tags/PWA/" class="tag">#PWA</a><a href="/tags/WORKBOX/" class="tag">#WORKBOX</a><a href="/tags/VITE/" class="tag">#VITE</a><a href="/tags/REACT/" class="tag">#REACT</a><a href="/tags/CACHING/" class="tag">#CACHING</a>
+        </p>
+        
+    </div>
+    
+
+    <div class="container post-prev-next">
+        
+        <a href="/2025/01/06/Monorepo%E6%9E%B6%E6%A7%8B%E4%BB%8B%E7%B4%B9%E5%8F%8A%E5%BB%BA%E7%BD%AE/" class="next">
+            <div>
+                <div class="text">
+                    <p class="label">Next</p>
+                    <h3 class="title">Monorepo架構介紹及建置</h3>
+                </div>
+            </div>
+        </a>
+        
+        
+        <a href="/2024/11/08/React%E5%B0%88%E6%A1%88%E5%BC%95%E5%85%A5PWA%E6%A9%9F%E5%88%B6/" class="prev">
+            <div>
+                <div class="text">
+                    <p class="label">Previous</p>
+                    <h3 class="title">React專案引入PWA機制</>
+                </div>
+            </div>
+        </a>
+        
+    </div>
+
+    
+        
+        
+    
+</article>
+
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h2 class="title">Blog</h2>
+                
+                <a href="/" class="item">Blog</a>
+                
+                <a href="/archives" class="item">Archives</a>
+                
+                <a href="/tags" class="item">Tags</a>
+                
+                <a href="/categories" class="item">Categories</a>
+                
+                <a href="/search" class="item">Search</a>
+                
+                <a href="/friends" class="item">Friends</a>
+                
+                <a href="/projects" class="item">Projects</a>
+                
+                <a href="/resume" class="item">Resume</a>
+                
+                <a href="/about" class="item">About</a>
+                
+                <a href="/atom.xml" class="item">RSS</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Projects</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/MrWillCom/rsa-cli" class="item">RSA CLI</a>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/MrWillCom/hexo-theme-cupertino" class="item">Hexo Theme Cupertino</a>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/MrWillCom/a-calendar" class="item">A Calendar</a>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/MrWillCom/auto-mirroring-bucket" class="item">Auto Mirroring Bucket</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Me</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/MrWillCom" class="item">GitHub</a>
+                
+                <a target="_blank" rel="noopener" href="https://codepen.io/mrwillcom" class="item">CodePen</a>
+                
+                <a target="_blank" rel="noopener" href="https://www.patreon.com/MrWillCom" class="item">Patreon</a>
+                
+                <a target="_blank" rel="noopener" href="https://noc.social/@MrWillCom" class="item">Mastodon</a>
+                
+                <a target="_blank" rel="noopener" href="https://discord.gg/UKuFDjcfY8" class="item">Discord</a>
+                
+                <a href="mailto:mr.will.com@outlook.com" class="item">Email</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2026 Peter<br>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> </span>
+        
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+
+        
+<script src="/js/main.js"></script>
+
+        
+        
+        
+
+        
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            window.addEventListener('load', () => {
+                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
+                ScrollReveal().reveal('.post-list-item .cover-img img')
+                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
+            })
+        </script>
+        
+    </body>
+</html>

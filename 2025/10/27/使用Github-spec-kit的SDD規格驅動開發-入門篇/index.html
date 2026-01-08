@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head prefix="og: https://ogp.me/ns#">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  
+  <title>使用 Github-spec-kit 的 SDD 規格驅動開發 - 入門篇 - Peter&#39;s Blog</title>
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+  
+  
+  <meta property="og:title" content="使用 Github-spec-kit 的 SDD 規格驅動開發 - 入門篇 - Peter&#39;s Blog" />
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:url" content="https://tsengpeter.github.io/2025/10/27/%E4%BD%BF%E7%94%A8Github-spec-kit%E7%9A%84SDD%E8%A6%8F%E6%A0%BC%E9%A9%85%E5%8B%95%E9%96%8B%E7%99%BC-%E5%85%A5%E9%96%80%E7%AF%87/index.html" />
+  
+  <meta property="og:image" content="/favicon.png" />
+  
+  <meta property="og:article:published_time" content="2025-10-27T10:00:00.000Z" />
+  
+  <meta property="og:article:author" content="Peter" />
+  
+  
+
+  
+<link rel="stylesheet" href="/css/var.css">
+
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+<link rel="stylesheet" href="/css/typography.css">
+
+  
+<link rel="stylesheet" href="/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/css/components.css">
+
+  
+<link rel="stylesheet" href="/css/nav.css">
+
+  
+<link rel="stylesheet" href="/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/css/footer.css">
+
+  
+<link rel="stylesheet" href="/css/post-list.css">
+
+  
+  
+<link rel="stylesheet" href="/css/rainbow-banner.css">
+
+  
+  
+  
+<link rel="stylesheet" href="/css/toc.css">
+
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/post.css">
+
+  
+  
+  
+  
+  
+
+  
+<meta name="generator" content="Hexo 7.2.0"></head>
+    <body
+        data-color-scheme="auto"
+        data-uppercase-categories="true"
+        
+        data-rainbow-banner="true"
+        data-rainbow-banner-shown="auto"
+        data-rainbow-banner-month="6"
+        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+        
+        data-config-root="/"
+        
+        data-toc="true"
+        data-toc-max-depth="2"
+        
+        
+    >
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">Blog</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">Home</a>
+            
+            
+            <a class="nav-item" href="/archives">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/friends">Friends</a>
+            
+            
+            
+            <a class="nav-item" href="/projects">Projects</a>
+            
+            
+            
+            <a class="nav-item" href="/about">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/MrWillCom" target="_blank" aria-label="GitHub">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-codepen nav-item-icon" href="https://codepen.io/mrwillcom" target="_blank" aria-label="CodePen">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-patreon nav-item-icon" href="https://www.patreon.com/MrWillCom" target="_blank" aria-label="Patreon">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-mastodon nav-item-icon" href="https://noc.social/@MrWillCom" target="_blank" aria-label="Mastodon">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-discord nav-item-icon" href="https://discord.gg/UKuFDjcfY8" target="_blank" aria-label="Discord">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        
+<article class="post">
+    <div class="meta">
+        
+        <div class="categories text-uppercase">
+        
+            <a href="/categories/技術分享/">技術分享</a>
+        
+        </div>
+        
+
+        
+        <div class="date" id="date">
+            <span>October</span>
+            <span>27,</span>
+            <span>2025</span>
+        </div>
+        
+
+        <h1 class="title">使用 Github-spec-kit 的 SDD 規格驅動開發 - 入門篇</h1>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <ul>
+<li><a href="#%E4%BB%80%E9%BA%BC%E6%98%AF-SDD">什麼是 SDD（規格驅動開發）？</a></li>
+<li><a href="#Github-spec-kit-%E6%98%AF%E4%BB%80%E9%BA%BC">Github-spec-kit 是什麼？</a></li>
+<li><a href="#%E6%A0%B8%E5%BF%83%E7%B5%84%E4%BB%B6">Github-spec-kit 的核心組件</a></li>
+<li><a href="#SDD-%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B">使用 Github-spec-kit 的 SDD 工作流程</a></li>
+<li><a href="#%E5%89%8D%E7%BD%AE%E4%BD%9C%E6%A5%AD">前置作業</a><ul>
+<li><a href="#Step1:-%E5%AE%89%E8%A3%9Duv">Step1: 安裝uv</a></li>
+<li><a href="#Step2:-%E9%87%8D%E5%95%9F%E7%B5%82%E7%AB%AF%E6%A9%9F%E6%88%96%E5%9F%B7%E8%A1%8C%E4%B8%8B%E9%9D%A2%E6%8C%87%E4%BB%A4">Step2: 重啟終端機或執行下面指令</a></li>
+<li><a href="#Step3:-%E7%A2%BA%E8%AA%8D%E5%AE%89%E8%A3%9D%E6%88%90%E5%8A%9F">Step3: 確認安裝成功</a></li>
+</ul>
+</li>
+<li><a href="#%E7%92%B0%E5%A2%83%E5%BB%BA%E7%BD%AE%E8%88%87%E5%AE%89%E8%A3%9D">環境建置與安裝</a><ul>
+<li><a href="#Step1-%E5%AE%89%E8%A3%9D-Specify-CLI">Step1: 安裝 Specify CLI</a></li>
+<li><a href="#Step2-%E5%88%9D%E5%A7%8B%E5%8C%96%E5%B0%88%E6%A1%88">Step2: 初始化專案</a></li>
+</ul>
+</li>
+<li><a href="#%E4%B8%8B%E4%B8%80%E7%AF%87">下一篇：實戰演練</a></li>
+</ul>
+<h1 id="使用-Github-spec-kit-的-SDD-規格驅動開發-入門篇"><a href="#使用-Github-spec-kit-的-SDD-規格驅動開發-入門篇" class="headerlink" title="使用 Github-spec-kit 的 SDD 規格驅動開發 - 入門篇"></a>使用 Github-spec-kit 的 SDD 規格驅動開發 - 入門篇</h1><h2 id="什麼是-SDD（規格驅動開發）？"><a href="#什麼是-SDD（規格驅動開發）？" class="headerlink" title="什麼是 SDD（規格驅動開發）？"></a>什麼是 SDD（規格驅動開發）？</h2><p>SDD（Specification Driven Development，規格驅動開發）是一種軟體開發方法論，其核心理念在於將詳細、可執行的規格文件作為整個開發流程的唯一真實來源（single source of truth）。在這種模式下，我們優先定義「需要構建什麼（what）」以及「為什麼要這樣構建（why）」，然後才交由 AI 編碼助理或開發人員去實現「如何構建（how）」。</p>
+<p>SDD 的目標是透過明確、可審查和可演進的技術決策，來減少模糊性、提高代碼品質並加速開發週期。</p>
+<h2 id="Github-spec-kit-是什麼？"><a href="#Github-spec-kit-是什麼？" class="headerlink" title="Github-spec-kit 是什麼？"></a>Github-spec-kit 是什麼？</h2><p><code>Github-spec-kit</code> 是由 GitHub 在 2025 年 9 月發布的一個開源工具組，專為輔助開發者與 AI 編碼助理（如 GitHub Copilot, Gemini CLI 等）進行 SDD 開發而設計。它提供了一套結構化的方法與工具，旨在將傳統開發中較為隨性的 “vibe coding”（跟著感覺走）轉變為一個更嚴謹、更可預測的流程。</p>
+<h2 id="Github-spec-kit-的核心組件"><a href="#Github-spec-kit-的核心組件" class="headerlink" title="Github-spec-kit 的核心組件"></a>Github-spec-kit 的核心組件</h2><p>Github-spec-kit 包含以下幾個關鍵部分：</p>
+<ol>
+<li><strong>Specify CLI</strong>: 一個命令列介面（CLI）工具，用於管理 SDD 的工作流程、生成專案模板等。</li>
+<li><strong>Templates</strong>: 提供一組預設的模板，幫助開發者快速創建結構化的規格文件。</li>
+<li><strong>Steering Prompts</strong>: 一系列精心設計的提示詞（例如 <code>/specify</code>, <code>/plan</code>, <code>/tasks</code>），用於在開發的不同階段引導 AI 編碼助理，使其產出更符合預期的結果。</li>
+<li><strong>Constitution.md</strong>: 一個專案的「憲法」文件，用於定義專案中不可動搖的原則和指導方針（例如：編碼風格、技術選型、禁止使用的套件等）。AI 在生成代碼時會參考此文件。</li>
+</ol>
+<h2 id="使用-Github-spec-kit-的-SDD-工作流程"><a href="#使用-Github-spec-kit-的-SDD-工作流程" class="headerlink" title="使用 Github-spec-kit 的 SDD 工作流程"></a>使用 Github-spec-kit 的 SDD 工作流程</h2><p>使用此工具組的開發流程被劃分為四個清晰的、需要逐一驗證的階段：</p>
+<ol>
+<li><strong>Specify (規格化)</strong>: 開發者提供對專案意圖和目的的高層次描述。AI 助理會基於這些描述生成一份詳細的規格文件。</li>
+<li><strong>Plan (計畫)</strong>: 將詳細的規格文件轉化為具體的技術計畫，包含架構選擇、技術棧、數據模型等。</li>
+<li><strong>Tasks (任務拆解)</strong>: AI 助理將技術計畫分解為一系列更小、可執行且可測試的開發任務。</li>
+<li><strong>Implement (實現)</strong>: AI 助理或開發者根據拆解後的任務，逐步完成代碼的編寫與實現。</li>
+</ol>
+<p>這種結構化的方法確保了 AI 生成的代碼能夠精確地對應到最初的需求。</p>
+<h2 id="前置作業"><a href="#前置作業" class="headerlink" title="前置作業"></a>前置作業</h2><p>在開始之前，根據<a target="_blank" rel="noopener" href="https://github.com/github/spec-kit">官網spec kit的github</a>內容，是使用uv這個工具來安裝</p>
+<ul>
+<li>uv: 是一個用 Rust 編寫的快速 Python 包管理器，我們將使用 uv 來安裝 <code>Github-spec-kit</code> 的工具。</li>
+</ul>
+<blockquote>
+<p>以下所有操作步驟皆在 Ubuntu 系統執行。</p>
+</blockquote>
+<h3 id="Step1-安裝uv"><a href="#Step1-安裝uv" class="headerlink" title="Step1: 安裝uv"></a>Step1: 安裝uv</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -LsSf https://astral.sh/uv/install.sh | sh</span><br></pre></td></tr></table></figure>
+
+<h3 id="Step2-重啟終端機或執行下面指令"><a href="#Step2-重啟終端機或執行下面指令" class="headerlink" title="Step2: 重啟終端機或執行下面指令"></a>Step2: 重啟終端機或執行下面指令</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">source</span> ~/.bashrc</span><br></pre></td></tr></table></figure>
+
+<h3 id="Step3-確認安裝成功"><a href="#Step3-確認安裝成功" class="headerlink" title="Step3: 確認安裝成功"></a>Step3: 確認安裝成功</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">uv --version</span><br></pre></td></tr></table></figure>
+
+<h2 id="環境建置與安裝"><a href="#環境建置與安裝" class="headerlink" title="環境建置與安裝"></a>環境建置與安裝</h2><p>接下來，我們將引導你完成 <code>Github-spec-kit</code> 的基本環境設置。</p>
+<h3 id="Step1-安裝-Specify-CLI"><a href="#Step1-安裝-Specify-CLI" class="headerlink" title="Step1: 安裝 Specify CLI"></a>Step1: 安裝 Specify CLI</h3><p>在你的終端機中，運行以下指令來全域安裝 <code>specify-cli</code>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">uv tool install specify-cli --from git+https://github.com/github/spec-kit.git</span><br></pre></td></tr></table></figure>
+
+<p>安裝完成後，你可以透過以下指令來驗證是否安裝成功：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">specify check</span><br></pre></td></tr></table></figure>
+
+<h3 id="Step2-初始化專案"><a href="#Step2-初始化專案" class="headerlink" title="Step2: 初始化專案"></a>Step2: 初始化專案</h3><p>建立一個你想要開始新專案的資料夾後，然後運行初始化指令：</p>
+<blockquote>
+<p>初始化之前，specify check的項目中，至少 Git、VS Code&#x2F;VS Code insider跟列表其中一個AI工具要安裝後才開始</p>
+</blockquote>
+<p>建立資料夾初始化</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">specify init my-new-app</span><br></pre></td></tr></table></figure>
+
+<p>或在當下資料夾初始化</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">specify init --here</span><br></pre></td></tr></table></figure>
+
+<p>這個指令會引導你完成一系列的設定，並在 <code>my-new-app</code> 資料夾中生成 SDD 所需的基礎文件結構，包括 <code>constitution.md</code> 和規格文件模板。</p>
+<h2 id="下一篇：實戰演練"><a href="#下一篇：實戰演練" class="headerlink" title="下一篇：實戰演練"></a>下一篇：實戰演練</h2><p>到此為止，我們已經完成了 <code>Github-spec-kit</code> 的介紹和環境準備。在下一篇文章中，我們將以一個實際的範例，帶你完整地走過 <code>Specify</code> -&gt; <code>Plan</code> -&gt; <code>Tasks</code> -&gt; <code>Implement</code> 的四個階段，體驗如何利用 SDD 和 AI 助理高效地完成一個小型專案。</p>
+
+    </div>
+
+    
+    <div class="about">
+        <h1>About this Post</h1>
+        <div class="details">
+            <p>This post is written by Peter, licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a>.</p>
+        </div>
+        
+        <p class="tags">
+            
+            <i class="icon"></i>
+            <a href="/tags/TUTORIAL/" class="tag">#TUTORIAL</a><a href="/tags/WEBDEV/" class="tag">#WEBDEV</a><a href="/tags/SDD/" class="tag">#SDD</a><a href="/tags/AI/" class="tag">#AI</a><a href="/tags/Github/" class="tag">#Github</a>
+        </p>
+        
+    </div>
+    
+
+    <div class="container post-prev-next">
+        
+        <a href="/2025/12/31/docker%E7%B3%BB%E5%88%97%E4%B8%80%E4%BB%B6%E5%A5%97/" class="next">
+            <div>
+                <div class="text">
+                    <p class="label">Next</p>
+                    <h3 class="title">[Docker] 深入淺出 Docker Desktop：前端與後端的容器化實戰指南</h3>
+                </div>
+            </div>
+        </a>
+        
+        
+        <a href="/2025/09/18/NX%E5%B0%88%E6%A1%88%E7%9A%84%E9%96%8B%E7%99%BC%E7%92%B0%E5%A2%83%E8%AE%8A%E6%95%B8%E8%A8%AD%E5%AE%9A%E6%96%B9%E5%BC%8F/" class="prev">
+            <div>
+                <div class="text">
+                    <p class="label">Previous</p>
+                    <h3 class="title">NX專案的開發環境變數設定方式</>
+                </div>
+            </div>
+        </a>
+        
+    </div>
+
+    
+        
+        
+    
+</article>
+
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h2 class="title">Blog</h2>
+                
+                <a href="/" class="item">Blog</a>
+                
+                <a href="/archives" class="item">Archives</a>
+                
+                <a href="/tags" class="item">Tags</a>
+                
+                <a href="/categories" class="item">Categories</a>
+                
+                <a href="/search" class="item">Search</a>
+                
+                <a href="/friends" class="item">Friends</a>
+                
+                <a href="/projects" class="item">Projects</a>
+                
+                <a href="/resume" class="item">Resume</a>
+                
+                <a href="/about" class="item">About</a>
+                
+                <a href="/atom.xml" class="item">RSS</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Projects</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/MrWillCom/rsa-cli" class="item">RSA CLI</a>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/MrWillCom/hexo-theme-cupertino" class="item">Hexo Theme Cupertino</a>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/MrWillCom/a-calendar" class="item">A Calendar</a>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/MrWillCom/auto-mirroring-bucket" class="item">Auto Mirroring Bucket</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Me</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/MrWillCom" class="item">GitHub</a>
+                
+                <a target="_blank" rel="noopener" href="https://codepen.io/mrwillcom" class="item">CodePen</a>
+                
+                <a target="_blank" rel="noopener" href="https://www.patreon.com/MrWillCom" class="item">Patreon</a>
+                
+                <a target="_blank" rel="noopener" href="https://noc.social/@MrWillCom" class="item">Mastodon</a>
+                
+                <a target="_blank" rel="noopener" href="https://discord.gg/UKuFDjcfY8" class="item">Discord</a>
+                
+                <a href="mailto:mr.will.com@outlook.com" class="item">Email</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2026 Peter<br>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> </span>
+        
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+
+        
+<script src="/js/main.js"></script>
+
+        
+        
+        
+
+        
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            window.addEventListener('load', () => {
+                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
+                ScrollReveal().reveal('.post-list-item .cover-img img')
+                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
+            })
+        </script>
+        
+    </body>
+</html>

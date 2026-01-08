@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head prefix="og: https://ogp.me/ns#">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  
+  <title>nodejs的elsint與prettier與husky - Peter&#39;s Blog</title>
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+  
+  
+  <meta property="og:title" content="nodejs的elsint與prettier與husky - Peter&#39;s Blog" />
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:url" content="https://tsengpeter.github.io/2025/01/08/nodejs%E7%9A%84elsint%E8%88%87prettier%E8%88%87husky/index.html" />
+  
+  <meta property="og:image" content="/favicon.png" />
+  
+  <meta property="og:article:published_time" content="2025-01-08T16:01:00.000Z" />
+  
+  <meta property="og:article:author" content="Peter" />
+  
+  
+
+  
+<link rel="stylesheet" href="/css/var.css">
+
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+<link rel="stylesheet" href="/css/typography.css">
+
+  
+<link rel="stylesheet" href="/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/css/components.css">
+
+  
+<link rel="stylesheet" href="/css/nav.css">
+
+  
+<link rel="stylesheet" href="/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/css/footer.css">
+
+  
+<link rel="stylesheet" href="/css/post-list.css">
+
+  
+  
+<link rel="stylesheet" href="/css/rainbow-banner.css">
+
+  
+  
+  
+<link rel="stylesheet" href="/css/toc.css">
+
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/post.css">
+
+  
+  
+  
+  
+  
+
+  
+<meta name="generator" content="Hexo 7.2.0"></head>
+    <body
+        data-color-scheme="auto"
+        data-uppercase-categories="true"
+        
+        data-rainbow-banner="true"
+        data-rainbow-banner-shown="auto"
+        data-rainbow-banner-month="6"
+        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+        
+        data-config-root="/"
+        
+        data-toc="true"
+        data-toc-max-depth="2"
+        
+        
+    >
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">Blog</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">Home</a>
+            
+            
+            <a class="nav-item" href="/archives">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/friends">Friends</a>
+            
+            
+            
+            <a class="nav-item" href="/projects">Projects</a>
+            
+            
+            
+            <a class="nav-item" href="/about">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/MrWillCom" target="_blank" aria-label="GitHub">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-codepen nav-item-icon" href="https://codepen.io/mrwillcom" target="_blank" aria-label="CodePen">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-patreon nav-item-icon" href="https://www.patreon.com/MrWillCom" target="_blank" aria-label="Patreon">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-mastodon nav-item-icon" href="https://noc.social/@MrWillCom" target="_blank" aria-label="Mastodon">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-discord nav-item-icon" href="https://discord.gg/UKuFDjcfY8" target="_blank" aria-label="Discord">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        
+<article class="post">
+    <div class="meta">
+        
+        <div class="categories text-uppercase">
+        
+            <a href="/categories/技術分享/">技術分享</a>
+        
+        </div>
+        
+
+        
+        <div class="date" id="date">
+            <span>January</span>
+            <span>8,</span>
+            <span>2025</span>
+        </div>
+        
+
+        <h1 class="title">nodejs的elsint與prettier與husky</h1>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <ul>
+<li><a href="#%E4%BB%80%E9%BA%BC%E6%98%AFEslint">什麼是 Eslint</a></li>
+<li><a href="#%E4%BB%80%E9%BA%BC%E6%98%AFPrettier">什麼是 Prettier</a></li>
+<li><a href="#%E4%BB%80%E9%BA%BC%E6%98%AFHusky">什麼是 Husky</a></li>
+<li><a href="#%E5%89%8D%E7%BD%AE%E4%BD%9C%E6%A5%AD">前置作業</a><ul>
+<li><a href="#%E5%89%8D%E7%BD%AE%E5%AE%89%E8%A3%9D">前置安裝</a></li>
+<li><a href="#%E5%AE%89%E8%A3%9D%E5%A5%97%E4%BB%B6">安裝套件</a></li>
+</ul>
+</li>
+<li><a href="#%E8%A8%AD%E5%AE%9AEslint">設定 Eslint</a></li>
+<li><a href="#%E8%A8%AD%E5%AE%9APrettier">設定 Prettier</a></li>
+<li><a href="#%E8%A8%AD%E5%AE%9AHusky">設定 Husky</a></li>
+<li><a href="#BONUS-%E5%AD%98%E6%AA%94%E5%BE%8C%E8%87%AA%E5%8B%95%E5%9F%B7%E8%A1%8C-Prettier-%E4%BF%AE%E6%AD%A3%E6%A0%BC%E5%BC%8F">BONUS 存檔後自動執行 Prettier 修正格式</a></li>
+</ul>
+<h2 id="什麼是-Eslint"><a href="#什麼是-Eslint" class="headerlink" title="什麼是 Eslint"></a>什麼是 Eslint</h2><p>Eslint 是一個靜態程式碼分析工具，用於識別和修復 JavaScript 程式碼中的問題。它可以幫助開發者保持一致的程式碼風格，並避免常見的錯誤。</p>
+<h2 id="什麼是-Prettier"><a href="#什麼是-Prettier" class="headerlink" title="什麼是 Prettier"></a>什麼是 Prettier</h2><p>Prettier 是一個程式碼格式化工具，用於自動調整程式碼的格式，使其符合指定的風格規範。它可以與 Eslint 一起使用，以確保程式碼既正確又美觀。</p>
+<h2 id="什麼是-Husky"><a href="#什麼是-Husky" class="headerlink" title="什麼是 Husky"></a>什麼是 Husky</h2><p>Husky 是一個 Git hooks 工具，用於在特定的 Git 事件（如 commit 或 push）發生時，自動執行指定的腳本。它可以用來強制執行程式碼檢查和格式化，確保程式碼庫的品質。</p>
+<h2 id="前置作業"><a href="#前置作業" class="headerlink" title="前置作業"></a>前置作業</h2><h3 id="前置安裝"><a href="#前置安裝" class="headerlink" title="前置安裝"></a>前置安裝</h3><p>在開始使用 Eslint、Prettier 和 Husky 之前，請確保已經安裝了 Node.js 和 npm。</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://nodejs.org/en">安裝 node.js</a> : 使用 npm 指令來安裝所需的套件<blockquote>
+<p>若不確定下載哪個版本，可以直接下載最新的 node 版本。</p>
+</blockquote>
+</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://nodejs.org/en"><img src="/../img/nodejs.png" alt="nodejs"></a></p>
+<h3 id="安裝套件"><a href="#安裝套件" class="headerlink" title="安裝套件"></a>安裝套件</h3><p>使用以下命令安裝所需的套件：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install eslint prettier husky --save-dev</span><br></pre></td></tr></table></figure>
+
+<p>除此之外還要再額外安裝另外兩個套件:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install eslint-config-prettier eslint-plugin-prettier -D</span><br></pre></td></tr></table></figure>
+
+<p>這兩個額外套件是可以在 eslint 設定整合 prettier 設定時不會有問題。</p>
+<ul>
+<li><p>eslint-config-prettier: 當你使用 ESLint 和 Prettier 時，有些 ESLint 規則（例如格式相關的規則）會與 Prettier 格式化衝突（如縮排、引號類型等）。這個套件會自動禁用這些規則，讓 Prettier 接管格式化部分。</p>
+</li>
+<li><p>eslint-plugin-prettier: 讓 Prettier 成為一個 ESLint 插件，將 Prettier 的格式化錯誤當作 ESLint 錯誤報告出來。</p>
+</li>
+</ul>
+<h2 id="設定-Eslint"><a href="#設定-Eslint" class="headerlink" title="設定 Eslint"></a>設定 Eslint</h2><p>Eslint 的配置檔有很多格式，下面是各個格式的配置檔比較:</p>
+<table>
+<thead>
+<tr>
+<th>特徵&#x2F;格式</th>
+<th>CJS</th>
+<th>JSON</th>
+<th>ESM</th>
+<th>Flat Config</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>靜態配置</td>
+<td>✅ 支援</td>
+<td>✅ 支援</td>
+<td>✅ 支援</td>
+<td>✅ 支援</td>
+</tr>
+<tr>
+<td>動態邏輯</td>
+<td>✅ 支援</td>
+<td>❌ 不支援</td>
+<td>✅ 支援</td>
+<td>✅ 支援</td>
+</tr>
+<tr>
+<td>相容性</td>
+<td>Node.js 全版本</td>
+<td>跨工具標準</td>
+<td>Node.js 14+</td>
+<td>ESLint 8+</td>
+</tr>
+<tr>
+<td>語法複雜度</td>
+<td>中等</td>
+<td>簡單</td>
+<td>中等</td>
+<td>較高</td>
+</tr>
+</tbody></table>
+<p>我在下面範例會用 CJS 與 JSON 格式來示範配置檔的設定內容:</p>
+<ol>
+<li><p>在專案根目錄下創建 <code>.eslintrc.json .eslintignore</code> 文件，或是 <code>eslint.config.cjs .eslintignore</code> 擇一種格式來建立配置檔。</p>
+</li>
+<li><p>在配置檔添加以下內容</p>
+</li>
+</ol>
+<ul>
+<li>.eslintrc.json:</li>
+</ul>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;root&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;ignorePatterns&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;**/*&quot;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;plugins&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;@nx&quot;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;extends&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;eslint:recommended&quot;</span><span class="punctuation">,</span> <span class="string">&quot;plugin:prettier/recommended&quot;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;overrides&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;files&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;*.ts&quot;</span><span class="punctuation">,</span> <span class="string">&quot;*.tsx&quot;</span><span class="punctuation">,</span> <span class="string">&quot;*.js&quot;</span><span class="punctuation">,</span> <span class="string">&quot;*.jsx&quot;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;rules&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;@nx/enforce-module-boundaries&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">          <span class="string">&quot;error&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;enforceBuildableLibDependency&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;allow&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;depConstraints&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">              <span class="punctuation">&#123;</span></span><br><span class="line">                <span class="attr">&quot;sourceTag&quot;</span><span class="punctuation">:</span> <span class="string">&quot;*&quot;</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;onlyDependOnLibsWithTags&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;*&quot;</span><span class="punctuation">]</span></span><br><span class="line">              <span class="punctuation">&#125;</span></span><br><span class="line">            <span class="punctuation">]</span></span><br><span class="line">          <span class="punctuation">&#125;</span></span><br><span class="line">        <span class="punctuation">]</span></span><br><span class="line">      <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;files&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;*.ts&quot;</span><span class="punctuation">,</span> <span class="string">&quot;*.tsx&quot;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;extends&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;plugin:@nx/typescript&quot;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;rules&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;@typescript-eslint/no-extra-semi&quot;</span><span class="punctuation">:</span> <span class="string">&quot;error&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;no-extra-semi&quot;</span><span class="punctuation">:</span> <span class="string">&quot;off&quot;</span></span><br><span class="line">      <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;files&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;*.js&quot;</span><span class="punctuation">,</span> <span class="string">&quot;*.jsx&quot;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;extends&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;plugin:@nx/javascript&quot;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;rules&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;@typescript-eslint/no-extra-semi&quot;</span><span class="punctuation">:</span> <span class="string">&quot;error&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;no-extra-semi&quot;</span><span class="punctuation">:</span> <span class="string">&quot;off&quot;</span></span><br><span class="line">      <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;files&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;*.spec.ts&quot;</span><span class="punctuation">,</span> <span class="string">&quot;*.spec.tsx&quot;</span><span class="punctuation">,</span> <span class="string">&quot;*.spec.js&quot;</span><span class="punctuation">,</span> <span class="string">&quot;*.spec.jsx&quot;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;env&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;jest&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span></span><br><span class="line">      <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;rules&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>eslint.config.cjs:</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> nx = <span class="built_in">require</span>(<span class="string">&quot;@nx/eslint-plugin&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = [</span><br><span class="line">  ...nx.<span class="property">configs</span>[<span class="string">&quot;flat/base&quot;</span>],</span><br><span class="line">  ...nx.<span class="property">configs</span>[<span class="string">&quot;flat/typescript&quot;</span>],</span><br><span class="line">  ...nx.<span class="property">configs</span>[<span class="string">&quot;flat/javascript&quot;</span>],</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="attr">ignores</span>: [<span class="string">&quot;**/dist&quot;</span>],</span><br><span class="line">  &#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="attr">files</span>: [</span><br><span class="line">      <span class="string">&quot;**/*.ts&quot;</span>,</span><br><span class="line">      <span class="string">&quot;**/*.tsx&quot;</span>,</span><br><span class="line">      <span class="string">&quot;**/*.js&quot;</span>,</span><br><span class="line">      <span class="string">&quot;**/*.jsx&quot;</span>,</span><br><span class="line">      <span class="string">&quot;**/*.cjs&quot;</span>,</span><br><span class="line">      <span class="string">&quot;**/*.mjs&quot;</span>,</span><br><span class="line">    ],</span><br><span class="line">    <span class="attr">rules</span>: &#123;</span><br><span class="line">      <span class="string">&quot;@nx/enforce-module-boundaries&quot;</span>: [</span><br><span class="line">        <span class="string">&quot;error&quot;</span>,</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="attr">enforceBuildableLibDependency</span>: <span class="literal">true</span>,</span><br><span class="line">          <span class="attr">allow</span>: [],</span><br><span class="line">          <span class="attr">depConstraints</span>: [</span><br><span class="line">            &#123;</span><br><span class="line">              <span class="attr">sourceTag</span>: <span class="string">&quot;*&quot;</span>,</span><br><span class="line">              <span class="attr">onlyDependOnLibsWithTags</span>: [<span class="string">&quot;*&quot;</span>],</span><br><span class="line">            &#125;,</span><br><span class="line">          ],</span><br><span class="line">        &#125;,</span><br><span class="line">      ],</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="attr">files</span>: [<span class="string">&quot;*.ts&quot;</span>, <span class="string">&quot;*.tsx&quot;</span>, <span class="string">&quot;*.js&quot;</span>, <span class="string">&quot;*.jsx&quot;</span>, <span class="string">&quot;**/*.cjs&quot;</span>, <span class="string">&quot;**/*.mjs&quot;</span>],</span><br><span class="line">    <span class="attr">plugins</span>: &#123;</span><br><span class="line">      <span class="attr">prettier</span>: <span class="built_in">require</span>(<span class="string">&quot;eslint-plugin-prettier&quot;</span>),</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">rules</span>: &#123;</span><br><span class="line">      <span class="string">&quot;prettier/prettier&quot;</span>: <span class="string">&quot;error&quot;</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;,</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>eslintignore:</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">node_modules</span><br><span class="line">dist</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>如果是 nx 的專案，在 nx.json 中增加以下內容:</li>
+</ol>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">&quot;targetDefaults&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;lint&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;executor&quot;</span><span class="punctuation">:</span> <span class="string">&quot;@nx/linter:eslint&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;options&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;fix&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;lintFilePatterns&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;apps/**/*.&#123;ts,tsx,js,jsx&#125;&quot;</span><span class="punctuation">,</span> <span class="string">&quot;libs/**/*.&#123;ts,tsx,js,jsx&#125;&quot;</span><span class="punctuation">]</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="設定-Prettier"><a href="#設定-Prettier" class="headerlink" title="設定 Prettier"></a>設定 Prettier</h2><p>在專案根目錄下創建一個 <code>prettier.config.js</code> 或是 <code>.prettierrc</code> 以及 <code>.prettierignore</code> 文件，並添加以下內容：</p>
+<ul>
+<li>prettier.config.js:</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = &#123;</span><br><span class="line">  <span class="attr">endOfLine</span>: <span class="string">&quot;auto&quot;</span>,</span><br><span class="line">  <span class="attr">printWidth</span>: <span class="number">80</span>,</span><br><span class="line">  <span class="attr">tabWidth</span>: <span class="number">2</span>,</span><br><span class="line">  <span class="attr">useTabs</span>: <span class="literal">false</span>,</span><br><span class="line">  <span class="attr">semi</span>: <span class="literal">true</span>,</span><br><span class="line">  <span class="attr">singleQuote</span>: <span class="literal">false</span>,</span><br><span class="line">  <span class="attr">quoteProps</span>: <span class="string">&quot;as-needed&quot;</span>,</span><br><span class="line">  <span class="attr">trailingComma</span>: <span class="string">&quot;all&quot;</span>,</span><br><span class="line">  <span class="attr">bracketSpacing</span>: <span class="literal">true</span>,</span><br><span class="line">  <span class="attr">bracketSameLine</span>: <span class="literal">false</span>,</span><br><span class="line">  <span class="attr">arrowParens</span>: <span class="string">&quot;always&quot;</span>,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>.prettierrc</li>
+</ul>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;endOfLine&quot;</span><span class="punctuation">:</span> <span class="string">&quot;auto&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;printWidth&quot;</span><span class="punctuation">:</span> <span class="number">80</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;tabWidth&quot;</span><span class="punctuation">:</span> <span class="number">2</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;useTabs&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;semi&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;singleQuote&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;quoteProps&quot;</span><span class="punctuation">:</span> <span class="string">&quot;as-needed&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;trailingComma&quot;</span><span class="punctuation">:</span> <span class="string">&quot;all&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;bracketSpacing&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;bracketSameLine&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;arrowParens&quot;</span><span class="punctuation">:</span> <span class="string">&quot;always&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>.prettierignore</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># Add files here to ignore them from prettier formatting</span><br><span class="line">/node_modules</span><br><span class="line">/dist</span><br><span class="line">/coverage</span><br><span class="line">/.nx/cache</span><br><span class="line">/.nx/workspace-data</span><br></pre></td></tr></table></figure>
+
+<h2 id="設定-Husky"><a href="#設定-Husky" class="headerlink" title="設定 Husky"></a>設定 Husky</h2><p>初始化 husky，在 command 機中切換到專案路徑後，輸入下面指令:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npx husky install</span><br></pre></td></tr></table></figure>
+
+<p>執行完後會看到在專案內多出一個 <code>.husky</code> 的資料夾，資料夾裡面會有個 <code>_</code> 的資料夾，裡面存放著各樣式的配置檔。</p>
+<p>husky 的配置檔有很多種，像是要 push 之前的 commit 時要做甚麼，push 後的要做甚麼等等，在我的專案需求中，我只需要在 commit 之前要有動作，所以接下來依序照著以下步驟，應該就可以順利運行 husky:</p>
+<ol>
+<li><p>在 <code>.husky</code> 資料夾中從 <code>_</code> 資料夾中將 <code>pre-commit</code> 檔案複製到 <code>.husky</code> ，或是自行新增一個 <code>pre-commit</code> 的檔案。</p>
+</li>
+<li><p>在 <code>pre-commit</code> 檔案裡改成以下內容:</p>
+</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">prettier $(git diff --cached --name-only --diff-filter=ACMR | sed &#x27;s| |\\ |g&#x27;) --write --ignore-unknown</span><br><span class="line">git update-index --again</span><br><span class="line">npx lint-staged</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>在 <code>package.json</code> 文件中添加以下腳本：</li>
+</ol>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;scripts&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;prepare&quot;</span><span class="punctuation">:</span> <span class="string">&quot;husky&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;lint-staged&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;*.&#123;js,jsx,ts,tsx&#125;&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;eslint --fix&quot;</span><span class="punctuation">,</span> <span class="string">&quot;prettier --write&quot;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;*.html&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;prettier --write&quot;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;*.&#123;css,scss&#125;&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;prettier --write&quot;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;*.&#123;json,md&#125;&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;prettier --write&quot;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;*.&#123;cjs,mjs&#125;&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;prettier --write&quot;</span><span class="punctuation">]</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>到這個步驟就是完成 husky 的設定了，接下來就是要測試 husky 有沒有確實的完成執行動作，根據以下動作操作:</p>
+<ol>
+<li><p>先隨便將一直檔案修改，讓 git 有變更紀錄。</p>
+</li>
+<li><p>在 command 機輸入以下指令:</p>
+</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git add .</span><br><span class="line">npx lint-staged</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>git add .: 是暫存修改紀錄</p>
+</li>
+<li><p>npx lint-staged: 執行 package.json 配置的檢查設定</p>
+</li>
+</ul>
+<p>如果執行後再 command 端有執行動作的話就代表 Husky 有執行。</p>
+<h2 id="BONUS-存檔後自動執行-Prettier-修正格式"><a href="#BONUS-存檔後自動執行-Prettier-修正格式" class="headerlink" title="BONUS: 存檔後自動執行 Prettier 修正格式"></a>BONUS: 存檔後自動執行 Prettier 修正格式</h2><p>除了上面的 Eslint 跟 Prettier 的配置設定好之外，還要再去設定另一個配置檔，才能夠讓功能生效，請依照下圖的步驟執行:</p>
+<ol>
+<li><p>根據下圖的指示步驟操作:<br><img src="/../img/vs%E8%A8%AD%E5%AE%9A%E6%AA%94%E6%95%99%E5%AD%B8.png" alt="vs 設定檔"></p>
+</li>
+<li><p>這樣就會開啟 <code>.vscode</code> 底下的 <code>settings.json</code> 配置檔，接下來在裡面新增以下的設定:</p>
+</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">// 儲存檔案時自動格式化程式碼</span><br><span class="line">&quot;editor.formatOnSave&quot;: true,</span><br><span class="line">// 指定 Prettier 為默認格式化工具</span><br><span class="line">&quot;editor.defaultFormatter&quot;: &quot;esbenp.prettier-vscode&quot;,</span><br><span class="line">// 在儲存時自動應用程式碼修正</span><br><span class="line">&quot;editor.codeActionsOnSave&quot;: &#123;</span><br><span class="line">  &quot;source.organizeImports&quot;: &quot;explicit&quot;,</span><br><span class="line">  &quot;source.fixAll&quot;: &quot;explicit&quot;,</span><br><span class="line">  &quot;source.fixAll.eslint&quot;: &quot;explicit&quot;</span><br><span class="line">&#125;,</span><br><span class="line">// 將 ESLint 視為格式化工具，並在您執行格式化操作時（例如儲存檔案或手動格式化）調用 ESLint 的格式化規則。</span><br><span class="line">&quot;eslint.format.enable&quot;: true,</span><br><span class="line">// 指定哪些檔案類型會啟用 ESLint 驗證</span><br><span class="line">&quot;eslint.validate&quot;: [</span><br><span class="line">  &quot;javascript&quot;, // 對 JavaScript 檔案使用 ESLint</span><br><span class="line">  &quot;javascriptreact&quot;, // 對 React 的 JavaScript 檔案使用 ESLint</span><br><span class="line">  &quot;typescript&quot;, // 對 TypeScript 檔案使用 ESLint</span><br><span class="line">  &quot;typescriptreact&quot; // 對 React 的 TypeScript 檔案使用 ESLint</span><br><span class="line">],</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>這些設定的作用也一併備註上去了，不過這邊特別要提出的一點是關於 <code>eslint.format.enable</code> 這個設定，設為 <code>true</code> 的情況是我有在 <code>Eslint</code> 的配置檔引用了 <code>eslint-plugin-prettier</code>，若 <code>eslint</code> 配置檔沒有引用，則應該設為 <code>false</code>。</p>
+</blockquote>
+<p>這樣設定完成以上的步驟後，就能在編輯時看到 <code>Eslint</code> 發出錯誤訊息，可能是 <code>prettier</code> 格式不符，或是語法有問題都會顯示，以及按下存檔後，<code>prettier</code> 會自動將正在編輯的檔案做格式化，要做 git 上傳時會透過 <code>husky</code> 套件執行 <code>eslint</code> 跟 <code>prettier</code> 的檢查，確保上傳前的都沒有任何語法或是格式的錯誤。</p>
+
+    </div>
+
+    
+    <div class="about">
+        <h1>About this Post</h1>
+        <div class="details">
+            <p>This post is written by Peter, licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a>.</p>
+        </div>
+        
+        <p class="tags">
+            
+            <i class="icon"></i>
+            <a href="/tags/NODEJS/" class="tag">#NODEJS</a><a href="/tags/ESLINT/" class="tag">#ESLINT</a><a href="/tags/PRETTIER/" class="tag">#PRETTIER</a><a href="/tags/HUSKY/" class="tag">#HUSKY</a><a href="/tags/LINTING/" class="tag">#LINTING</a><a href="/tags/GIT/" class="tag">#GIT</a>
+        </p>
+        
+    </div>
+    
+
+    <div class="container post-prev-next">
+        
+        <a href="/2025/09/10/Monorepo%E6%9E%B6%E6%A7%8B%E7%9A%84NX%E5%B0%88%E6%A1%88%E5%BC%95%E5%85%A5Sentry%E7%9B%A3%E6%8E%A7/" class="next">
+            <div>
+                <div class="text">
+                    <p class="label">Next</p>
+                    <h3 class="title">Monorepo架構的NX專案引入Sentry監控</h3>
+                </div>
+            </div>
+        </a>
+        
+        
+        <a href="/2025/01/06/Monorepo%E6%9E%B6%E6%A7%8B%E4%BB%8B%E7%B4%B9%E5%8F%8A%E5%BB%BA%E7%BD%AE/" class="prev">
+            <div>
+                <div class="text">
+                    <p class="label">Previous</p>
+                    <h3 class="title">Monorepo架構介紹及建置</>
+                </div>
+            </div>
+        </a>
+        
+    </div>
+
+    
+        
+        
+    
+</article>
+
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h2 class="title">Blog</h2>
+                
+                <a href="/" class="item">Blog</a>
+                
+                <a href="/archives" class="item">Archives</a>
+                
+                <a href="/tags" class="item">Tags</a>
+                
+                <a href="/categories" class="item">Categories</a>
+                
+                <a href="/search" class="item">Search</a>
+                
+                <a href="/friends" class="item">Friends</a>
+                
+                <a href="/projects" class="item">Projects</a>
+                
+                <a href="/resume" class="item">Resume</a>
+                
+                <a href="/about" class="item">About</a>
+                
+                <a href="/atom.xml" class="item">RSS</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Projects</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/MrWillCom/rsa-cli" class="item">RSA CLI</a>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/MrWillCom/hexo-theme-cupertino" class="item">Hexo Theme Cupertino</a>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/MrWillCom/a-calendar" class="item">A Calendar</a>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/MrWillCom/auto-mirroring-bucket" class="item">Auto Mirroring Bucket</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Me</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/MrWillCom" class="item">GitHub</a>
+                
+                <a target="_blank" rel="noopener" href="https://codepen.io/mrwillcom" class="item">CodePen</a>
+                
+                <a target="_blank" rel="noopener" href="https://www.patreon.com/MrWillCom" class="item">Patreon</a>
+                
+                <a target="_blank" rel="noopener" href="https://noc.social/@MrWillCom" class="item">Mastodon</a>
+                
+                <a target="_blank" rel="noopener" href="https://discord.gg/UKuFDjcfY8" class="item">Discord</a>
+                
+                <a href="mailto:mr.will.com@outlook.com" class="item">Email</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2026 Peter<br>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> </span>
+        
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+
+        
+<script src="/js/main.js"></script>
+
+        
+        
+        
+
+        
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            window.addEventListener('load', () => {
+                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
+                ScrollReveal().reveal('.post-list-item .cover-img img')
+                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
+            })
+        </script>
+        
+    </body>
+</html>

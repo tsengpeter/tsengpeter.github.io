@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head prefix="og: https://ogp.me/ns#">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  
+  <title>React專案引入PWA機制 - Peter&#39;s Blog</title>
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+  
+  
+  <meta property="og:title" content="React專案引入PWA機制 - Peter&#39;s Blog" />
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:url" content="https://tsengpeter.github.io/2024/11/08/React%E5%B0%88%E6%A1%88%E5%BC%95%E5%85%A5PWA%E6%A9%9F%E5%88%B6/index.html" />
+  
+  <meta property="og:image" content="/favicon.png" />
+  
+  <meta property="og:article:published_time" content="2024-11-08T10:17:55.000Z" />
+  
+  <meta property="og:article:author" content="Peter" />
+  
+  
+
+  
+<link rel="stylesheet" href="/css/var.css">
+
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+<link rel="stylesheet" href="/css/typography.css">
+
+  
+<link rel="stylesheet" href="/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/css/components.css">
+
+  
+<link rel="stylesheet" href="/css/nav.css">
+
+  
+<link rel="stylesheet" href="/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/css/footer.css">
+
+  
+<link rel="stylesheet" href="/css/post-list.css">
+
+  
+  
+<link rel="stylesheet" href="/css/rainbow-banner.css">
+
+  
+  
+  
+<link rel="stylesheet" href="/css/toc.css">
+
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/post.css">
+
+  
+  
+  
+  
+  
+
+  
+<meta name="generator" content="Hexo 7.2.0"></head>
+    <body
+        data-color-scheme="auto"
+        data-uppercase-categories="true"
+        
+        data-rainbow-banner="true"
+        data-rainbow-banner-shown="auto"
+        data-rainbow-banner-month="6"
+        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+        
+        data-config-root="/"
+        
+        data-toc="true"
+        data-toc-max-depth="2"
+        
+        
+    >
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">Blog</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">Home</a>
+            
+            
+            <a class="nav-item" href="/archives">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/friends">Friends</a>
+            
+            
+            
+            <a class="nav-item" href="/projects">Projects</a>
+            
+            
+            
+            <a class="nav-item" href="/about">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/MrWillCom" target="_blank" aria-label="GitHub">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-codepen nav-item-icon" href="https://codepen.io/mrwillcom" target="_blank" aria-label="CodePen">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-patreon nav-item-icon" href="https://www.patreon.com/MrWillCom" target="_blank" aria-label="Patreon">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-mastodon nav-item-icon" href="https://noc.social/@MrWillCom" target="_blank" aria-label="Mastodon">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-discord nav-item-icon" href="https://discord.gg/UKuFDjcfY8" target="_blank" aria-label="Discord">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        
+<article class="post">
+    <div class="meta">
+        
+        <div class="categories text-uppercase">
+        
+            <a href="/categories/技術分享/">技術分享</a>
+        
+        </div>
+        
+
+        
+        <div class="date" id="date">
+            <span>November</span>
+            <span>8,</span>
+            <span>2024</span>
+        </div>
+        
+
+        <h1 class="title">React專案引入PWA機制</h1>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <ul>
+<li><a href="#PWA-%E6%98%AF%E4%BB%80%E9%BA%BC">PWA 是什麼</a></li>
+<li><a href="#%E5%89%8D%E7%BD%AE%E4%BD%9C%E6%A5%AD">前置作業</a><br>1 <a href="#%E5%89%8D%E7%BD%AE%E5%AE%89%E8%A3%9D">前置安裝</a></li>
+<li><a href="#%E5%B0%88%E6%A1%88%E7%92%B0%E5%A2%83%E5%BB%BA%E7%BD%AE">專案環境建置</a><br>1 <a href="#Step1-%E5%AE%89%E8%A3%9D-Vite-CLI">Step1:安裝 Vite CLI</a><br>2 <a href="#Step2-%E5%89%B5%E5%BB%BA%E5%B0%88%E6%A1%88">Step2:創建專案</a><br>3 <a href="#Step3-%E5%AE%89%E8%A3%9D%E5%B0%88%E6%A1%88%E4%BE%9D%E8%B3%B4%E5%A5%97%E4%BB%B6">Step3:安裝專案依賴套件</a><br>4 <a href="#Step4-%E5%AE%89%E8%A3%9D-PWA-%E5%A5%97%E4%BB%B6">Step4:安裝 PWA 套件</a></li>
+<li><a href="#%E5%AF%A6%E4%BD%9C-PWA-%E8%A8%AD%E5%AE%9A">實作 PWA 設定</a></li>
+</ul>
+<h1 id="三大前端框架引入-PWA-機制-入門篇"><a href="#三大前端框架引入-PWA-機制-入門篇" class="headerlink" title="三大前端框架引入 PWA 機制 - 入門篇"></a>三大前端框架引入 PWA 機制 - 入門篇</h1><h2 id="PWA-是甚麼"><a href="#PWA-是甚麼" class="headerlink" title="PWA 是甚麼"></a>PWA 是甚麼</h2><p>PWA（Progressive Web App，漸進式網頁應用）是一種將網站或網頁應用程式優化，使其具有類似原生手機 App 的體驗和功能的技術。PWA 的目標是將網站打造成更快、更可靠、更吸引人的使用體驗，無論在網速較差或無網路連接的情況下，都能提供良好的使用體驗。</p>
+<h2 id="PWA-的主要特點"><a href="#PWA-的主要特點" class="headerlink" title="PWA 的主要特點"></a>PWA 的主要特點</h2><ol>
+<li><p>跨平台性：PWA 可以在任何支持現代瀏覽器的設備上運行，無論是桌面端還是移動端，用戶不需要下載或安裝。</p>
+</li>
+<li><p>可離線使用：透過 Service Workers（服務工作者）技術，PWA 可以在無網路的情況下提供部分功能。例如，當網絡恢復時，PWA 可以自動同步數據。</p>
+</li>
+<li><p>自動更新：PWA 會自動更新用戶端的資源，確保用戶看到的是最新版本，而不需要手動更新。</p>
+</li>
+<li><p>快捷安裝：PWA 可以被“添加至主屏幕”，用戶在瀏覽器中打開網站後，通常會被提示安裝，將其添加到桌面或主屏幕上，使其看起來更像一個 App。</p>
+</li>
+<li><p>推送通知：PWA 可以向用戶發送推送通知，與原生 App 一樣提供及時更新和提醒。</p>
+</li>
+</ol>
+<h2 id="PWA-的常見應用"><a href="#PWA-的常見應用" class="headerlink" title="PWA 的常見應用"></a>PWA 的常見應用</h2><p>PWA 技術適用於內容型網站、電商平台、社交網絡等，例如 Twitter Lite、阿里巴巴、Forbes 等都採用了 PWA，使其網站在低網速或離線的情況下依然提供良好的體驗。</p>
+<h2 id="PWA-的技術組成"><a href="#PWA-的技術組成" class="headerlink" title="PWA 的技術組成"></a>PWA 的技術組成</h2><p><strong>Service Worker</strong>：負責離線功能、背景同步和推送通知。<br><strong>App Manifest</strong>：定義了應用的圖標、顏色、啟動頁面等設置，使其能夠被“添加至主屏幕”。<br><strong>HTTPS</strong>：PWA 需要運行在安全的網路協議上（HTTPS），以保護數據安全。</p>
+<h2 id="前置作業"><a href="#前置作業" class="headerlink" title="前置作業"></a>前置作業</h2><h3 id="前置安裝"><a href="#前置安裝" class="headerlink" title="前置安裝"></a>前置安裝</h3><p>在開始使用之前，電腦必須先安裝以下工具:</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://nodejs.org/en">安裝 node.js</a> : 使用 npm 指令來安裝所需的套件<blockquote>
+<p>Hexo 官網建議使用 Node.js 10.0 及以上版本，若不確定下載哪個版本，可以直接下載最新的 node 版本。</p>
+</blockquote>
+</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://nodejs.org/en"><img src="/../img/nodejs.png" alt="nodejs"></a></p>
+<h2 id="專案環境建置"><a href="#專案環境建置" class="headerlink" title="專案環境建置"></a>專案環境建置</h2><p>以下從建置專案的步驟開始</p>
+<blockquote>
+<p>首先我的專案是使用 Vite 套件來建立一個 React 專案，所以我講述的內容都會以 Vite 建立的專案為主軸。</p>
+</blockquote>
+<h3 id="Step1-安裝-Vite-CLI"><a href="#Step1-安裝-Vite-CLI" class="headerlink" title="Step1:安裝 Vite CLI"></a>Step1:安裝 Vite CLI</h3><p>在終端機中運行以下指令:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm create vite@latest</span><br></pre></td></tr></table></figure>
+
+<h3 id="Step2-創建專案"><a href="#Step2-創建專案" class="headerlink" title="Step2:創建專案"></a>Step2:創建專案</h3><p>安裝好 vite 的 cli 之後接著在終端機中運行以下指令來建立專案:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm create vite@latest &lt;<span class="string">&quot;你的專案名稱&quot;</span>&gt;</span><br></pre></td></tr></table></figure>
+
+<p>在建置專案中，Vite 的 CLI 指令會詢問你專案的內容要怎麼樣，例如是 vue 還是 react 的專案等框架選擇問題，以及是用 Javascript 還是 Typescript 的方式撰寫專案等問題</p>
+<h3 id="Step3-安裝專案依賴套件"><a href="#Step3-安裝專案依賴套件" class="headerlink" title="Step3:安裝專案依賴套件"></a>Step3:安裝專案依賴套件</h3><p>當你專案建立好後再終端機運行以下指令來切換進入到你建立的專案:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> &lt;<span class="string">&quot;你專案的路徑&quot;</span>&gt;/&lt;<span class="string">&quot;你專案的名稱&quot;</span>&gt;</span><br></pre></td></tr></table></figure>
+
+<p>再輸入以下指令來安裝依賴套件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install</span><br></pre></td></tr></table></figure>
+
+<h3 id="Step4-安裝-PWA-套件"><a href="#Step4-安裝-PWA-套件" class="headerlink" title="Step4:安裝 PWA 套件"></a>Step4:安裝 PWA 套件</h3><p>接著是要安裝這次主題要使用的 PWA 套件，因為我這次的專案適用 Vite 的專案，所以我會使用 vite-plugin-pwa 這個套件來實作 PWA 的內容。</p>
+<p>在終端機你的專案位置下輸入以下指令:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install vite-plugin-pwa --save-dev</span><br></pre></td></tr></table></figure>
+
+<p>這樣一來專案的環境建置就告此一個段落。</p>
+<h2 id="實作-PWA-設定"><a href="#實作-PWA-設定" class="headerlink" title="實作 PWA 設定"></a>實作 PWA 設定</h2><p>已經安裝好了 vite-plugin-pwa 這個套件後，我們就可以在專案中開始設定 PWA 的設定內容了，配置 PWA 的設定直接在 vite.config.js 這個文件添加內容，範例如下:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// vite.config.js</span></span><br><span class="line"><span class="keyword">import</span> &#123; defineConfig &#125; <span class="keyword">from</span> <span class="string">&quot;vite&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> react <span class="keyword">from</span> <span class="string">&quot;@vitejs/plugin-react&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; <span class="title class_">VitePWA</span> &#125; <span class="keyword">from</span> <span class="string">&quot;vite-plugin-pwa&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineConfig</span>(&#123;</span><br><span class="line">  <span class="attr">plugins</span>: [</span><br><span class="line">    <span class="title function_">react</span>(),</span><br><span class="line">    <span class="title class_">VitePWA</span>(&#123;</span><br><span class="line">      <span class="attr">registerType</span>: <span class="string">&quot;autoUpdate&quot;</span>,</span><br><span class="line">      <span class="attr">manifest</span>: &#123;</span><br><span class="line">        <span class="attr">name</span>: <span class="string">&quot;My Vite React PWA&quot;</span>,</span><br><span class="line">        <span class="attr">short_name</span>: <span class="string">&quot;VitePWA&quot;</span>,</span><br><span class="line">        <span class="attr">theme_color</span>: <span class="string">&quot;#ffffff&quot;</span>,</span><br><span class="line">        <span class="attr">background_color</span>: <span class="string">&quot;#ffffff&quot;</span>,</span><br><span class="line">        <span class="attr">display</span>: <span class="string">&quot;standalone&quot;</span>,</span><br><span class="line">        <span class="attr">icons</span>: [</span><br><span class="line">          &#123;</span><br><span class="line">            <span class="attr">src</span>: <span class="string">&quot;/icon-192x192.png&quot;</span>,</span><br><span class="line">            <span class="attr">sizes</span>: <span class="string">&quot;192x192&quot;</span>,</span><br><span class="line">            <span class="attr">type</span>: <span class="string">&quot;image/png&quot;</span>,</span><br><span class="line">          &#125;,</span><br><span class="line">          &#123;</span><br><span class="line">            <span class="attr">src</span>: <span class="string">&quot;/icon-512x512.png&quot;</span>,</span><br><span class="line">            <span class="attr">sizes</span>: <span class="string">&quot;512x512&quot;</span>,</span><br><span class="line">            <span class="attr">type</span>: <span class="string">&quot;image/png&quot;</span>,</span><br><span class="line">          &#125;,</span><br><span class="line">        ],</span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="attr">workbox</span>: &#123;</span><br><span class="line">        <span class="attr">runtimeCaching</span>: [</span><br><span class="line">          &#123;</span><br><span class="line">            <span class="attr">urlPattern</span>: <span class="regexp">/\/api\/.*\/*.json/</span>, <span class="comment">// 快取符合此模式的 API 請求</span></span><br><span class="line">            <span class="attr">handler</span>: <span class="string">&quot;NetworkFirst&quot;</span>, <span class="comment">// 首先從網路獲取，無法連接時再從快取獲取</span></span><br><span class="line">            <span class="attr">options</span>: &#123;</span><br><span class="line">              <span class="attr">cacheName</span>: <span class="string">&quot;api-cache&quot;</span>,</span><br><span class="line">              <span class="attr">expiration</span>: &#123;</span><br><span class="line">                <span class="attr">maxEntries</span>: <span class="number">50</span>, <span class="comment">// 最大快取 50 個請求</span></span><br><span class="line">                <span class="attr">maxAgeSeconds</span>: <span class="number">24</span> * <span class="number">60</span> * <span class="number">60</span>, <span class="comment">// 快取的最大保存時間（秒）</span></span><br><span class="line">              &#125;,</span><br><span class="line">            &#125;,</span><br><span class="line">          &#125;,</span><br><span class="line">          &#123;</span><br><span class="line">            <span class="attr">urlPattern</span>: <span class="regexp">/\.(?:png|jpg|jpeg|svg)$/</span>, <span class="comment">// 快取圖片資源</span></span><br><span class="line">            <span class="attr">handler</span>: <span class="string">&quot;CacheFirst&quot;</span>, <span class="comment">// 首先從快取獲取，無法獲取時再從網路獲取</span></span><br><span class="line">            <span class="attr">options</span>: &#123;</span><br><span class="line">              <span class="attr">cacheName</span>: <span class="string">&quot;image-cache&quot;</span>,</span><br><span class="line">              <span class="attr">expiration</span>: &#123;</span><br><span class="line">                <span class="attr">maxEntries</span>: <span class="number">100</span>, <span class="comment">// 最大快取 100 個圖片</span></span><br><span class="line">                <span class="attr">maxAgeSeconds</span>: <span class="number">7</span> * <span class="number">24</span> * <span class="number">60</span> * <span class="number">60</span>, <span class="comment">// 7 天的快取時間</span></span><br><span class="line">              &#125;,</span><br><span class="line">            &#125;,</span><br><span class="line">          &#125;,</span><br><span class="line">        ],</span><br><span class="line">      &#125;,</span><br><span class="line">    &#125;),</span><br><span class="line">  ],</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>也可以將 PWA 的配置從 defineConfig 中抽離來方便解讀，範例如下:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// vite.config.js</span></span><br><span class="line"><span class="keyword">import</span> &#123; defineConfig &#125; <span class="keyword">from</span> <span class="string">&quot;vite&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> react <span class="keyword">from</span> <span class="string">&quot;@vitejs/plugin-react&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; <span class="title class_">VitePWA</span> &#125; <span class="keyword">from</span> <span class="string">&quot;vite-plugin-pwa&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> pwaPlugin = <span class="title class_">VitePWA</span>(&#123;</span><br><span class="line">  <span class="attr">registerType</span>: <span class="string">&quot;autoUpdate&quot;</span>,</span><br><span class="line">  <span class="attr">manifest</span>: &#123;</span><br><span class="line">    <span class="attr">name</span>: <span class="string">&quot;My Vite React PWA&quot;</span>,</span><br><span class="line">    <span class="attr">short_name</span>: <span class="string">&quot;VitePWA&quot;</span>,</span><br><span class="line">    <span class="attr">theme_color</span>: <span class="string">&quot;#ffffff&quot;</span>,</span><br><span class="line">    <span class="attr">background_color</span>: <span class="string">&quot;#ffffff&quot;</span>,</span><br><span class="line">    <span class="attr">display</span>: <span class="string">&quot;standalone&quot;</span>,</span><br><span class="line">    <span class="attr">icons</span>: [</span><br><span class="line">      &#123;</span><br><span class="line">        <span class="attr">src</span>: <span class="string">&quot;/icon-192x192.png&quot;</span>,</span><br><span class="line">        <span class="attr">sizes</span>: <span class="string">&quot;192x192&quot;</span>,</span><br><span class="line">        <span class="attr">type</span>: <span class="string">&quot;image/png&quot;</span>,</span><br><span class="line">      &#125;,</span><br><span class="line">      &#123;</span><br><span class="line">        <span class="attr">src</span>: <span class="string">&quot;/icon-512x512.png&quot;</span>,</span><br><span class="line">        <span class="attr">sizes</span>: <span class="string">&quot;512x512&quot;</span>,</span><br><span class="line">        <span class="attr">type</span>: <span class="string">&quot;image/png&quot;</span>,</span><br><span class="line">      &#125;,</span><br><span class="line">    ],</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">workbox</span>: &#123;</span><br><span class="line">    <span class="attr">runtimeCaching</span>: [</span><br><span class="line">      &#123;</span><br><span class="line">        <span class="attr">urlPattern</span>: <span class="regexp">/\/api\/.*\/*.json/</span>, <span class="comment">// 快取符合此模式的 API 請求</span></span><br><span class="line">        <span class="attr">handler</span>: <span class="string">&quot;NetworkFirst&quot;</span>, <span class="comment">// 首先從網路獲取，無法連接時再從快取獲取</span></span><br><span class="line">        <span class="attr">options</span>: &#123;</span><br><span class="line">          <span class="attr">cacheName</span>: <span class="string">&quot;api-cache&quot;</span>,</span><br><span class="line">          <span class="attr">expiration</span>: &#123;</span><br><span class="line">            <span class="attr">maxEntries</span>: <span class="number">50</span>, <span class="comment">// 最大快取 50 個請求</span></span><br><span class="line">            <span class="attr">maxAgeSeconds</span>: <span class="number">24</span> * <span class="number">60</span> * <span class="number">60</span>, <span class="comment">// 快取的最大保存時間（秒）</span></span><br><span class="line">          &#125;,</span><br><span class="line">        &#125;,</span><br><span class="line">      &#125;,</span><br><span class="line">      &#123;</span><br><span class="line">        <span class="attr">urlPattern</span>: <span class="regexp">/\.(?:png|jpg|jpeg|svg)$/</span>, <span class="comment">// 快取圖片資源</span></span><br><span class="line">        <span class="attr">handler</span>: <span class="string">&quot;CacheFirst&quot;</span>, <span class="comment">// 首先從快取獲取，無法獲取時再從網路獲取</span></span><br><span class="line">        <span class="attr">options</span>: &#123;</span><br><span class="line">          <span class="attr">cacheName</span>: <span class="string">&quot;image-cache&quot;</span>,</span><br><span class="line">          <span class="attr">expiration</span>: &#123;</span><br><span class="line">            <span class="attr">maxEntries</span>: <span class="number">100</span>, <span class="comment">// 最大快取 100 個圖片</span></span><br><span class="line">            <span class="attr">maxAgeSeconds</span>: <span class="number">7</span> * <span class="number">24</span> * <span class="number">60</span> * <span class="number">60</span>, <span class="comment">// 7 天的快取時間</span></span><br><span class="line">          &#125;,</span><br><span class="line">        &#125;,</span><br><span class="line">      &#125;,</span><br><span class="line">    ],</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineConfig</span>(&#123;</span><br><span class="line">  <span class="attr">plugins</span>: [<span class="title function_">react</span>(), <span class="title class_">VitePWA</span>(pwaPlugin)],</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>由上面 PWA 設定範例來講解一下內容，分別有兩塊:</p>
+<ol>
+<li><p>第一個是上方的 manifest 的設定，這個通常會透過解析後產生一個 manifest.json 的檔案來存取設定的例如圖檔位置等資訊</p>
+</li>
+<li><p>第二個就是下方的 Workbox 的設定，Workbox 是一個 Google 提供的強大 Service Worker 工具，可以幫助管理和優化快取，vite-plugin-pwa 套件實際上已內建 Workbox，因此在這個插件中使用 Workbox 不需要額外安裝，只需要在 vite.config.js 配置文件中啟用並設置相應的選項。</p>
+</li>
+</ol>
+<p>關於 workbox 提供的很多種設定，一定是讓人看不懂這是在弄甚麼的吧，這邊整理了有甚麼項目可以添增，以及這項目又是做甚麼的說明，以下是 Workbox 支持的主要配置選項：</p>
+<ol>
+<li>runtimeCaching (執行時快取)</li>
+</ol>
+<p>這是 Workbox 最常用的配置，用來定義在應用運行期間需要快取的請求資源。每個 runtimeCaching 設定包含一個 urlPattern 和 handler（即快取策略）。</p>
+<p>基本選項</p>
+<ol>
+<li>urlPattern: 一個正則表達式，匹配要快取的 URL（例如 &#x2F;api&#x2F;、圖片或字體）。</li>
+<li>handler: 快取策略，Workbox 支援以下幾種常見策略：<ul>
+<li>NetworkFirst: 先嘗試從網路獲取，若失敗則從快取中讀取。</li>
+<li>CacheFirst: 先從快取讀取，若快取中沒有則從網路獲取。</li>
+<li>StaleWhileRevalidate: 快取和網路同時請求，使用快取資料並在背景中更新。</li>
+<li>NetworkOnly: 僅從網路獲取，不做快取。</li>
+<li>CacheOnly: 僅從快取讀取，不從網路獲取。</li>
+</ul>
+</li>
+</ol>
+<p>高級選項 3. options: 此選項允許您對快取進行更詳細的控制。options 中的屬性包括：</p>
+<ul>
+<li>cacheName: 指定快取名稱，默認值為 “workbox-runtime-*“。</li>
+<li>expiration: 快取失效策略，包含以下選項：</li>
+<li>maxEntries: 快取最大條目數。</li>
+<li>maxAgeSeconds: 快取的最大存活時間（秒），超出時間的資源會被清除。</li>
+<li>cacheableResponse: 用來設置哪些狀態碼或標頭的回應可以快取。包含：</li>
+<li>statuses: 允許快取的 HTTP 狀態碼（如 [0, 200] 表示狀態碼為 0 或 200 的回應可被快取）。</li>
+<li>headers: 必須包含指定標頭的回應才可快取。</li>
+<li>broadcastUpdate: 當快取更新時，將更新通知到其他客戶端（需設置 channelName）。</li>
+</ul>
+<p>以下是一小段完整的配置設定內容，請各位在依需求以這個樣式來添加到你的專案中:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">workbox</span>: &#123;</span><br><span class="line">  <span class="attr">runtimeCaching</span>: [</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">urlPattern</span>: <span class="regexp">/\/api\/.*\/*.json/</span>,       <span class="comment">// API 請求</span></span><br><span class="line">      <span class="attr">handler</span>: <span class="string">&#x27;NetworkFirst&#x27;</span>,               <span class="comment">// 使用網路優先策略</span></span><br><span class="line">      <span class="attr">options</span>: &#123;</span><br><span class="line">        <span class="attr">cacheName</span>: <span class="string">&#x27;api-cache&#x27;</span>,              <span class="comment">// 快取名稱</span></span><br><span class="line">        <span class="attr">expiration</span>: &#123;</span><br><span class="line">          <span class="attr">maxEntries</span>: <span class="number">50</span>,                    <span class="comment">// 最大快取條目數</span></span><br><span class="line">          <span class="attr">maxAgeSeconds</span>: <span class="number">24</span> * <span class="number">60</span> * <span class="number">60</span>,       <span class="comment">// 24 小時</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">cacheableResponse</span>: &#123;</span><br><span class="line">          <span class="attr">statuses</span>: [<span class="number">0</span>, <span class="number">200</span>],             <span class="comment">// 只快取狀態碼為 0 或 200 的回應</span></span><br><span class="line">          <span class="attr">headers</span>: &#123;</span><br><span class="line">            <span class="string">&#x27;Cache-Control&#x27;</span>: <span class="string">&#x27;public&#x27;</span>     <span class="comment">// 只快取 Cache-Control 標頭中含有 &#x27;public&#x27; 的回應</span></span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="attr">broadcastUpdate</span>: &#123;</span><br><span class="line">          <span class="attr">channelName</span>: <span class="string">&#x27;api-updates&#x27;</span>         <span class="comment">// 使用更新通知</span></span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>這些文件都配置好後就可以啟動專案來查看以下幾個步驟來確認是不是建立成功:</p>
+<ol>
+<li>啟動專案並確認生成的 manifest.json 文件：</li>
+</ol>
+<ul>
+<li>啟動專案後，檢查專案的 dist 或生成的靜態文件夾中，應該會看到生成的 manifest.json 文件。這文件是給 PWA 應用的，包含應用的名稱、圖標、顏色等資訊。</li>
+<li>您也可以在瀏覽器中直接訪問 <a target="_blank" rel="noopener" href="http://localhost:7211/manifest.json%EF%BC%88%E6%88%96%E6%82%A8%E8%A8%AD%E7%BD%AE%E7%9A%84%E6%9C%AC%E5%9C%B0%E9%96%8B%E7%99%BC%E4%BC%BA%E6%9C%8D%E5%99%A8%E5%9C%B0%E5%9D%80%EF%BC%89%EF%BC%8C%E7%9C%8B%E8%A9%B2%E6%96%87%E4%BB%B6%E6%98%AF%E5%90%A6%E6%AD%A3%E7%A2%BA%E7%94%9F%E6%88%90%E3%80%82">http://localhost:7211/manifest.json（或您設置的本地開發伺服器地址），看該文件是否正確生成。</a></li>
+</ul>
+<ol start="2">
+<li>檢查瀏覽器開發者工具中的 Service Worker：</li>
+</ol>
+<ul>
+<li>在 Chrome 瀏覽器中，打開開發者工具 &gt; Application 面板。</li>
+<li>點擊左側的「Service Workers」，確認 Service Worker 是否已成功註冊並顯示狀態「Activated and is running」。這表示 Service Worker 已生效。</li>
+</ul>
+<ol start="3">
+<li>檢查 Cache Storage 中的快取：</li>
+</ol>
+<ul>
+<li>在「Application」面板中，找到「Cache Storage」。</li>
+<li>這裡應該會出現您在 vite.config.js 中配置的快取名稱（如 api-cache 和 image-cache），以及相應快取的資源。 -點擊各個快取名稱，展開後可查看已快取的資源，確認您的 API 和靜態資源是否正確地被快取。</li>
+</ul>
+<ol start="4">
+<li>斷網測試：</li>
+</ol>
+<ul>
+<li>在開發者工具的「Network」面板中，選擇「Offline」模式來模擬無網絡環境。</li>
+<li>嘗試訪問已配置快取的頁面或資源，確保這些頁面和 API 資源能夠從快取中加載。如果一切正常，表示快取機制和 PWA 功能已經正確生效。</li>
+</ul>
+<p>這些步驟完成後，如果以上都正常顯示，您的 PWA 功能應該已經在應用中成功啟用了。</p>
+
+    </div>
+
+    
+    <div class="about">
+        <h1>About this Post</h1>
+        <div class="details">
+            <p>This post is written by Peter, licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a>.</p>
+        </div>
+        
+        <p class="tags">
+            
+            <i class="icon"></i>
+            <a href="/tags/FRONTEND/" class="tag">#FRONTEND</a><a href="/tags/TUTORIAL/" class="tag">#TUTORIAL</a><a href="/tags/PWA/" class="tag">#PWA</a><a href="/tags/VITE/" class="tag">#VITE</a><a href="/tags/REACT/" class="tag">#REACT</a><a href="/tags/WEBDEV/" class="tag">#WEBDEV</a>
+        </p>
+        
+    </div>
+    
+
+    <div class="container post-prev-next">
+        
+        <a href="/2024/12/16/React%E5%B0%88%E6%A1%88%E5%BC%95%E5%85%A5PWA%E6%A9%9F%E5%88%B6-2/" class="next">
+            <div>
+                <div class="text">
+                    <p class="label">Next</p>
+                    <h3 class="title">React專案引入PWA機制(2)</h3>
+                </div>
+            </div>
+        </a>
+        
+        
+        <a href="/2024/10/18/CSS%E7%9A%84%E8%AE%8A%E7%A8%AE-SASS%E8%88%87LESS/" class="prev">
+            <div>
+                <div class="text">
+                    <p class="label">Previous</p>
+                    <h3 class="title">CSS的變種: SASS與LESS</>
+                </div>
+            </div>
+        </a>
+        
+    </div>
+
+    
+        
+        
+    
+</article>
+
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h2 class="title">Blog</h2>
+                
+                <a href="/" class="item">Blog</a>
+                
+                <a href="/archives" class="item">Archives</a>
+                
+                <a href="/tags" class="item">Tags</a>
+                
+                <a href="/categories" class="item">Categories</a>
+                
+                <a href="/search" class="item">Search</a>
+                
+                <a href="/friends" class="item">Friends</a>
+                
+                <a href="/projects" class="item">Projects</a>
+                
+                <a href="/resume" class="item">Resume</a>
+                
+                <a href="/about" class="item">About</a>
+                
+                <a href="/atom.xml" class="item">RSS</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Projects</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/MrWillCom/rsa-cli" class="item">RSA CLI</a>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/MrWillCom/hexo-theme-cupertino" class="item">Hexo Theme Cupertino</a>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/MrWillCom/a-calendar" class="item">A Calendar</a>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/MrWillCom/auto-mirroring-bucket" class="item">Auto Mirroring Bucket</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Me</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/MrWillCom" class="item">GitHub</a>
+                
+                <a target="_blank" rel="noopener" href="https://codepen.io/mrwillcom" class="item">CodePen</a>
+                
+                <a target="_blank" rel="noopener" href="https://www.patreon.com/MrWillCom" class="item">Patreon</a>
+                
+                <a target="_blank" rel="noopener" href="https://noc.social/@MrWillCom" class="item">Mastodon</a>
+                
+                <a target="_blank" rel="noopener" href="https://discord.gg/UKuFDjcfY8" class="item">Discord</a>
+                
+                <a href="mailto:mr.will.com@outlook.com" class="item">Email</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2026 Peter<br>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> </span>
+        
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+
+        
+<script src="/js/main.js"></script>
+
+        
+        
+        
+
+        
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            window.addEventListener('load', () => {
+                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
+                ScrollReveal().reveal('.post-list-item .cover-img img')
+                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
+            })
+        </script>
+        
+    </body>
+</html>

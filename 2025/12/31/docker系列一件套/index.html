@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head prefix="og: https://ogp.me/ns#">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  
+  <title>[Docker] 深入淺出 Docker Desktop：前端與後端的容器化實戰指南 - Peter&#39;s Blog</title>
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+  
+  
+  <meta property="og:title" content="[Docker] 深入淺出 Docker Desktop：前端與後端的容器化實戰指南 - Peter&#39;s Blog" />
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:url" content="https://tsengpeter.github.io/2025/12/31/docker%E7%B3%BB%E5%88%97%E4%B8%80%E4%BB%B6%E5%A5%97/index.html" />
+  
+  <meta property="og:image" content="/favicon.png" />
+  
+  <meta property="og:article:published_time" content="2025-12-31T10:00:00.000Z" />
+  
+  <meta property="og:article:author" content="Peter" />
+  
+  
+
+  
+<link rel="stylesheet" href="/css/var.css">
+
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+<link rel="stylesheet" href="/css/typography.css">
+
+  
+<link rel="stylesheet" href="/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/css/components.css">
+
+  
+<link rel="stylesheet" href="/css/nav.css">
+
+  
+<link rel="stylesheet" href="/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/css/footer.css">
+
+  
+<link rel="stylesheet" href="/css/post-list.css">
+
+  
+  
+<link rel="stylesheet" href="/css/rainbow-banner.css">
+
+  
+  
+  
+<link rel="stylesheet" href="/css/toc.css">
+
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/post.css">
+
+  
+  
+  
+  
+  
+
+  
+<meta name="generator" content="Hexo 7.2.0"></head>
+    <body
+        data-color-scheme="auto"
+        data-uppercase-categories="true"
+        
+        data-rainbow-banner="true"
+        data-rainbow-banner-shown="auto"
+        data-rainbow-banner-month="6"
+        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+        
+        data-config-root="/"
+        
+        data-toc="true"
+        data-toc-max-depth="2"
+        
+        
+    >
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">Blog</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">Home</a>
+            
+            
+            <a class="nav-item" href="/archives">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/friends">Friends</a>
+            
+            
+            
+            <a class="nav-item" href="/projects">Projects</a>
+            
+            
+            
+            <a class="nav-item" href="/about">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/MrWillCom" target="_blank" aria-label="GitHub">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-codepen nav-item-icon" href="https://codepen.io/mrwillcom" target="_blank" aria-label="CodePen">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-patreon nav-item-icon" href="https://www.patreon.com/MrWillCom" target="_blank" aria-label="Patreon">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-mastodon nav-item-icon" href="https://noc.social/@MrWillCom" target="_blank" aria-label="Mastodon">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-discord nav-item-icon" href="https://discord.gg/UKuFDjcfY8" target="_blank" aria-label="Discord">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        
+<article class="post">
+    <div class="meta">
+        
+        <div class="categories text-uppercase">
+        
+            <a href="/categories/技術筆記/">技術筆記</a>
+        
+            <a href="/categories/技術筆記/Docker/">Docker</a>
+        
+        </div>
+        
+
+        
+        <div class="date" id="date">
+            <span>December</span>
+            <span>31,</span>
+            <span>2025</span>
+        </div>
+        
+
+        <h1 class="title">[Docker] 深入淺出 Docker Desktop：前端與後端的容器化實戰指南</h1>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <ul>
+<li><a href="#%E6%9C%AC%E7%AF%87%E4%B8%BB%E6%97%A8">本篇主旨</a></li>
+<li><a href="#%E7%82%BA%E4%BB%80%E9%BA%BC%E9%81%B8%E6%93%87-Docker-Desktop%EF%BC%9F">為什麼選擇 Docker Desktop？</a></li>
+<li><a href="#%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5%E9%80%9F%E8%A6%BD">核心概念速覽</a></li>
+<li><a href="#Part-1-Dockerfile-%E5%AE%9A%E7%BE%A9%E7%92%B0%E5%A2%83">Part 1: Dockerfile (定義環境)</a><ul>
+<li><a href="#%E5%89%8D%E7%AB%AF%E7%AF%84%E4%BE%8B%EF%BC%9AReact-Multi-stage-Build">前端範例：React (Multi-stage Build)</a></li>
+<li><a href="#%E5%BE%8C%E7%AB%AF%E7%AF%84%E4%BE%8B%EF%BC%9AASP-NET-Core-8-Multi-stage-Build">後端範例：ASP.NET Core 8 (Multi-stage Build)</a></li>
+<li><a href="#%E3%80%90%E9%97%9C%E9%8D%B5%E8%A3%9C%E5%85%85%E3%80%91-dockerignore-%E8%A2%AB%E5%BF%BD%E8%A6%96%E7%9A%84%E6%95%88%E8%83%BD%E6%AE%BA%E6%89%8B">【關鍵補充】<code>.dockerignore</code> - 被忽視的效能殺手</a></li>
+</ul>
+</li>
+<li><a href="#Part-2-Docker-Compose-%E5%AE%9A%E7%BE%A9%E6%9C%8D%E5%8B%99">Part 2: Docker Compose (定義服務)</a><ul>
+<li><a href="#%E6%83%85%E5%A2%83%E4%B8%80%EF%BC%9A%E5%89%8D%E7%AB%AF%E9%96%8B%E7%99%BC%E8%80%85-React-Hot-Reload">情境一：前端開發者 (React + Hot Reload)</a></li>
+<li><a href="#%E6%83%85%E5%A2%83%E4%BA%8C%EF%BC%9A%E5%BE%8C%E7%AB%AF%E9%96%8B%E7%99%BC%E8%80%85-Web-API-PostgreSQL">情境二：後端開發者 (Web API + PostgreSQL)</a></li>
+<li><a href="#%E3%80%90%E5%AE%89%E5%85%A8%E5%AF%A6%E8%B8%90%E3%80%91%E4%BD%BF%E7%94%A8-env-%E7%AE%A1%E7%90%86%E6%95%8F%E6%84%9F%E8%B3%87%E8%A8%8A">【安全實踐】使用 <code>.env</code> 管理敏感資訊</a></li>
+</ul>
+</li>
+<li><a href="#Docker-Desktop-%E8%A6%96%E8%A6%BA%E5%8C%96%E7%AE%A1%E7%90%86%E6%8A%80%E5%B7%A7">Docker Desktop 視覺化管理技巧</a><ul>
+<li><a href="#%E7%AE%A1%E7%90%86-Images-%E6%98%A0%E5%83%8F%E6%AA%94">管理 Images (映像檔)</a></li>
+<li><a href="#%E6%9F%A5%E7%9C%8B-Logs-%E8%88%87%E5%AE%B9%E5%99%A8%E7%8B%80%E6%85%8B">查看 Logs 與容器狀態</a></li>
+<li><a href="#%E7%AE%A1%E7%90%86-Volumes-%E8%B3%87%E6%96%99%E6%8C%81%E4%B9%85%E5%8C%96">管理 Volumes (資料持久化)</a></li>
+<li><a href="#%E3%80%90%E5%AF%A6%E5%8B%99%E7%97%9B%E9%BB%9E%E3%80%91%E8%A7%A3%E6%B1%BA-Windows-Mac-%E8%A8%98%E6%86%B6%E9%AB%94%E8%A2%AB%E5%90%83%E5%85%89%E7%9A%84%E5%95%8F%E9%A1%8C">【實務痛點】解決 Windows&#x2F;Mac 記憶體被吃光的問題</a></li>
+</ul>
+</li>
+<li><a href="#%E3%80%90%E8%A3%9C%E5%85%85%E3%80%91%E5%B8%82%E5%A0%B4%E4%B8%8A%E5%85%B6%E4%BB%96%E7%86%B1%E9%96%80%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7">【補充】市場上其他熱門管理工具</a></li>
+<li><a href="#Docker-%E6%8C%87%E4%BB%A4%E5%85%A8%E9%9B%86-Cheat-Sheet">Docker 指令全集 (Cheat Sheet)</a><ul>
+<li><a href="#1-%E6%98%A0%E5%83%8F%E6%AA%94-Images">1. 映像檔 (Images)</a></li>
+<li><a href="#2-%E5%AE%B9%E5%99%A8-Containers-%E5%9F%BA%E7%A4%8E">2. 容器 (Containers) - 基礎</a></li>
+<li><a href="#3-%E5%AE%B9%E5%99%A8-Containers-%E9%99%A4%E9%8C%AF%E8%88%87%E4%BA%92%E5%8B%95">3. 容器 (Containers) - 除錯與互動</a></li>
+<li><a href="#4-Docker-Compose">4. Docker Compose</a></li>
+<li><a href="#5-%E6%B8%85%E7%90%86%E8%88%87%E7%B6%AD%E8%AD%B7-System-Prune">5. 清理與維護 (System Prune)</a></li>
+<li><a href="#6-%E9%80%B2%E9%9A%8E%E8%88%87%E7%B6%B2%E8%B7%AF-Network-Volume">6. 進階與網路 (Network &amp; Volume)</a></li>
+</ul>
+</li>
+<li><a href="#Part-3-%E9%80%B2%E9%9A%8E%E5%B1%95%E6%9C%9B-Kubernetes-K8s-%E7%B0%A1%E4%BB%8B">Part 3: 進階展望 - Kubernetes (K8s) 簡介</a><ul>
+<li><a href="#%E4%BB%80%E9%BA%BC%E6%98%AF-K8s%EF%BC%9F">什麼是 K8s？</a></li>
+<li><a href="#%E6%A0%B8%E5%BF%83%E4%B8%89%E5%85%83%E4%BB%B6%E9%80%9F%E8%A6%BD">核心三元件速覽</a></li>
+<li><a href="#Docker-Desktop-%E4%B8%80%E9%8D%B5%E5%95%9F%E7%94%A8-K8s">Docker Desktop 一鍵啟用 K8s</a></li>
+</ul>
+</li>
+<li><a href="#%E7%B8%BD%E7%B5%90">總結</a></li>
+</ul>
+<span id="more"></span>
+
+<h2 id="本篇主旨"><a href="#本篇主旨" class="headerlink" title="本篇主旨"></a>本篇主旨</h2><p>在現代前後端分離的開發架構中，前端工程師通常不需要在本機跑一個龐大的資料庫，而後端工程師也不一定需要編譯完整的前端頁面。傳統的 Docker 教學往往將所有服務寫在一個巨大的 <code>docker-compose.yml</code> 中，這並不符合實際的專案切分現狀。</p>
+<p>本文將以 <strong>Docker Desktop</strong> 這款強大的圖形化工具為核心，分別針對 <strong>React 前端</strong> 與 <strong>ASP.NET Core 後端</strong> 專案，設計獨立且高效的容器化開發環境。我們將學會如何用 Docker 解決「環境不一致」的問題，並利用 GUI 介面輕鬆管理你的開發容器。</p>
+<h2 id="為什麼選擇-Docker-Desktop？"><a href="#為什麼選擇-Docker-Desktop？" class="headerlink" title="為什麼選擇 Docker Desktop？"></a>為什麼選擇 Docker Desktop？</h2><p><strong>Docker Desktop</strong> 是由 <strong>Docker 官方</strong> 為 Windows 和 macOS 使用者量身打造的應用程式。作為官方推薦的標準開發工具，它將 Docker Engine、CLI 工具、Docker Compose 以及 Kubernetes 全部打包在一起，讓開發者無需煩惱繁瑣的底層設定，安裝即用。</p>
+<p>除了擁有「官方血統」帶來的穩定性與最佳相容性外，它還提供了強大的 GUI 優勢：</p>
+<ul>
+<li><strong>一鍵安裝 Kubernetes</strong>：內建 K8s 叢集，適合學習與測試。</li>
+<li>**視覺化儀表板 (Dashboard)**：直接在視窗中查看容器狀態、CPU&#x2F;記憶體使用率，不用一直打 <code>docker ps</code>。</li>
+<li><strong>直觀的 Log 查看器</strong>：支援搜尋、過濾 Logs，比終端機更易讀。</li>
+<li>**Extensions (擴充功能)**：可以一鍵安裝 Portainer、Redis Insight 等管理工具。</li>
+</ul>
+<h2 id="核心概念速覽"><a href="#核心概念速覽" class="headerlink" title="核心概念速覽"></a>核心概念速覽</h2><p><img src="/../img/docker-instructure.png" alt="Docker 架構圖"></p>
+<ul>
+<li>**Dockerfile (食譜)**：定義如何製作一個 Image。</li>
+<li>**Image (蛋糕模具)**：唯讀的環境模板。</li>
+<li>**Container (蛋糕)**：實際運行的環境實例。</li>
+<li>**Docker Compose (套餐清單)**：定義多個容器如何協同運作（例如：API + 資料庫）。</li>
+</ul>
+<hr>
+<h2 id="Part-1-Dockerfile-定義環境"><a href="#Part-1-Dockerfile-定義環境" class="headerlink" title="Part 1: Dockerfile (定義環境)"></a>Part 1: Dockerfile (定義環境)</h2><p>無論你是前端還是後端，標準化的第一步都是撰寫 <code>Dockerfile</code>。這裡我們採用 <strong>Multi-stage Builds (多階段建置)</strong> 最佳實踐，確保產出的 Image 既安全又輕量。</p>
+<h3 id="前端範例：React-Multi-stage-Build"><a href="#前端範例：React-Multi-stage-Build" class="headerlink" title="前端範例：React (Multi-stage Build)"></a>前端範例：React (Multi-stage Build)</h3><p>這個設定檔適用於「部署」，它會將 React 程式碼編譯成靜態檔案並放入 Nginx。</p>
+<p><strong><code>frontend/Dockerfile</code></strong></p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># --- 第一階段：建置環境 (Builder) ---</span></span><br><span class="line"><span class="keyword">FROM</span> node:<span class="number">18</span>-alpine AS builder</span><br><span class="line"><span class="keyword">WORKDIR</span><span class="language-bash"> /app</span></span><br><span class="line"><span class="comment"># 利用 Cache 機制加速安裝依賴</span></span><br><span class="line"><span class="keyword">COPY</span><span class="language-bash"> package*.json ./</span></span><br><span class="line"><span class="keyword">RUN</span><span class="language-bash"> npm install</span></span><br><span class="line"><span class="keyword">COPY</span><span class="language-bash"> . .</span></span><br><span class="line"><span class="keyword">RUN</span><span class="language-bash"> npm run build</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># --- 第二階段：生產環境 (Runner) ---</span></span><br><span class="line"><span class="keyword">FROM</span> nginx:alpine</span><br><span class="line"><span class="comment"># 將編譯好的 dist 複製到 Nginx 目錄</span></span><br><span class="line"><span class="keyword">COPY</span><span class="language-bash"> --from=builder /app/dist /usr/share/nginx/html</span></span><br><span class="line"><span class="keyword">EXPOSE</span> <span class="number">80</span></span><br><span class="line"><span class="keyword">CMD</span><span class="language-bash"> [<span class="string">&quot;nginx&quot;</span>, <span class="string">&quot;-g&quot;</span>, <span class="string">&quot;daemon off;&quot;</span>]</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="後端範例：ASP-NET-Core-8-Multi-stage-Build"><a href="#後端範例：ASP-NET-Core-8-Multi-stage-Build" class="headerlink" title="後端範例：ASP.NET Core 8 (Multi-stage Build)"></a>後端範例：ASP.NET Core 8 (Multi-stage Build)</h3><p>利用微軟官方的 SDK 映像檔進行編譯，再用輕量的 Runtime 映像檔執行。</p>
+<p><strong><code>backend/Dockerfile</code></strong></p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># --- 第一階段：編譯環境 (SDK) ---</span></span><br><span class="line"><span class="keyword">FROM</span> mcr.microsoft.com/dotnet/sdk:<span class="number">8.0</span> AS build</span><br><span class="line"><span class="keyword">WORKDIR</span><span class="language-bash"> /src</span></span><br><span class="line"><span class="keyword">COPY</span><span class="language-bash"> [<span class="string">&quot;MyWebApi/MyWebApi.csproj&quot;</span>, <span class="string">&quot;MyWebApi/&quot;</span>]</span></span><br><span class="line"><span class="keyword">RUN</span><span class="language-bash"> dotnet restore <span class="string">&quot;MyWebApi/MyWebApi.csproj&quot;</span></span></span><br><span class="line"><span class="keyword">COPY</span><span class="language-bash"> . .</span></span><br><span class="line"><span class="keyword">WORKDIR</span><span class="language-bash"> <span class="string">&quot;/src/MyWebApi&quot;</span></span></span><br><span class="line"><span class="keyword">RUN</span><span class="language-bash"> dotnet publish <span class="string">&quot;MyWebApi.csproj&quot;</span> -c Release -o /app/publish /p:UseAppHost=<span class="literal">false</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment"># --- 第二階段：執行環境 (Runtime) ---</span></span><br><span class="line"><span class="keyword">FROM</span> mcr.microsoft.com/dotnet/aspnet:<span class="number">8.0</span> AS final</span><br><span class="line"><span class="keyword">WORKDIR</span><span class="language-bash"> /app</span></span><br><span class="line"><span class="keyword">USER</span> app</span><br><span class="line"><span class="keyword">COPY</span><span class="language-bash"> --from=build /app/publish .</span></span><br><span class="line"><span class="keyword">EXPOSE</span> <span class="number">8080</span></span><br><span class="line"><span class="keyword">ENTRYPOINT</span><span class="language-bash"> [<span class="string">&quot;dotnet&quot;</span>, <span class="string">&quot;MyWebApi.dll&quot;</span>]</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="【關鍵補充】-dockerignore-被忽視的效能殺手"><a href="#【關鍵補充】-dockerignore-被忽視的效能殺手" class="headerlink" title="【關鍵補充】.dockerignore - 被忽視的效能殺手"></a>【關鍵補充】<code>.dockerignore</code> - 被忽視的效能殺手</h3><p>在執行 <code>COPY . .</code> 指令時，Docker 會把當前目錄下的 <strong>所有檔案</strong> 都複製進去。對於前端專案來說，這會導致災難性的後果：你可能會不小心把本機那個幾百 MB 的 <code>node_modules</code> 也複製進去！</p>
+<p>這不僅會讓 <code>docker build</code> 變得極慢，還可能導致 Image 體積暴肥，甚至發生 OS 架構不相容的錯誤（例如把 Mac 的 binary 複製到 Linux 容器跑）。</p>
+<p>因此，<strong>務必</strong>在專案根目錄新增一個 <code>.dockerignore</code> 檔案：</p>
+<p><strong><code>.dockerignore</code></strong></p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">node_modules</span><br><span class="line">.git</span><br><span class="line">.vscode</span><br><span class="line">.env</span><br><span class="line">dist</span><br><span class="line">build</span><br><span class="line">bin</span><br><span class="line">obj</span><br></pre></td></tr></table></figure>
+<p>加上這個檔案後，Docker 在建置時就會自動忽略這些目錄，讓你的 Image 建置速度飛快且乾淨。</p>
+<hr>
+<h2 id="Part-2-Docker-Compose-定義服務"><a href="#Part-2-Docker-Compose-定義服務" class="headerlink" title="Part 2: Docker Compose (定義服務)"></a>Part 2: Docker Compose (定義服務)</h2><p>在現實專案中，前端與後端通常位於不同的 Repository。以下我們分別針對兩種角色的需求，設計專屬的 <code>docker-compose.yml</code>。</p>
+<h3 id="情境一：前端開發者-React-Hot-Reload"><a href="#情境一：前端開發者-React-Hot-Reload" class="headerlink" title="情境一：前端開發者 (React + Hot Reload)"></a>情境一：前端開發者 (React + Hot Reload)</h3><p>前端開發時，我們不希望每次改 Code 都要重新 Build Image。因此，這裡我們使用 <strong>Bind Mounts</strong> 將本機程式碼掛載進容器，實現 **熱更新 (Hot Reload)**。</p>
+<p><strong><code>frontend/docker-compose.yml</code></strong></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&#x27;3.8&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">web:</span></span><br><span class="line">    <span class="comment"># 開發階段我們直接用 Node Image，而不使用上面的 Nginx Dockerfile</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">node:18-alpine</span></span><br><span class="line">    <span class="attr">working_dir:</span> <span class="string">/app</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;3000:3000&quot;</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="comment"># [關鍵] 將本機的當前目錄 (.) 掛載到容器的 /app</span></span><br><span class="line">      <span class="comment"># 這樣你在 VS Code 改程式碼，容器內會同步變更</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">./:/app</span></span><br><span class="line">      <span class="comment"># 排除 node_modules，避免 OS 架構不同導致的錯誤</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/app/node_modules</span></span><br><span class="line">    <span class="comment"># 覆寫啟動指令，改為開發伺服器啟動</span></span><br><span class="line">    <span class="attr">command:</span> <span class="string">npm</span> <span class="string">start</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">CHOKIDAR_USEPOLLING=true</span> <span class="comment"># 確保在某些系統上熱更新能正常運作</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>如何在 Docker Desktop 啟動？</strong><ul>
+<li>在終端機進入 <code>frontend</code> 目錄，輸入 <code>docker-compose up</code>。</li>
+<li>你會在 Docker Desktop 的 <strong>Containers</strong> 分頁看到一個 <code>frontend</code> 群組亮起綠燈。</li>
+<li>點擊 <strong>Port 3000</strong> 的連結，瀏覽器就會自動開啟你的 React 頁面。</li>
+</ul>
+</li>
+</ul>
+<h3 id="情境二：後端開發者-Web-API-PostgreSQL"><a href="#情境二：後端開發者-Web-API-PostgreSQL" class="headerlink" title="情境二：後端開發者 (Web API + PostgreSQL)"></a>情境二：後端開發者 (Web API + PostgreSQL)</h3><p>後端開發通常需要一個乾淨的資料庫環境。Docker Compose 可以幫你一鍵拉起 Web API 和 PostgreSQL，並處理好網路連線。</p>
+<p><strong><code>backend/docker-compose.yml</code></strong></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&#x27;3.8&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="comment"># 1. .NET Web API 服務</span></span><br><span class="line">  <span class="attr">api:</span></span><br><span class="line">    <span class="attr">build:</span> <span class="string">.</span> <span class="comment"># 使用當前目錄的 Dockerfile 建置</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;8080:8080&quot;</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="comment"># 在 Docker 網路中，host 直接寫服務名稱 &quot;db&quot; 即可</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">ConnectionStrings__DefaultConnection=Server=db;Database=mydb;User</span> <span class="string">Id=postgres;Password=secret;</span></span><br><span class="line">    <span class="attr">depends_on:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">db</span></span><br><span class="line"></span><br><span class="line">  <span class="comment"># 2. PostgreSQL 資料庫服務</span></span><br><span class="line">  <span class="attr">db:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">postgres:15-alpine</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;5432:5432&quot;</span> <span class="comment"># 開放 5432 埠，讓你用 DBeaver 或 pgAdmin 從本機連線</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">POSTGRES_PASSWORD=secret</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">POSTGRES_USER=postgres</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">POSTGRES_DB=mydb</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="comment"># [資料持久化] 使用 Named Volume 確保容器刪除後資料還在</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">pg-data:/var/lib/postgresql/data</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 宣告 Volume</span></span><br><span class="line"><span class="attr">volumes:</span></span><br><span class="line">  <span class="attr">pg-data:</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="【安全實踐】使用-env-管理敏感資訊"><a href="#【安全實踐】使用-env-管理敏感資訊" class="headerlink" title="【安全實踐】使用 .env 管理敏感資訊"></a>【安全實踐】使用 <code>.env</code> 管理敏感資訊</h3><p>在上面的範例中，我們直接將密碼寫在 <code>docker-compose.yml</code> 裡（例如 <code>POSTGRES_PASSWORD=secret</code>）。在實務上這是<strong>資安大忌</strong>，因為這些檔案通常會被 Commit 到 Git，導致密碼外洩。</p>
+<p>正確的做法是使用 <strong><code>.env</code></strong> 檔案來管理變數：</p>
+<ol>
+<li>在同層目錄建立 <code>.env</code> 檔案：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">DB_PASSWORD=my_super_secure_password</span><br><span class="line">DB_USER=postgres</span><br></pre></td></tr></table></figure></li>
+<li>修改 <code>docker-compose.yml</code> 來讀取變數：<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">environment:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">POSTGRES_PASSWORD=$&#123;DB_PASSWORD&#125;</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">POSTGRES_USER=$&#123;DB_USER&#125;</span></span><br></pre></td></tr></table></figure></li>
+<li><strong>最重要的一步</strong>：將 <code>.env</code> 加入 <code>.gitignore</code> 中，確保它永遠不會被上傳到儲存庫。</li>
+</ol>
+<hr>
+<h2 id="Docker-Desktop-視覺化管理技巧"><a href="#Docker-Desktop-視覺化管理技巧" class="headerlink" title="Docker Desktop 視覺化管理技巧"></a>Docker Desktop 視覺化管理技巧</h2><p>有了 Docker Desktop，很多操作變得直觀許多：</p>
+<h3 id="管理-Images-映像檔"><a href="#管理-Images-映像檔" class="headerlink" title="管理 Images (映像檔)"></a>管理 Images (映像檔)</h3><p><img src="/../img/docker-desktop-1.png" alt="執行 docker build 後的成果"></p>
+<p>當你執行完 <code>docker build -t my-app .</code> 後，你可以在 <strong>Images</strong> 頁面看到剛建置好的 Image。介面上直接提供了「Run (啟動)」、「Pull (拉取)」、「Delete (刪除)」等按鈕，讓你不用背複雜的指令也能輕鬆管理本機映像檔。</p>
+<h3 id="查看-Logs-與容器狀態"><a href="#查看-Logs-與容器狀態" class="headerlink" title="查看 Logs 與容器狀態"></a>查看 Logs 與容器狀態</h3><p><img src="/../img/docker-desktop-2.png" alt="執行 docker-compose up 後的成果"></p>
+<ol>
+<li>當你執行 <code>docker-compose up -d</code> 後，所有相關的服務會自動被歸類在同一個群組下（如上圖的 <code>biddingservice</code>）。</li>
+<li>點擊你的專案名稱，你可以看到 <code>api</code> 和 <code>db</code> 等容器並列顯示。</li>
+<li>點擊任意一個容器，就能看到即時的 <strong>Logs</strong> 視窗，這對於除錯非常有幫助。</li>
+</ol>
+<h3 id="管理-Volumes-資料持久化"><a href="#管理-Volumes-資料持久化" class="headerlink" title="管理 Volumes (資料持久化)"></a>管理 Volumes (資料持久化)</h3><ol>
+<li>點擊左側 <strong>Volumes</strong>。</li>
+<li>這裡列出了所有 Named Volumes（例如 <code>backend_pg-data</code>）。</li>
+<li><strong>Data Explorer</strong>：Docker Desktop 甚至允許你直接瀏覽 Volume 裡面的檔案內容，或者將檔案匯出，這對於除錯資料庫非常有用。</li>
+<li><strong>一鍵清理</strong>：想清空資料庫重來？點擊垃圾桶圖示刪除該 Volume 即可。</li>
+</ol>
+<h3 id="【實務痛點】解決-Windows-Mac-記憶體被吃光的問題"><a href="#【實務痛點】解決-Windows-Mac-記憶體被吃光的問題" class="headerlink" title="【實務痛點】解決 Windows&#x2F;Mac 記憶體被吃光的問題"></a>【實務痛點】解決 Windows&#x2F;Mac 記憶體被吃光的問題</h3><p>許多使用者（特別是 Windows WSL2 用戶）在安裝 Docker Desktop 後，會發現電腦變慢了，打開工作管理員發現 <code>Vmmem</code> 這個程序吃掉了大量記憶體。這是因為 Docker 預設會盡可能使用可用的系統資源。</p>
+<p>我們可以透過 Docker Desktop 進行限制：</p>
+<ol>
+<li>點擊右上角的 **齒輪 (Settings)**。</li>
+<li>選擇 <strong>Resources</strong> 分頁。</li>
+<li>在這裡你可以手動調整 Docker 能使用的最大 <strong>CPU</strong> 核心數與 <strong>Memory</strong> (記憶體) 上限（例如限制在 4GB）。</li>
+<li>點擊 <strong>Apply &amp; Restart</strong>。</li>
+</ol>
+<p>這一個小動作能顯著改善你開發時的電腦流暢度，避免 Docker 反客為主拖慢系統。</p>
+<h2 id="【補充】市場上其他熱門管理工具"><a href="#【補充】市場上其他熱門管理工具" class="headerlink" title="【補充】市場上其他熱門管理工具"></a>【補充】市場上其他熱門管理工具</h2><p>雖然 Docker Desktop 是官方標準，但因應不同的使用場景（如純 Linux 環境、追求極致效能或開源授權），市場上也有許多優秀的替代方案：</p>
+<ol>
+<li>**<a target="_blank" rel="noopener" href="https://www.portainer.io/">Portainer</a>**：<ul>
+<li><strong>特色</strong>：強大的 Web GUI 介面。</li>
+<li><strong>適用場景</strong>：除了管理本機，非常適合用來管理 <strong>遠端伺服器</strong> 或 <strong>HomeLab</strong>。它能將複雜的 Docker 指令轉化為好點選的網頁按鈕。</li>
+</ul>
+</li>
+<li><strong><a target="_blank" rel="noopener" href="https://orbstack.dev/">OrbStack</a></strong> (macOS 限定)：<ul>
+<li><strong>特色</strong>：主打 <strong>「快」</strong> 與 <strong>「輕」</strong>。啟動速度極快，記憶體佔用極低。</li>
+<li><strong>適用場景</strong>：覺得 Docker Desktop 在 Mac 上跑太慢的開發者。它是目前 Mac 圈非常熱門的 Drop-in 替代品。</li>
+</ul>
+</li>
+<li>**<a target="_blank" rel="noopener" href="https://rancherdesktop.io/">Rancher Desktop</a>**：<ul>
+<li><strong>特色</strong>：開源免費 (Open Source)，直接整合 k3s (輕量級 K8s)。</li>
+<li><strong>適用場景</strong>：企業內部因授權問題無法使用 Docker Desktop，或是重度依賴 Kubernetes 開發的使用者。</li>
+</ul>
+</li>
+<li>**<a target="_blank" rel="noopener" href="https://github.com/jesseduffield/lazydocker">LazyDocker</a>**：<ul>
+<li><strong>特色</strong>：終端機使用者介面 (TUI)。它不是圖形視窗，而是像駭客一樣在終端機裡用鍵盤操作的 GUI。</li>
+<li><strong>適用場景</strong>：鍵盤流高手 (Vim&#x2F;Tmux 使用者)，不想離開終端機但又想要直觀監控容器狀態的人。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 id="Docker-指令全集-Cheat-Sheet"><a href="#Docker-指令全集-Cheat-Sheet" class="headerlink" title="Docker 指令全集 (Cheat Sheet)"></a>Docker 指令全集 (Cheat Sheet)</h2><p>雖然 Docker Desktop 可以處理大部分日常工作，但有些進階操作或是伺服器環境（Server）仍然需要依賴 CLI。這份清單涵蓋了開發到運維的必備指令。</p>
+<h3 id="1-映像檔-Images"><a href="#1-映像檔-Images" class="headerlink" title="1. 映像檔 (Images)"></a>1. 映像檔 (Images)</h3><ul>
+<li><code>docker build -t &lt;tag_name&gt; .</code>：從 Dockerfile 建置映像檔。</li>
+<li><code>docker images</code>：列出本機所有下載或建置的映像檔。</li>
+<li><code>docker rmi &lt;image_id&gt;</code>：刪除指定的映像檔。</li>
+<li><code>docker pull &lt;image_name&gt;</code>：從 Docker Hub 下載映像檔（如 <code>docker pull node:18</code>）。</li>
+<li><code>docker tag &lt;source_img&gt; &lt;target_img&gt;</code>：為映像檔加上新的標籤 (Tag)，通常用於推送到 Registry 前。</li>
+<li><code>docker push &lt;image_name&gt;</code>：將映像檔推送到遠端 Registry。</li>
+</ul>
+<h3 id="2-容器-Containers-基礎"><a href="#2-容器-Containers-基礎" class="headerlink" title="2. 容器 (Containers) - 基礎"></a>2. 容器 (Containers) - 基礎</h3><ul>
+<li><code>docker run -d -p 80:80 --name &lt;name&gt; &lt;image&gt;</code>：啟動容器（<code>-d</code> 背景執行, <code>-p</code> 埠號對應）。</li>
+<li><code>docker ps</code>：列出正在執行的容器。</li>
+<li><code>docker ps -a</code>：列出所有容器（包含已停止的）。</li>
+<li><code>docker stop &lt;container_id&gt;</code>：優雅停止容器。</li>
+<li><code>docker kill &lt;container_id&gt;</code>：強制停止容器。</li>
+<li><code>docker rm &lt;container_id&gt;</code>：刪除已停止的容器。</li>
+</ul>
+<h3 id="3-容器-Containers-除錯與互動"><a href="#3-容器-Containers-除錯與互動" class="headerlink" title="3. 容器 (Containers) - 除錯與互動"></a>3. 容器 (Containers) - 除錯與互動</h3><ul>
+<li><code>docker logs -f &lt;container_id&gt;</code>：持續監控容器的輸出日誌 (Stdout&#x2F;Stderr)。</li>
+<li><code>docker exec -it &lt;container_id&gt; /bin/sh</code>：進入容器內部開啟 Shell (若無 sh 嘗試 bash)。</li>
+<li><code>docker inspect &lt;container_id&gt;</code>：查看容器的詳細 metadata（IP 位址、掛載路徑、環境變數等）。</li>
+<li><code>docker cp &lt;local_path&gt; &lt;container_id&gt;:&lt;path&gt;</code>：在主機與容器間複製檔案。</li>
+<li><code>docker stats</code>：即時顯示所有容器的資源使用率 (CPU, Memory, Network)。</li>
+</ul>
+<h3 id="4-Docker-Compose"><a href="#4-Docker-Compose" class="headerlink" title="4. Docker Compose"></a>4. Docker Compose</h3><ul>
+<li><code>docker-compose up -d</code>：依據 <code>docker-compose.yml</code> 建置並啟動所有服務（背景執行）。</li>
+<li><code>docker-compose up --build</code>：強制重新建置 Image 後啟動。</li>
+<li><code>docker-compose down</code>：停止並移除所有由該 Compose 啟動的容器與網路。</li>
+<li><code>docker-compose stop</code>：僅停止服務，不移除容器。</li>
+<li><code>docker-compose restart &lt;service_name&gt;</code>：重啟指定服務。</li>
+<li><code>docker-compose logs -f &lt;service_name&gt;</code>：查看特定服務的 Log。</li>
+</ul>
+<h3 id="5-清理與維護-System-Prune"><a href="#5-清理與維護-System-Prune" class="headerlink" title="5. 清理與維護 (System Prune)"></a>5. 清理與維護 (System Prune)</h3><ul>
+<li><code>docker system prune</code>：一鍵刪除所有停止的容器、未使用的網路和懸空的映像檔 (Dangling images)。</li>
+<li><code>docker system prune -a</code>：<strong>強力清理</strong>。刪除所有未被使用的映像檔（不僅是懸空的），慎用！</li>
+<li><code>docker volume prune</code>：刪除所有未被使用的掛載卷。</li>
+</ul>
+<h3 id="6-進階與網路-Network-Volume"><a href="#6-進階與網路-Network-Volume" class="headerlink" title="6. 進階與網路 (Network &amp; Volume)"></a>6. 進階與網路 (Network &amp; Volume)</h3><ul>
+<li><code>docker network ls</code>：列出所有網路。</li>
+<li><code>docker network inspect &lt;network_name&gt;</code>：查看網路詳細資訊（查詢容器 IP 用）。</li>
+<li><code>docker volume ls</code>：列出所有掛載卷。</li>
+<li><code>docker volume inspect &lt;volume_name&gt;</code>：查看掛載卷在本機的實際路徑。</li>
+</ul>
+<hr>
+<h2 id="Part-3-進階展望-Kubernetes-K8s-簡介"><a href="#Part-3-進階展望-Kubernetes-K8s-簡介" class="headerlink" title="Part 3: 進階展望 - Kubernetes (K8s) 簡介"></a>Part 3: 進階展望 - Kubernetes (K8s) 簡介</h2><p>當你的服務數量從 5 個變成了 50 個，或者你需要跨多台伺服器進行自動擴展 (Auto-scaling) 時，單純的 Docker 和 Docker Compose 可能會開始力不從心。這時，就是 <strong>Kubernetes (K8s)</strong> 登場的時刻。</p>
+<h3 id="什麼是-K8s？"><a href="#什麼是-K8s？" class="headerlink" title="什麼是 K8s？"></a>什麼是 K8s？</h3><p>如果說 Docker 是「樂器」（單個容器），Docker Compose 是「四重奏」（小型樂團），那麼 <strong>Kubernetes 就是「交響樂團指揮」</strong>。它是一個開源的容器調度平台，負責管理成千上萬個容器的生命週期。</p>
+<p>K8s 的核心能力包括：</p>
+<ul>
+<li><strong>自動擴展</strong>：流量大時自動增加容器，流量小時自動減少。</li>
+<li>**自我修復 (Self-healing)**：當某個容器掛掉時，K8s 會自動重啟或替換它，確保服務永遠在線。</li>
+<li><strong>負載平衡</strong>：自動分配流量到健康的容器上。</li>
+</ul>
+<h3 id="核心三元件速覽"><a href="#核心三元件速覽" class="headerlink" title="核心三元件速覽"></a>核心三元件速覽</h3><p>在 K8s 的世界裡，我們不再直接操作 Container，而是操作以下物件：</p>
+<ol>
+<li><strong>Pod</strong>：K8s 的最小運作單位，通常包含一個或多個容器（例如 Web App + Logger）。</li>
+<li><strong>Service</strong>：負責網路管理，給一組 Pod 一個固定的 IP 或網域名稱，讓外部能存取。</li>
+<li><strong>Deployment</strong>：負責管理 Pod 的版本與數量（例如：我要維持 3 個 Nginx Pods 永遠運行）。</li>
+</ol>
+<h3 id="Docker-Desktop-一鍵啟用-K8s"><a href="#Docker-Desktop-一鍵啟用-K8s" class="headerlink" title="Docker Desktop 一鍵啟用 K8s"></a>Docker Desktop 一鍵啟用 K8s</h3><p>學習 K8s 最困難的通常是「安裝環境」，但 Docker Desktop 解決了這個問題！</p>
+<ol>
+<li>點擊 Docker Desktop 右上角的 **齒輪 (Settings)**。</li>
+<li>選擇左側的 <strong>Kubernetes</strong> 分頁。</li>
+<li>勾選 <strong>Enable Kubernetes</strong> 並點擊 Apply &amp; Restart。</li>
+</ol>
+<p>等待幾分鐘後，你就擁有了一個單節點的 K8s 叢集 (Cluster)，可以直接使用 <code>kubectl</code> 指令開始你的 K8s 學習之旅！</p>
+<hr>
+<h2 id="總結"><a href="#總結" class="headerlink" title="總結"></a>總結</h2><p>本文雖然以 Docker Desktop 作為切入點，但我們的核心目標始終是<strong>深入理解 Docker 這項容器化技術</strong>。</p>
+<p>Docker Desktop 提供了一個絕佳的「視覺化學習場域」。透過 GUI，我們能將抽象的「容器生命週期」、「資料持久化機制」與「多服務編排」具象化，這對於初學者建立正確的 mental model 至關重要。</p>
+<p>然而，工具只是手段，技術才是本質。當你透過圖形介面弄懂了 <code>Volume</code> 如何運作、<code>Network</code> 如何串接後，這些觀念將成為你通往高階 DevOps 技能（如 Linux 伺服器維運、Kubernetes 叢集管理）的堅實基石。記住，善用 Docker Desktop 來加速學習，但不要止步於此，持續深挖底層原理，才是掌握雲端原生時代的關鍵。</p>
+
+    </div>
+
+    
+    <div class="about">
+        <h1>About this Post</h1>
+        <div class="details">
+            <p>This post is written by Peter, licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a>.</p>
+        </div>
+        
+        <p class="tags">
+            
+            <i class="icon"></i>
+            <a href="/tags/Docker/" class="tag">#Docker</a><a href="/tags/Docker-Desktop/" class="tag">#Docker Desktop</a><a href="/tags/K8s/" class="tag">#K8s</a><a href="/tags/DevOps/" class="tag">#DevOps</a>
+        </p>
+        
+    </div>
+    
+
+    <div class="container post-prev-next">
+        <a class="next"></a>
+        
+        <a href="/2025/10/27/%E4%BD%BF%E7%94%A8Github-spec-kit%E7%9A%84SDD%E8%A6%8F%E6%A0%BC%E9%A9%85%E5%8B%95%E9%96%8B%E7%99%BC-%E5%85%A5%E9%96%80%E7%AF%87/" class="prev">
+            <div>
+                <div class="text">
+                    <p class="label">Previous</p>
+                    <h3 class="title">使用 Github-spec-kit 的 SDD 規格驅動開發 - 入門篇</>
+                </div>
+            </div>
+        </a>
+        
+    </div>
+
+    
+        
+        
+    
+</article>
+
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h2 class="title">Blog</h2>
+                
+                <a href="/" class="item">Blog</a>
+                
+                <a href="/archives" class="item">Archives</a>
+                
+                <a href="/tags" class="item">Tags</a>
+                
+                <a href="/categories" class="item">Categories</a>
+                
+                <a href="/search" class="item">Search</a>
+                
+                <a href="/friends" class="item">Friends</a>
+                
+                <a href="/projects" class="item">Projects</a>
+                
+                <a href="/resume" class="item">Resume</a>
+                
+                <a href="/about" class="item">About</a>
+                
+                <a href="/atom.xml" class="item">RSS</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Projects</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/MrWillCom/rsa-cli" class="item">RSA CLI</a>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/MrWillCom/hexo-theme-cupertino" class="item">Hexo Theme Cupertino</a>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/MrWillCom/a-calendar" class="item">A Calendar</a>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/MrWillCom/auto-mirroring-bucket" class="item">Auto Mirroring Bucket</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Me</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/MrWillCom" class="item">GitHub</a>
+                
+                <a target="_blank" rel="noopener" href="https://codepen.io/mrwillcom" class="item">CodePen</a>
+                
+                <a target="_blank" rel="noopener" href="https://www.patreon.com/MrWillCom" class="item">Patreon</a>
+                
+                <a target="_blank" rel="noopener" href="https://noc.social/@MrWillCom" class="item">Mastodon</a>
+                
+                <a target="_blank" rel="noopener" href="https://discord.gg/UKuFDjcfY8" class="item">Discord</a>
+                
+                <a href="mailto:mr.will.com@outlook.com" class="item">Email</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2026 Peter<br>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> </span>
+        
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+
+        
+<script src="/js/main.js"></script>
+
+        
+        
+        
+
+        
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            window.addEventListener('load', () => {
+                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
+                ScrollReveal().reveal('.post-list-item .cover-img img')
+                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
+            })
+        </script>
+        
+    </body>
+</html>

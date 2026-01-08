@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head prefix="og: https://ogp.me/ns#">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  
+  <title>NX專案的開發環境變數設定方式 - Peter&#39;s Blog</title>
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+  
+  
+  <meta property="og:title" content="NX專案的開發環境變數設定方式 - Peter&#39;s Blog" />
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:url" content="https://tsengpeter.github.io/2025/09/18/NX%E5%B0%88%E6%A1%88%E7%9A%84%E9%96%8B%E7%99%BC%E7%92%B0%E5%A2%83%E8%AE%8A%E6%95%B8%E8%A8%AD%E5%AE%9A%E6%96%B9%E5%BC%8F/index.html" />
+  
+  <meta property="og:image" content="/favicon.png" />
+  
+  <meta property="og:article:published_time" content="2025-09-18T14:47:37.000Z" />
+  
+  <meta property="og:article:author" content="Peter" />
+  
+  
+
+  
+<link rel="stylesheet" href="/css/var.css">
+
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+<link rel="stylesheet" href="/css/typography.css">
+
+  
+<link rel="stylesheet" href="/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/css/components.css">
+
+  
+<link rel="stylesheet" href="/css/nav.css">
+
+  
+<link rel="stylesheet" href="/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/css/footer.css">
+
+  
+<link rel="stylesheet" href="/css/post-list.css">
+
+  
+  
+<link rel="stylesheet" href="/css/rainbow-banner.css">
+
+  
+  
+  
+<link rel="stylesheet" href="/css/toc.css">
+
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/post.css">
+
+  
+  
+  
+  
+  
+
+  
+<meta name="generator" content="Hexo 7.2.0"></head>
+    <body
+        data-color-scheme="auto"
+        data-uppercase-categories="true"
+        
+        data-rainbow-banner="true"
+        data-rainbow-banner-shown="auto"
+        data-rainbow-banner-month="6"
+        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+        
+        data-config-root="/"
+        
+        data-toc="true"
+        data-toc-max-depth="2"
+        
+        
+    >
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">Blog</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">Home</a>
+            
+            
+            <a class="nav-item" href="/archives">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/friends">Friends</a>
+            
+            
+            
+            <a class="nav-item" href="/projects">Projects</a>
+            
+            
+            
+            <a class="nav-item" href="/about">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/MrWillCom" target="_blank" aria-label="GitHub">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-codepen nav-item-icon" href="https://codepen.io/mrwillcom" target="_blank" aria-label="CodePen">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-patreon nav-item-icon" href="https://www.patreon.com/MrWillCom" target="_blank" aria-label="Patreon">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-mastodon nav-item-icon" href="https://noc.social/@MrWillCom" target="_blank" aria-label="Mastodon">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-discord nav-item-icon" href="https://discord.gg/UKuFDjcfY8" target="_blank" aria-label="Discord">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        
+<article class="post">
+    <div class="meta">
+        
+        <div class="categories text-uppercase">
+        
+            <a href="/categories/技術分享/">技術分享</a>
+        
+        </div>
+        
+
+        
+        <div class="date" id="date">
+            <span>September</span>
+            <span>18,</span>
+            <span>2025</span>
+        </div>
+        
+
+        <h1 class="title">NX專案的開發環境變數設定方式</h1>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <ul>
+<li><a href="#%E6%9C%AC%E7%AF%87%E4%B8%BB%E6%97%A8">本篇主旨</a></li>
+<li><a href="#%E7%82%BA%E4%BB%80%E9%BA%BC%E9%9C%80%E8%A6%81%E7%92%B0%E5%A2%83%E8%AE%8A%E6%95%B8%EF%BC%9F">為什麼需要環境變數？</a></li>
+<li><a href="#Vite-%E5%A6%82%E4%BD%95%E8%99%95%E7%90%86%E7%92%B0%E5%A2%83%E8%AE%8A%E6%95%B8">Vite 如何處理環境變數</a></li>
+<li><a href="#Next-%E5%B0%88%E6%A1%88%E5%A6%82%E4%BD%95%E8%99%95%E7%90%86%E7%92%B0%E5%A2%83%E8%AE%8A%E6%95%B8">Next 專案如何處理環境變數</a></li>
+<li><a href="#NX-%E5%B0%88%E6%A1%88%E4%B8%AD%E7%9A%84%E7%92%B0%E5%A2%83%E8%AE%8A%E6%95%B8%E8%A8%AD%E5%AE%9A">NX 專案中的環境變數設定</a><ul>
+<li><a href="#1-%E9%80%8F%E9%81%8E-viteconfigts-%E5%AE%9A%E7%BE%A9%E7%92%B0%E5%A2%83%E8%AE%8A%E6%95%B8-vite-%E5%B0%88%E6%A1%88">1. 透過 <code>vite.config.ts</code> 定義環境變數 (Vite 專案)</a></li>
+<li><a href="#2-%E9%80%8F%E9%81%8E-nextconfigts-%E5%AE%9A%E7%BE%A9%E7%92%B0%E5%A2%83%E8%AE%8A%E6%95%B8-nextjs-%E5%B0%88%E6%A1%88">2. 透過 <code>next.config.ts</code> 定義環境變數 (Next.js 專案)</a></li>
+<li><a href="#3-%E5%9C%A8%E7%A8%8B%E5%BC%8F%E7%A2%BC%E4%B8%AD%E5%AD%98%E5%8F%96%E7%92%B0%E5%A2%83%E8%AE%8A%E6%95%B8">3. 在程式碼中存取環境變數</a></li>
+<li><a href="#4-%E5%9F%B7%E8%A1%8C%E8%88%87%E5%BB%BA%E6%A7%8B">4. 執行與建構</a></li>
+</ul>
+</li>
+<li><a href="#%E7%B8%BD%E7%B5%90">總結</a></li>
+</ul>
+<span id="more"></span>
+
+<h2 id="本篇主旨"><a href="#本篇主旨" class="headerlink" title="本篇主旨"></a>本篇主旨</h2><p>在現代前端開發中，環境變數 (Environment Variables) 的管理是不可或缺的一環。無論是開發環境、測試環境還是生產環境，我們經常需要根據不同的部署目標來調整 API 端點、金鑰或其他配置。在基於 Vite、Next.js 和 NX 的 Monorepo 專案中，如何有效地設定和管理這些環境變數，是本文將探討的重點。</p>
+<p>也就是怎麼在VSCode編輯器的NX套件中顯示環境變數來切換，如下圖</p>
+<p><img src="/../img/EnvironmentVariablesSetting.png" alt="EnvironmentVariablesSetting"></p>
+<h2 id="為什麼需要環境變數？"><a href="#為什麼需要環境變數？" class="headerlink" title="為什麼需要環境變數？"></a>為什麼需要環境變數？</h2><p>環境變數允許我們在不修改程式碼的情況下，根據不同的執行環境來調整應用程式的行為。例如：</p>
+<ul>
+<li><strong>API 端點：</strong> 開發環境可能指向 <code>localhost</code>，而生產環境則指向實際的伺服器。</li>
+<li><strong>第三方服務金鑰：</strong> 不同的環境可能使用不同的金鑰，以避免混淆或安全問題。</li>
+<li><strong>日誌級別：</strong> 開發環境可能需要詳細日誌，而生產環境則只需記錄錯誤。</li>
+</ul>
+<h2 id="Vite-如何處理環境變數"><a href="#Vite-如何處理環境變數" class="headerlink" title="Vite 如何處理環境變數"></a>Vite 如何處理環境變數</h2><p>Vite 內建對環境變數的支援，主要透過 <code>define</code> 選項來注入全域常數。這使得我們可以在編譯時將環境相關的配置直接嵌入到程式碼中，而無需依賴外部的設定檔。</p>
+<ol>
+<li><strong><code>define</code> 選項：</strong> 在 <code>vite.config.ts</code> 中，可以使用 <code>define</code> 選項來定義全域常數。這些常數在程式碼中可以直接存取，並且在建構時會被替換為其值。</li>
+<li><strong><code>mode</code> 參數：</strong> <code>defineConfig</code> 函式會接收一個 <code>mode</code> 參數，該參數表示當前的環境模式（例如 <code>development</code> 或 <code>production</code>）。我們可以根據這個 <code>mode</code> 來動態設定不同的變數值。</li>
+</ol>
+<h2 id="Next-專案如何處理環境變數"><a href="#Next-專案如何處理環境變數" class="headerlink" title="Next 專案如何處理環境變數"></a>Next 專案如何處理環境變數</h2><p>Next.js 對環境變數有著內建的強大支援，並採用了比 Vite 更為結構化的方式。其核心概念包括：</p>
+<ol>
+<li><strong><code>NODE_ENV</code> 的角色：</strong> Next.js 的行為很大程度上取決於 <code>NODE_ENV</code> 這個環境變數。當其值為 <code>development</code> 時，會啟用開發專用功能；當值為 <code>production</code> 時，則會進行生產環境的最佳化建置。</li>
+<li><strong><code>next.config.js</code> 中的 <code>env</code>：</strong> 你可以直接在 <code>next.config.js</code> 中透過 <code>process.env.NODE_ENV</code> 物件來取得環境變數，這是本文推薦在 NX 環境中集中管理變數的方式。</li>
+</ol>
+<p>在接下來的章節，我們將重點展示如何在 NX 專案中，利用其執行器 (Executor) 來自動管理 <code>NODE_ENV</code>，並透過 <code>next.config.ts</code> 來注入這些變數。</p>
+<h2 id="NX-專案中的環境變數設定"><a href="#NX-專案中的環境變數設定" class="headerlink" title="NX 專案中的環境變數設定"></a>NX 專案中的環境變數設定</h2><p>在 NX Monorepo 專案中，每個應用程式 (App) 或函式庫 (Library) 都有其獨立的配置。以下將分別以 Vite 和 Next.js 專案為例，說明如何設定環境變數。</p>
+<h3 id="1-透過-vite-config-ts-定義環境變數-Vite-專案"><a href="#1-透過-vite-config-ts-定義環境變數-Vite-專案" class="headerlink" title="1. 透過 vite.config.ts 定義環境變數 (Vite 專案)"></a>1. 透過 <code>vite.config.ts</code> 定義環境變數 (Vite 專案)</h3><p>在 Vite 專案中，主要的設定檔是 <code>vite.config.ts</code>。我們可以在 <code>project.json</code> 中定義不同的 <code>configurations</code>，並將 <code>mode</code> 傳遞給 Vite。</p>
+<p><strong><code>monorepo/apps/&lt;YOUR-VITE-PROJECT&gt;/project.json</code></strong></p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&lt;YOUR-VITE-PROJECT&gt;&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;targets&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;build&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;executor&quot;</span><span class="punctuation">:</span> <span class="string">&quot;@nx/vite:build&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;configurations&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;development&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;mode&quot;</span><span class="punctuation">:</span> <span class="string">&quot;development&quot;</span> <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;production&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;mode&quot;</span><span class="punctuation">:</span> <span class="string">&quot;production&quot;</span> <span class="punctuation">&#125;</span></span><br><span class="line">      <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;serve&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;executor&quot;</span><span class="punctuation">:</span> <span class="string">&quot;@nx/vite:dev-server&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;configurations&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;development&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;buildTarget&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&lt;YOUR-VITE-PROJECT&gt;:build:development&quot;</span> <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;production&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;buildTarget&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&lt;YOUR-VITE-PROJECT&gt;:build:production&quot;</span> <span class="punctuation">&#125;</span></span><br><span class="line">      <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong><code>monorepo/apps/&lt;YOUR-VITE-PROJECT&gt;/vite.config.ts</code></strong></p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; defineConfig &#125; <span class="keyword">from</span> <span class="string">&quot;vite&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineConfig</span>(<span class="function">(<span class="params">&#123; mode &#125;</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> buildTime = <span class="keyword">new</span> <span class="title class_">Date</span>().<span class="title function_">toLocaleString</span>(<span class="string">&quot;en-US&quot;</span>, &#123; <span class="attr">timeZone</span>: <span class="string">&quot;Asia/Taipei&quot;</span> &#125;);</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    <span class="attr">define</span>: &#123;</span><br><span class="line">      <span class="attr">__Env__</span>: <span class="title class_">JSON</span>.<span class="title function_">stringify</span>(mode),</span><br><span class="line">      <span class="attr">__version__</span>: <span class="title class_">JSON</span>.<span class="title function_">stringify</span>(buildTime),</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>在 <code>vite.config.ts</code> 中，我們利用 <code>define</code> 選項來注入全域常數 <code>__Env__</code> 和 <code>__version__</code>。</p>
+<h3 id="2-透過-next-config-ts-定義環境變數-Next-js-專案"><a href="#2-透過-next-config-ts-定義環境變數-Next-js-專案" class="headerlink" title="2. 透過 next.config.ts 定義環境變數 (Next.js 專案)"></a>2. 透過 <code>next.config.ts</code> 定義環境變數 (Next.js 專案)</h3><p>對於 Next.js 專案，我們則是在 <code>next.config.ts</code> 中進行設定。NX 的執行器會自動處理 <code>NODE_ENV</code>。</p>
+<p><strong><code>monorepo/apps/&lt;YOUR-NEXT-PROJECT&gt;/project.json</code></strong></p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&lt;YOUR-NEXT-PROJECT&gt;&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;$schema&quot;</span><span class="punctuation">:</span> <span class="string">&quot;../../node_modules/nx/schemas/project-schema.json&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;sourceRoot&quot;</span><span class="punctuation">:</span> <span class="string">&quot;apps/&lt;YOUR-NEXT-PROJECT&gt;&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;projectType&quot;</span><span class="punctuation">:</span> <span class="string">&quot;application&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;targets&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;build&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;executor&quot;</span><span class="punctuation">:</span> <span class="string">&quot;@nx/next:build&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;outputs&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;&#123;options.outputPath&#125;&quot;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;defaultConfiguration&quot;</span><span class="punctuation">:</span> <span class="string">&quot;production&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;options&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;outputPath&quot;</span><span class="punctuation">:</span> <span class="string">&quot;dist/apps/&lt;YOUR-NEXT-PROJECT&gt;&quot;</span> <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;configurations&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;development&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;outputPath&quot;</span><span class="punctuation">:</span> <span class="string">&quot;apps/&lt;YOUR-NEXT-PROJECT&gt;&quot;</span> <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;production&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="punctuation">&#125;</span></span><br><span class="line">      <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;dev&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;executor&quot;</span><span class="punctuation">:</span> <span class="string">&quot;@nx/next:server&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;defaultConfiguration&quot;</span><span class="punctuation">:</span> <span class="string">&quot;development&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;options&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;buildTarget&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&lt;YOUR-NEXT-PROJECT&gt;:build&quot;</span><span class="punctuation">,</span> <span class="attr">&quot;dev&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span> <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;configurations&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;development&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;buildTarget&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&lt;YOUR-NEXT-PROJECT&gt;:build:development&quot;</span><span class="punctuation">,</span> <span class="attr">&quot;dev&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span> <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;production&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;buildTarget&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&lt;YOUR-NEXT-PROJECT&gt;:build:production&quot;</span><span class="punctuation">,</span> <span class="attr">&quot;dev&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span> <span class="punctuation">&#125;</span></span><br><span class="line">      <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong><code>monorepo/apps/&lt;YOUR-NEXT-PROJECT&gt;/next.config.ts</code></strong></p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; composePlugins, withNx &#125; <span class="keyword">from</span> <span class="string">&quot;@nx/next&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> <span class="keyword">type</span> &#123; <span class="title class_">NextConfig</span> &#125; <span class="keyword">from</span> <span class="string">&quot;next&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// --- Proxy Map ---</span></span><br><span class="line"><span class="keyword">const</span> proxyMap = &#123;</span><br><span class="line">  <span class="attr">development</span>: &#123;</span><br><span class="line">    <span class="attr">api</span>: <span class="string">&quot;https://master.api.example.com&quot;</span>,</span><br><span class="line">    <span class="attr">auth</span>: <span class="string">&quot;https://master.auth.example.com&quot;</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">production</span>: &#123;</span><br><span class="line">    <span class="attr">api</span>: <span class="string">&quot;https://master.api.example.com&quot;</span>,</span><br><span class="line">    <span class="attr">auth</span>: <span class="string">&quot;https://master.auth.example.com&quot;</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> isProduction = process.<span class="property">env</span>.<span class="property">NODE_ENV</span> === <span class="string">&quot;production&quot;</span>;</span><br><span class="line"><span class="keyword">const</span> proxyTarget = isProduction ? proxyMap.<span class="property">production</span> : proxyMap.<span class="property">development</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> buildTime = <span class="keyword">new</span> <span class="title class_">Date</span>().<span class="title function_">toLocaleString</span>(<span class="string">&quot;en-US&quot;</span>, &#123;</span><br><span class="line">  <span class="attr">timeZone</span>: <span class="string">&quot;Asia/Taipei&quot;</span>,</span><br><span class="line">  <span class="attr">hour12</span>: <span class="literal">false</span>,</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="attr">nextConfig</span>: <span class="title class_">NextConfig</span> = &#123;</span><br><span class="line">  <span class="attr">nx</span>: &#123;&#125;,</span><br><span class="line">  <span class="comment">// --- Rewrites for Proxy ---</span></span><br><span class="line">  <span class="keyword">async</span> <span class="title function_">rewrites</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> [</span><br><span class="line">      &#123;</span><br><span class="line">        <span class="attr">source</span>: <span class="string">&quot;/api/:path*&quot;</span>,</span><br><span class="line">        <span class="attr">destination</span>: <span class="string">`<span class="subst">$&#123;proxyTarget.api&#125;</span>/:path*`</span>,</span><br><span class="line">      &#125;,</span><br><span class="line">      &#123;</span><br><span class="line">        <span class="attr">source</span>: <span class="string">&quot;/auth/:path*&quot;</span>,</span><br><span class="line">        <span class="attr">destination</span>: <span class="string">`<span class="subst">$&#123;proxyTarget.auth&#125;</span>/:path*`</span>,</span><br><span class="line">      &#125;,</span><br><span class="line">    ];</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="comment">// --- Environment Variables ---</span></span><br><span class="line">  <span class="attr">env</span>: &#123;</span><br><span class="line">    <span class="attr">_ENV_</span>: process.<span class="property">env</span>.<span class="property">NODE_ENV</span>,</span><br><span class="line">    <span class="attr">_VERSION_</span>: buildTime,</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> plugins = [withNx]; <span class="comment">// 假設還有其他 plugin，例如 withPWA</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">composePlugins</span>(...plugins)(nextConfig);</span><br></pre></td></tr></table></figure>
+
+<p>從上述配置中，我們可以看到：</p>
+<ol>
+<li><strong><code>project.json</code></strong>: <code>dev</code> 和 <code>build</code> 目標分別對應開發伺服器和生產建構。當我們執行 <code>nx dev</code> 或 <code>nx build</code> 時，NX 所使用的 <code>@nx/next:server</code> 和 <code>@nx/next:build</code> 執行器 (executor) 會<strong>自動</strong>為 Node.js 執行環境設定 <code>NODE_ENV</code> 變數 (<code>development</code> 或 <code>production</code>)。</li>
+<li><strong><code>next.config.ts</code></strong>: 這個設定檔本身是一個 Node.js 模組，因此它可以透過 <code>process.env.NODE_ENV</code> 直接存取到由 NX 設定的環境變數。接著，我們在 <code>env</code> 物件中定義的 <code>NEXT_PUBLIC_APP_ENV</code> 就會被賦予 <code>NODE_ENV</code> 的值，並在建置階段靜態地注入到前端的 JavaScript bundle 中。</li>
+</ol>
+<p>這個整合流程展示了一種在 <code>project.json</code> 和 <code>next.config.ts</code> 中集中管理環境變數的方式。整個流程如下：</p>
+<p><strong>NX Command (<code>nx dev</code> &#x2F; <code>nx build</code>)</strong> → <strong>NX Executor sets <code>NODE_ENV</code></strong> → <strong><code>next.config.ts</code> reads <code>process.env.NODE_ENV</code></strong> → <strong>Value is injected into client-side code</strong></p>
+<p>這正是 NX 與 Next.js 整合的優勢，它簡化了環境配置，讓變數的來源和設定更加清晰，從而實現開發與生產環境的無縫切換。</p>
+<h3 id="3-在程式碼中存取環境變數"><a href="#3-在程式碼中存取環境變數" class="headerlink" title="3. 在程式碼中存取環境變數"></a>3. 在程式碼中存取環境變數</h3><p>在你的專案應用程式中的任何 TypeScript&#x2F;JavaScript 檔案中，您可以根據專案類型存取變數：</p>
+<p><strong>Vite 專案</strong></p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// apps/&lt;YOUR-VITE-PROJECT&gt;/src/main.ts</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;當前環境:&#x27;</span>, __Env__);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;應用程式版本:&#x27;</span>, __version__);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (__Env__ === <span class="string">&#x27;development&#x27;</span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;Running in development mode&#x27;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>Next.js 專案</strong></p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// apps/&lt;YOUR-NEXT-PROJECT&gt;/pages/index.tsx</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;當前環境:&#x27;</span>, process.<span class="property">env</span>.<span class="property">_ENV_</span>);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;應用程式版本:&#x27;</span>, process.<span class="property">env</span>.<span class="property">_VERSION_</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (process.<span class="property">env</span>.<span class="property">_ENV_</span> === <span class="string">&#x27;development&#x27;</span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;Running in development mode&#x27;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>與 Vite 的 <code>define</code> 不同，Next.js 的 <code>env</code> 變數會被附加到 <code>process.env</code> 上，因此在程式碼中需要透過 <code>process.env._...</code> 來存取。</p>
+<h3 id="4-執行與建構"><a href="#4-執行與建構" class="headerlink" title="4. 執行與建構"></a>4. 執行與建構</h3><p>當您執行或建構專案應用程式時，NX 會自動根據 <code>project.json</code> 中的 <code>configuration</code> 載入對應的環境：</p>
+<ul>
+<li><p><strong>開發模式 (Vite):</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nx serve &lt;YOUR-VITE-PROJECT&gt;</span><br></pre></td></tr></table></figure>
+<p>此時 <code>mode</code> 為 <code>development</code>。</p>
+</li>
+<li><p><strong>開發模式 (Next.js):</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nx dev &lt;YOUR-NEXT-PROJECT&gt;</span><br></pre></td></tr></table></figure>
+<p>此時 <code>NODE_ENV</code> 為 <code>development</code>。</p>
+</li>
+<li><p><strong>生產模式 (Vite):</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nx build &lt;YOUR-VITE-PROJECT&gt; --configuration=production</span><br></pre></td></tr></table></figure>
+<p>此時 <code>mode</code> 為 <code>production</code>。</p>
+</li>
+<li><p><strong>生產模式 (Next.js):</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nx build &lt;YOUR-NEXT-PROJECT&gt;</span><br></pre></td></tr></table></figure>
+<p>此時 <code>NODE_ENV</code> 為 <code>production</code>。</p>
+</li>
+</ul>
+<h2 id="總結"><a href="#總結" class="headerlink" title="總結"></a>總結</h2><p>透過 <code>project.json</code> 的 <code>configurations</code> 與 NX 執行器 (executors) 的整合，我們可以為 Vite 和 Next.js 應用靈活地管理不同環境下的變數。無論是透過傳遞 <code>mode</code> 參數給 Vite，還是由執行器自動設定 <code>NODE_ENV</code> 給 Next.js，NX 都提供了一致且集中的配置方式。這種集中的配置方式，使得環境變數的管理更加清晰可控，也確保了應用程式在不同部署環境中的穩定性和安全性。</p>
+
+    </div>
+
+    
+    <div class="about">
+        <h1>About this Post</h1>
+        <div class="details">
+            <p>This post is written by Peter, licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a>.</p>
+        </div>
+        
+        <p class="tags">
+            
+            <i class="icon"></i>
+            <a href="/tags/NX/" class="tag">#NX</a><a href="/tags/Monorepo/" class="tag">#Monorepo</a><a href="/tags/Environment-Variables/" class="tag">#Environment Variables</a>
+        </p>
+        
+    </div>
+    
+
+    <div class="container post-prev-next">
+        
+        <a href="/2025/10/27/%E4%BD%BF%E7%94%A8Github-spec-kit%E7%9A%84SDD%E8%A6%8F%E6%A0%BC%E9%A9%85%E5%8B%95%E9%96%8B%E7%99%BC-%E5%85%A5%E9%96%80%E7%AF%87/" class="next">
+            <div>
+                <div class="text">
+                    <p class="label">Next</p>
+                    <h3 class="title">使用 Github-spec-kit 的 SDD 規格驅動開發 - 入門篇</h3>
+                </div>
+            </div>
+        </a>
+        
+        
+        <a href="/2025/09/10/Monorepo%E6%9E%B6%E6%A7%8B%E7%9A%84NX%E5%B0%88%E6%A1%88%E5%BC%95%E5%85%A5Sentry%E7%9B%A3%E6%8E%A7/" class="prev">
+            <div>
+                <div class="text">
+                    <p class="label">Previous</p>
+                    <h3 class="title">Monorepo架構的NX專案引入Sentry監控</>
+                </div>
+            </div>
+        </a>
+        
+    </div>
+
+    
+        
+        
+    
+</article>
+
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h2 class="title">Blog</h2>
+                
+                <a href="/" class="item">Blog</a>
+                
+                <a href="/archives" class="item">Archives</a>
+                
+                <a href="/tags" class="item">Tags</a>
+                
+                <a href="/categories" class="item">Categories</a>
+                
+                <a href="/search" class="item">Search</a>
+                
+                <a href="/friends" class="item">Friends</a>
+                
+                <a href="/projects" class="item">Projects</a>
+                
+                <a href="/resume" class="item">Resume</a>
+                
+                <a href="/about" class="item">About</a>
+                
+                <a href="/atom.xml" class="item">RSS</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Projects</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/MrWillCom/rsa-cli" class="item">RSA CLI</a>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/MrWillCom/hexo-theme-cupertino" class="item">Hexo Theme Cupertino</a>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/MrWillCom/a-calendar" class="item">A Calendar</a>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/MrWillCom/auto-mirroring-bucket" class="item">Auto Mirroring Bucket</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Me</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/MrWillCom" class="item">GitHub</a>
+                
+                <a target="_blank" rel="noopener" href="https://codepen.io/mrwillcom" class="item">CodePen</a>
+                
+                <a target="_blank" rel="noopener" href="https://www.patreon.com/MrWillCom" class="item">Patreon</a>
+                
+                <a target="_blank" rel="noopener" href="https://noc.social/@MrWillCom" class="item">Mastodon</a>
+                
+                <a target="_blank" rel="noopener" href="https://discord.gg/UKuFDjcfY8" class="item">Discord</a>
+                
+                <a href="mailto:mr.will.com@outlook.com" class="item">Email</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2026 Peter<br>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> </span>
+        
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+
+        
+<script src="/js/main.js"></script>
+
+        
+        
+        
+
+        
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            window.addEventListener('load', () => {
+                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
+                ScrollReveal().reveal('.post-list-item .cover-img img')
+                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
+            })
+        </script>
+        
+    </body>
+</html>

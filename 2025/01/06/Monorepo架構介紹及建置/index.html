@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head prefix="og: https://ogp.me/ns#">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  
+  <title>Monorepo架構介紹及建置 - Peter&#39;s Blog</title>
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+  
+  
+  <meta property="og:title" content="Monorepo架構介紹及建置 - Peter&#39;s Blog" />
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:url" content="https://tsengpeter.github.io/2025/01/06/Monorepo%E6%9E%B6%E6%A7%8B%E4%BB%8B%E7%B4%B9%E5%8F%8A%E5%BB%BA%E7%BD%AE/index.html" />
+  
+  <meta property="og:image" content="/favicon.png" />
+  
+  <meta property="og:article:published_time" content="2025-01-06T12:02:13.000Z" />
+  
+  <meta property="og:article:author" content="Peter" />
+  
+  
+
+  
+<link rel="stylesheet" href="/css/var.css">
+
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+<link rel="stylesheet" href="/css/typography.css">
+
+  
+<link rel="stylesheet" href="/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/css/components.css">
+
+  
+<link rel="stylesheet" href="/css/nav.css">
+
+  
+<link rel="stylesheet" href="/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/css/footer.css">
+
+  
+<link rel="stylesheet" href="/css/post-list.css">
+
+  
+  
+<link rel="stylesheet" href="/css/rainbow-banner.css">
+
+  
+  
+  
+<link rel="stylesheet" href="/css/toc.css">
+
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/post.css">
+
+  
+  
+  
+  
+  
+
+  
+<meta name="generator" content="Hexo 7.2.0"></head>
+    <body
+        data-color-scheme="auto"
+        data-uppercase-categories="true"
+        
+        data-rainbow-banner="true"
+        data-rainbow-banner-shown="auto"
+        data-rainbow-banner-month="6"
+        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+        
+        data-config-root="/"
+        
+        data-toc="true"
+        data-toc-max-depth="2"
+        
+        
+    >
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">Blog</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">Home</a>
+            
+            
+            <a class="nav-item" href="/archives">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/friends">Friends</a>
+            
+            
+            
+            <a class="nav-item" href="/projects">Projects</a>
+            
+            
+            
+            <a class="nav-item" href="/about">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/MrWillCom" target="_blank" aria-label="GitHub">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-codepen nav-item-icon" href="https://codepen.io/mrwillcom" target="_blank" aria-label="CodePen">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-patreon nav-item-icon" href="https://www.patreon.com/MrWillCom" target="_blank" aria-label="Patreon">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-mastodon nav-item-icon" href="https://noc.social/@MrWillCom" target="_blank" aria-label="Mastodon">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-discord nav-item-icon" href="https://discord.gg/UKuFDjcfY8" target="_blank" aria-label="Discord">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        
+<article class="post">
+    <div class="meta">
+        
+        <div class="categories text-uppercase">
+        
+            <a href="/categories/技術分享/">技術分享</a>
+        
+        </div>
+        
+
+        
+        <div class="date" id="date">
+            <span>January</span>
+            <span>6,</span>
+            <span>2025</span>
+        </div>
+        
+
+        <h1 class="title">Monorepo架構介紹及建置</h1>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <ul>
+<li><a href="#Monolith-vs-Multi-Repo-vs-Monorepo">Monolith vs Multi-Repo vs Monorepo</a><ul>
+<li><a href="#Monolith">Monolith</a></li>
+<li><a href="#Multi-Repo">Multi-Repo</a></li>
+<li><a href="#Monorepo">Monorepo</a></li>
+<li><a href="#%E7%89%B9%E9%BB%9E-%E5%84%AA%E9%BB%9E-%E7%BC%BA%E9%BB%9E%E5%88%86%E6%9E%90">特點、優點、缺點分析</a></li>
+</ul>
+</li>
+<li><a href="#%E5%89%8D%E7%BD%AE%E4%BD%9C%E6%A5%AD">前置作業</a><ul>
+<li><a href="#%E5%89%8D%E7%BD%AE%E5%AE%89%E8%A3%9D">前置安裝</a></li>
+<li><a href="#%E5%B7%A5%E5%85%B7%E9%81%B8%E6%93%87">工具選擇</a></li>
+</ul>
+</li>
+<li><a href="#%E5%B0%88%E6%A1%88%E7%92%B0%E5%A2%83%E5%BB%BA%E7%BD%AE">專案環境建置</a><ul>
+<li><a href="#%E5%88%9D%E5%A7%8B%E5%8C%96%E5%B0%88%E6%A1%88">NX 專案初始化</a></li>
+</ul>
+</li>
+<li><a href="#%E5%B0%88%E6%A1%88%E6%9E%B6%E6%A7%8B">專案架構</a><ul>
+<li><a href="#%E8%B3%87%E6%96%99%E5%A4%BE%E7%B5%90%E6%A7%8B">資料夾結構</a></li>
+<li><a href="#%E6%A8%A1%E7%B5%84%E7%AE%A1%E7%90%86">模組管理</a></li>
+</ul>
+</li>
+<li><a href="#%E5%80%8B%E4%BA%BA%E9%96%8B%E7%99%BC%E7%B6%93%E9%A9%97%E5%8F%8A%E6%A6%82%E5%BF%B5">個人開發經驗及概念</a><ul>
+<li><a href="#%E5%84%AA%E9%BB%9E%E8%88%87%E6%8C%91%E6%88%B0">優點與挑戰</a></li>
+<li><a href="#%E6%9C%80%E4%BD%B3%E5%AF%A6%E8%B8%90">最佳實踐</a></li>
+<li><a href="#%E5%B8%B8%E8%A6%8B%E5%95%8F%E9%A1%8C%E5%8F%8A%E8%A7%A3%E6%B1%BA%E6%96%B9%E6%A1%88">常見問題及解決方案</a></li>
+</ul>
+</li>
+</ul>
+<h2 id="Monolith-vs-Multi-Repo-vs-Monorepo"><a href="#Monolith-vs-Multi-Repo-vs-Monorepo" class="headerlink" title="Monolith vs Multi-Repo vs Monorepo"></a>Monolith vs Multi-Repo vs Monorepo</h2><p>在軟體開發中，專案的代碼管理方式對於團隊協作和專案維護有著重要的影響。常見的代碼管理方式有三種：單體架構（Monolith）、多倉庫架構（Multi-Repo）和單倉庫架構（Monorepo）。接下來，我們將逐一介紹這三種架構的特點和適用場景。</p>
+<p><img src="/../img/monolith-vs-multi-repo-vs-mono-repo.png" alt="monolith-vs-multi-repo-vs-mono-repo"></p>
+<h3 id="Monolith"><a href="#Monolith" class="headerlink" title="Monolith"></a>Monolith</h3><p>單體架構是指將所有的代碼集中在一個倉庫中，這種方式適用於小型專案或初創團隊。單體架構的優點是簡單易用，所有代碼都在一個地方，方便管理和部署。然而，隨著專案規模的擴大，單體架構會變得難以維護，代碼耦合度高，修改一個模塊可能會影響到其他模塊。</p>
+<h3 id="Multi-Repo"><a href="#Multi-Repo" class="headerlink" title="Multi-Repo"></a>Multi-Repo</h3><p>多倉庫架構是將專案的不同模塊分別存放在不同的倉庫中，這種方式適用於大型專案或多團隊協作。多倉庫架構的優點是模塊之間相對獨立，修改一個模塊不會影響到其他模塊，方便團隊分工合作。然而，多倉庫架構也有一些缺點，比如倉庫之間的依賴管理比較複雜，跨倉庫的變更需要更多的協作和溝通。</p>
+<h3 id="Monorepo"><a href="#Monorepo" class="headerlink" title="Monorepo"></a>Monorepo</h3><p>單倉庫架構是將專案的所有模塊存放在一個倉庫中，這種方式適用於大型專案或多團隊協作。單倉庫架構的優點是所有代碼都在一個地方，方便管理和協作，模塊之間的依賴管理比較簡單。然而，單倉庫架構也有一些挑戰，比如倉庫的規模會變得非常大，對於版本控制系統的性能要求較高。</p>
+<h3 id="特點、優點、缺點分析"><a href="#特點、優點、缺點分析" class="headerlink" title="特點、優點、缺點分析"></a>特點、優點、缺點分析</h3><table>
+<thead>
+<tr>
+<th>架構類型</th>
+<th>特點</th>
+<th>優點</th>
+<th>缺點</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>單體架構 (Monolith)</td>
+<td>所有代碼集中在一個倉庫中</td>
+<td>簡單易用，方便管理和部署</td>
+<td>隨著專案規模擴大，難以維護，代碼耦合度高</td>
+</tr>
+<tr>
+<td>多倉庫架構 (Multi-Repo)</td>
+<td>專案的不同模塊分別存放在不同的倉庫中</td>
+<td>模塊獨立，方便團隊分工合作</td>
+<td>依賴管理複雜，跨倉庫變更需要更多協作</td>
+</tr>
+<tr>
+<td>單倉庫架構 (Monorepo)</td>
+<td>所有模塊存放在一個倉庫中</td>
+<td>方便管理和協作，依賴管理簡單</td>
+<td>倉庫規模大，對版本控制系統性能要求高</td>
+</tr>
+</tbody></table>
+<h2 id="前置作業"><a href="#前置作業" class="headerlink" title="前置作業"></a>前置作業</h2><p>在開始建置 Monorepo 專案之前，我們需要進行一些前置作業，包括前置安裝和工具選擇。</p>
+<h3 id="前置安裝"><a href="#前置安裝" class="headerlink" title="前置安裝"></a>前置安裝</h3><p>首先，我們需要安裝一些必要的工具和依賴。以下是一些常見的前置安裝步驟：</p>
+<ol>
+<li>安裝 Node.js 和 npm：Node.js 是一個 JavaScript 運行環境，而 npm 是 Node.js 的包管理工具。我們可以通過 Node.js 的官方網站下載並安裝最新版本的 Node.js 和 npm。</li>
+</ol>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://nodejs.org/en">安裝 node.js</a> : 使用 npm 指令來安裝所需的套件<blockquote>
+<p>若不確定下載哪個版本，可以直接下載最新的 node 版本。</p>
+</blockquote>
+</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://nodejs.org/en"><img src="/../img/nodejs.png" alt="nodejs"></a></p>
+<ol start="2">
+<li>安裝 Git：Git 是一個分佈式版本控制系統，我們可以通過 Git 的官方網站下載並安裝最新版本的 Git。</li>
+</ol>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://git-scm.com/">安裝 git</a> : 使用 git 來上傳到 github 空間，以此發布 github page<blockquote>
+<p>git 指令請上網找，在此不教學 git 相關的詳細教學</p>
+</blockquote>
+</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://git-scm.com/"><img src="/../img/git.png" alt="git"></a></p>
+<h3 id="工具選擇"><a href="#工具選擇" class="headerlink" title="工具選擇"></a>工具選擇</h3><p>在 Monorepo 專案中，我們需要選擇合適的工具來管理和構建專案。以下是一些常見的工具選擇：</p>
+<ol>
+<li>Lerna：Lerna 是一個用於管理 Monorepo 專案的工具，它可以幫助我們管理多個包之間的依賴關係，並提供了一些便捷的命令來進行版本控制和發布。</li>
+<li>Nx：Nx 是一個強大的 Monorepo 管理工具，它提供了豐富的功能來幫助我們構建和測試 Monorepo 專案。Nx 支持多種前端和後端框架，並且具有良好的擴展性和性能。</li>
+</ol>
+<p>在接下來的章節中，我們將介紹如何使用 Nx 來初始化和管理 Monorepo 專案。</p>
+<h2 id="專案環境建置"><a href="#專案環境建置" class="headerlink" title="專案環境建置"></a>專案環境建置</h2><p>在這一章節中，我們將介紹如何使用 Nx 來初始化和管理 Monorepo 專案。</p>
+<h3 id="NX-專案初始化"><a href="#NX-專案初始化" class="headerlink" title="NX 專案初始化"></a>NX 專案初始化</h3><ol>
+<li><p>安裝 Nx CLI：首先，我們需要安裝 Nx CLI 工具。在終端中運行以下命令來全局安裝 Nx CLI：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g nx</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>創建 Nx 工作區：接下來，我們可以使用 Nx CLI 創建一個新的 Nx 工作區。在終端中運行以下命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npx create-nx-workspace@latest</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>選擇預設配置：在創建工作區的過程中，Nx 會提示我們選擇一些預設配置，比如工作區名稱、應用程序類型等。我們可以根據需要進行選擇。</p>
+</li>
+<li><p>初始化專案：完成工作區創建後，我們可以進入工作區目錄，並初始化專案。在終端中運行以下命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> &lt;nx-project-name&gt;</span><br><span class="line">npx nx generate @nx/react:application apps/&lt;app-name&gt;</span><br></pre></td></tr></table></figure>
+
+<p>若要建立某個框架但是會失敗，這裡以 react 框架為例，可以先在 console 執行:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install @nx/react</span><br></pre></td></tr></table></figure></li>
+</ol>
+<blockquote>
+<p>支援建立哪些框架可以到<a target="_blank" rel="noopener" href="https://nx.dev/plugin-registry">這裡</a>查看。</p>
+</blockquote>
+<ol start="5">
+<li>啟動開發伺服器：最後，我們可以啟動開發伺服器來查看專案。在終端中運行以下命令：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nx serve my-app</span><br></pre></td></tr></table></figure>
+或是可以安裝 <a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=nrwl.angular-console">nx consle</a> 的 vs code 套件來使用</li>
+</ol>
+<h2 id="專案架構"><a href="#專案架構" class="headerlink" title="專案架構"></a>專案架構</h2><p>在這一章節中，我們將介紹 Monorepo 專案的資料夾結構和模組管理。</p>
+<h3 id="資料夾結構"><a href="#資料夾結構" class="headerlink" title="資料夾結構"></a>資料夾結構</h3><p>一個典型的 Monorepo 專案的資料夾結構如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">my-workspace/</span><br><span class="line">├── apps/</span><br><span class="line">│   ├── my-app/</span><br><span class="line">│   └── my-other-app/</span><br><span class="line">├── libs/</span><br><span class="line">│   ├── ui/</span><br><span class="line">│   └── utils/</span><br><span class="line">├── tools/</span><br><span class="line">├── nx.json</span><br><span class="line">├── package.json</span><br><span class="line">└── tsconfig.base.json</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>apps/</code>：存放應用程序的目錄，每個應用程序都有自己的子目錄。</li>
+<li><code>libs/</code>：存放共享庫的目錄，每個共享庫都有自己的子目錄。</li>
+<li><code>tools/</code>：存放自定義工具和腳本的目錄。</li>
+<li><code>nx.json</code>：Nx 的配置文件。</li>
+<li><code>package.json</code>：npm 的配置文件。</li>
+<li><code>tsconfig.base.json</code>：TypeScript 的配置文件。</li>
+</ul>
+<h3 id="模組管理"><a href="#模組管理" class="headerlink" title="模組管理"></a>模組管理</h3><p>在 Monorepo 專案中，我們可以使用 Nx 提供的命令來管理模組。以下是一些常見的模組管理命令：</p>
+<ol>
+<li><p>創建新模組：我們可以使用以下命令來創建一個新的模組：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nx generate @nx/react:library my-lib</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>添加依賴：我們可以使用以下命令來添加模組之間的依賴：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nx generate @nx/workspace:library my-lib --directory=shared</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>移動模組：我們可以使用以下命令來移動模組：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nx move --project my-lib libs/shared/my-lib</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>刪除模組：我們可以使用以下命令來刪除模組：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nx remove my-lib</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="個人開發經驗及概念"><a href="#個人開發經驗及概念" class="headerlink" title="個人開發經驗及概念"></a>個人開發經驗及概念</h2><p>在這一章節中，我們將分享一些個人開發經驗和概念，包括優點與挑戰、最佳實踐以及常見問題及解決方案。</p>
+<h3 id="優點與挑戰"><a href="#優點與挑戰" class="headerlink" title="優點與挑戰"></a>優點與挑戰</h3><h4 id="優點"><a href="#優點" class="headerlink" title="優點"></a>優點</h4><ol>
+<li><strong>集中管理</strong>：所有代碼都在一個倉庫中，方便管理和協作。</li>
+<li><strong>依賴管理簡單</strong>：模塊之間的依賴管理比較簡單，不需要跨倉庫進行依賴管理。</li>
+<li><strong>版本一致性</strong>：可以確保所有模塊使用相同的依賴版本，避免版本不一致的問題。</li>
+</ol>
+<h4 id="挑戰"><a href="#挑戰" class="headerlink" title="挑戰"></a>挑戰</h4><ol>
+<li><strong>倉庫規模大</strong>：隨著專案規模的擴大，倉庫的規模會變得非常大，對於版本控制系統的性能要求較高。</li>
+<li><strong>協作複雜</strong>：多團隊協作時，需要更多的協作和溝通來管理代碼變更。</li>
+<li><strong>構建時間長</strong>：由於所有代碼都在一個倉庫中，構建時間可能會變得較長。</li>
+</ol>
+<h3 id="最佳實踐"><a href="#最佳實踐" class="headerlink" title="最佳實踐"></a>最佳實踐</h3><ol>
+<li><strong>模塊化設計</strong>：將專案劃分為多個模塊，每個模塊負責特定的功能，減少模塊之間的耦合。</li>
+<li><strong>自動化測試</strong>：為每個模塊編寫自動化測試，確保代碼質量和穩定性。</li>
+<li><strong>持續集成</strong>：使用持續集成工具來自動化構建和測試流程，減少手動操作和錯誤。</li>
+</ol>
+<h3 id="常見問題及解決方案"><a href="#常見問題及解決方案" class="headerlink" title="常見問題及解決方案"></a>常見問題及解決方案</h3><ol>
+<li><strong>倉庫規模過大</strong>：可以使用 Nx 提供的增量構建功能，只構建和測試有變更的模塊，減少構建時間。</li>
+<li><strong>依賴管理複雜</strong>：使用 Nx 提供的依賴圖功能，清晰地展示模塊之間的依賴關係，方便管理。</li>
+<li><strong>協作問題</strong>：制定明確的代碼管理規範和流程，確保團隊成員之間的協作順暢。</li>
+</ol>
+
+    </div>
+
+    
+    <div class="about">
+        <h1>About this Post</h1>
+        <div class="details">
+            <p>This post is written by Peter, licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a>.</p>
+        </div>
+        
+        <p class="tags">
+            
+            <i class="icon"></i>
+            <a href="/tags/FRONTEND/" class="tag">#FRONTEND</a><a href="/tags/TUTORIAL/" class="tag">#TUTORIAL</a><a href="/tags/MONOREPO/" class="tag">#MONOREPO</a><a href="/tags/NX/" class="tag">#NX</a><a href="/tags/ARCHITECTURE/" class="tag">#ARCHITECTURE</a><a href="/tags/BACKEND/" class="tag">#BACKEND</a>
+        </p>
+        
+    </div>
+    
+
+    <div class="container post-prev-next">
+        
+        <a href="/2025/01/08/nodejs%E7%9A%84elsint%E8%88%87prettier%E8%88%87husky/" class="next">
+            <div>
+                <div class="text">
+                    <p class="label">Next</p>
+                    <h3 class="title">nodejs的elsint與prettier與husky</h3>
+                </div>
+            </div>
+        </a>
+        
+        
+        <a href="/2024/12/16/React%E5%B0%88%E6%A1%88%E5%BC%95%E5%85%A5PWA%E6%A9%9F%E5%88%B6-2/" class="prev">
+            <div>
+                <div class="text">
+                    <p class="label">Previous</p>
+                    <h3 class="title">React專案引入PWA機制(2)</>
+                </div>
+            </div>
+        </a>
+        
+    </div>
+
+    
+        
+        
+    
+</article>
+
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h2 class="title">Blog</h2>
+                
+                <a href="/" class="item">Blog</a>
+                
+                <a href="/archives" class="item">Archives</a>
+                
+                <a href="/tags" class="item">Tags</a>
+                
+                <a href="/categories" class="item">Categories</a>
+                
+                <a href="/search" class="item">Search</a>
+                
+                <a href="/friends" class="item">Friends</a>
+                
+                <a href="/projects" class="item">Projects</a>
+                
+                <a href="/resume" class="item">Resume</a>
+                
+                <a href="/about" class="item">About</a>
+                
+                <a href="/atom.xml" class="item">RSS</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Projects</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/MrWillCom/rsa-cli" class="item">RSA CLI</a>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/MrWillCom/hexo-theme-cupertino" class="item">Hexo Theme Cupertino</a>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/MrWillCom/a-calendar" class="item">A Calendar</a>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/MrWillCom/auto-mirroring-bucket" class="item">Auto Mirroring Bucket</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Me</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/MrWillCom" class="item">GitHub</a>
+                
+                <a target="_blank" rel="noopener" href="https://codepen.io/mrwillcom" class="item">CodePen</a>
+                
+                <a target="_blank" rel="noopener" href="https://www.patreon.com/MrWillCom" class="item">Patreon</a>
+                
+                <a target="_blank" rel="noopener" href="https://noc.social/@MrWillCom" class="item">Mastodon</a>
+                
+                <a target="_blank" rel="noopener" href="https://discord.gg/UKuFDjcfY8" class="item">Discord</a>
+                
+                <a href="mailto:mr.will.com@outlook.com" class="item">Email</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2026 Peter<br>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> </span>
+        
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+
+        
+<script src="/js/main.js"></script>
+
+        
+        
+        
+
+        
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            window.addEventListener('load', () => {
+                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
+                ScrollReveal().reveal('.post-list-item .cover-img img')
+                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
+            })
+        </script>
+        
+    </body>
+</html>
